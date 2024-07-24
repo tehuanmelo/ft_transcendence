@@ -16,20 +16,34 @@ TODO:
 </head>
 
 <body>
-    <!-- <img id="PONG-logo" src="assets/PONG.svg" alt="Logo of the website" width="700" /> -->
-    <div class="container">
-        <p>Login to save your progress!</p>
-        <div class="form-floating">
-            <input type="email" class="form-control" placeholder="email">
-            <label for="floatingInput">Email address</label>
-        </div>
-        <div class="form-floating">
-            <input type="password" class="form-control" placeholder="password">
-            <label for="floatingInput">Password</label>
-        </div>
-        <button id="login-btn" type="button" class="w-100 py-2">LOG IN</button>
-        <button id="42login-btn" type="button" class="w-100 py-2">42</button>
-        <p>Don't have an account? <a href="#">Sign up</a></p>
+    <div class="container border">
+        <!-- <img id="PONG-logo" src="images/PONG.svg" alt="Logo of the website" width="700" /> -->
+        <form novalidate>
+            <div class="row">
+                <div class="col">Login to save your progress!</div>
+            </div>
+            <div class="row row-cols-1 gy-2">
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="email" id="email" class="form-control" placeholder="Enter email here" required>
+                        <label for="email">Email address</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="password" id="password" class="form-control" placeholder="Enter password here"
+                            required>
+                        <label for="password">Password</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <button id="login-btn" type="button">Log in</button>
+                <button id="42-login-btn" type="button">Continue with your 42 account</button>
+                <button id="guest-login-btn" type="button">Continue as Guest</button>
+                <p>Don't have an account? <a href="#">Sign up</a></p>
+            </div>
+        </form>
     </div>
 
     <script>
