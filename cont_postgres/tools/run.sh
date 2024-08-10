@@ -2,7 +2,7 @@
 
 # ---------------------------- source common file ---------------------------- #
 . ./tools/common.sh
-DJ_HOST='django_container.pong-bridge'
+DJ_HOST='django.pong'
 # ------------------------ add DB_USER to pg_hba.conf ------------------------ #
 if ! grep -Fxq "host  $DB_NAME    $DB_USR     $DJ_HOST    md5" "$HBA_FILE" ; then
     echo "host  $DB_NAME    $DB_USR     $DJ_HOST    md5" >> $HBA_FILE
@@ -10,7 +10,8 @@ else
     log_message "$DJ_HOST already exists in $HBA_FILE" $LOG_INIT
 fi
 
-echo "host  $DB_NAME    $DB_USR     172.21.0.1/24    md5" >> $HBA_FILE
+# NOTE if you are trying to connect from the outside
+# echo "host  $DB_NAME    $DB_USR     172.21.0.1/24    md5" >> $HBA_FILE
 
 # ------------------------ Start the postgres server ------------------------ #
 run_as_postgres "postgres -D $DATA_DIR >>$LOG_DIR/$LOG_POSTGRES 2>&1" &

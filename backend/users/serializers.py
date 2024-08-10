@@ -24,6 +24,9 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Password must contain at least one digit.")
         return value 
 
+    def check_user(self, value):
+        return User.objects.filter(username=value).exists();
+
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
         return User.objects.create(**validated_data)

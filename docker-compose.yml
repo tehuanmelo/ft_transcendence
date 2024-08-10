@@ -1,44 +1,52 @@
-# PONG docker compose file
+name: pong
 
 services:
-  # frontend:
-
-  # backend:
-  #   build: './backend/'
-  #   image: backend
-  #   env_file:
-  #     - .env
-  #   container_name: backend
-  #   #for testing should be removed
-  #   ports:
-  #     - 8000:8000
-  #   volumes:
-  #     - backend-volume:/app
-  #   networks:
-  #     - frontend-backend
-  #     - backend-db
-  #   restart: on-failure
-  #   depends_on:
-  #     - postgres
+  nginx:
+    build: ./cont_nginx
+    image: nginx_img
+    container_name: nginx
+    restart: on-failure
+    volumes:
+      - ./frontend:/usr/local/nginx/static
+    networks:
+      - pong
+    ports:
+      - 443:443
+    depends_on:
+      - django
 
   postgres:
-    environment:
-      - POSTGRES_PASSWORD=superuser
-    build: './postgres/srcs/'
-    image: postgres
+    build: ./cont_postgres
+    image: postgres_img
     container_name: postgres
-    # volumes:
-    #   - backend-volume:/app
-    #   - ./backend/api:/app
-    networks:
-      - backend-db
     restart: on-failure
+    volumes:
+      - pongdb:/usr/local/postgresql/data # NOTE this is the only volume, might fail on MAC
+    networks:
+      - pong
 
-networks:
-  frontend-backend:
-  backend-db:
+  django:
+    build: ./cont_django
+    image: django_img
+    container_name: django
+    restart: on-failure
+    volumes:
+      - ./backend:/usr/local/django/pong-backend
+    networks:
+      - pong
+    depends_on:
+      - postgres
 
 volumes:
-  frontend-volume:
-  backend-volume:
-  db-volume:
+  
+  pongdb:
+    name: "pongdb"
+    driver_opts:
+      type: local 
+      o: bind
+      device: "${PWD}/pongdb"
+
+networks:
+  pong:
+    name: pong 
+    driver: bridge

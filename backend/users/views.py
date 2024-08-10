@@ -7,9 +7,18 @@ from .serializers import UserSerializer
 # request, and response to json
 @api_view(['POST'])
 def register(request):
-    print(request)
+    # print(request)
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=201) # created
     return Response(serializer.errors, status=400)
+
+# TODO do this function
+@api_view(['POST'])
+def login(request):
+    serializer = UserSerializer(data=request.data)
+    if serializer.check_user(serializer.fields.username):
+        return Response(serializer.data, status=200)
+    return Response(serializer.data, status=400)
+
