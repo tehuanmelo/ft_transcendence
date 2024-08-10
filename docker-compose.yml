@@ -1,0 +1,44 @@
+# PONG docker compose file
+
+services:
+  # frontend:
+
+  # backend:
+  #   build: './backend/'
+  #   image: backend
+  #   env_file:
+  #     - .env
+  #   container_name: backend
+  #   #for testing should be removed
+  #   ports:
+  #     - 8000:8000
+  #   volumes:
+  #     - backend-volume:/app
+  #   networks:
+  #     - frontend-backend
+  #     - backend-db
+  #   restart: on-failure
+  #   depends_on:
+  #     - postgres
+
+  postgres:
+    environment:
+      - POSTGRES_PASSWORD=superuser
+    build: './postgres/srcs/'
+    image: postgres
+    container_name: postgres
+    # volumes:
+    #   - backend-volume:/app
+    #   - ./backend/api:/app
+    networks:
+      - backend-db
+    restart: on-failure
+
+networks:
+  frontend-backend:
+  backend-db:
+
+volumes:
+  frontend-volume:
+  backend-volume:
+  db-volume:
