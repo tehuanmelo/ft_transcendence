@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------- #
 #                                   VARIABLES                                  #
 # ---------------------------------------------------------------------------- #
-DOCKER_COMPOSE:= docker-compose -f ./docker-compose.yml
+DOCKER_COMPOSE:= docker compose -f ./docker-compose.yml
 VOL_PONGDB:= $(PWD)/pongdb
 
 
