@@ -1,8 +1,6 @@
-name: pong
-
 services:
   nginx:
-    build: ./cont_nginx
+    build: ./containers/nginx
     image: nginx_img
     container_name: nginx
     restart: on-failure
@@ -16,7 +14,7 @@ services:
       - django
 
   postgres:
-    build: ./cont_postgres
+    build: ./containers/postgres
     image: postgres_img
     container_name: postgres
     restart: on-failure
@@ -26,7 +24,7 @@ services:
       - pong
 
   django:
-    build: ./cont_django
+    build: ./containers/django
     image: django_img
     container_name: django
     restart: on-failure
@@ -48,5 +46,5 @@ volumes:
 
 networks:
   pong:
-    name: pong 
+    name: pong
     driver: bridge
