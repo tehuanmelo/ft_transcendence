@@ -7,9 +7,9 @@ COPY tools/setup.sh .
 RUN chmod +x setup.sh && ./setup.sh \
     && mkdir logs && touch logs/error.log
 
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY pong.conf /etc/nginx/http.d
 
 EXPOSE 443
 
 # CMD tail -f /dev/null
-CMD [ "nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
