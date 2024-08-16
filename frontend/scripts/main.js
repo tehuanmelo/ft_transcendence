@@ -14,7 +14,6 @@ const initialState = {
 };
 window.history.replaceState(initialState, 0, '');
 
-
 async function displayRegister() {
     const response = await fetch('form.html', {
         method: 'GET',
@@ -30,4 +29,22 @@ async function displayRegister() {
         url: 'register',
     }
     window.history.pushState(state, '', 'register');
+}
+
+async function displayLogin() {
+    const response = await fetch('login.html', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'text/html',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    });
+
+    const loginHtml = await response.text();
+    document.getElementById('login-menu').innerHTML = loginHtml;
+    const state = {
+        content: loginHtml,
+        url: 'login'
+    }
+    window.history.pushState(state, '', 'login');
 }

@@ -2,17 +2,17 @@
 const usersApiUrl = 'https://localhost:443/api/users';
 const notificationEl = document.getElementById('notification');
 
+// Event listener listens for submitting the registration info
 document.addEventListener('submit', (event) => {
     event.preventDefault();
-    const formEl = event.target.closest('.form');
+    const formEl = event.target.closest('form');
 
     if (formEl) {
-        event.preventDefault();
-
         const formData = new FormData(formEl);
-        // make an object
         const data = Object.fromEntries(formData);
-        fetch(`${usersApiUrl}/register`, {
+        const isLoginForm = formEl.classList.contains('login-form');
+
+        fetch(`${usersApiUrl}/${isLoginForm ? 'login' : 'register'}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -24,13 +24,14 @@ document.addEventListener('submit', (event) => {
                     const errorMessages = Object.values(data).flat().join(' ');
                     throw new Error(errorMessages);
                 }
-                showNotification(`User registered successfully`, 'success')
+                showNotification(isLoginForm ? 'Login successful' : 'User registered successfully', 'success');
                 setTimeout(() => {
+                    // should redirect to home if login successful
                     history.back(); // go back
                 }, 2000);
             }))
             .catch(error => {
-                showNotification(`Error: ${error.message}`, 'error')
+                showNotification(`Error: ${error.message}`, 'error');
                 formEl.reset(); // clear the form
             });
     }

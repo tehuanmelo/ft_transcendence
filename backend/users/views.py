@@ -2,6 +2,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import UserSerializer
+from django.contrib.auth import authenticate
 
 # the benifit of adding api_view is that it automatically converts
 # request, and response to json
@@ -14,11 +15,17 @@ def register(request):
         return Response(serializer.data, status=201) # created
     return Response(serializer.errors, status=400)
 
-# TODO do this function
 @api_view(['POST'])
 def login(request):
-    serializer = UserSerializer(data=request.data)
-    if serializer.check_user(serializer.fields.username):
-        return Response(serializer.data, status=200)
-    return Response(serializer.data, status=400)
+    username = request.data.get('username')
+    password = request.data.get('password')
 
+    # need to authenticate if the user exists in the database
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        # Authentication success
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=200)
+    else:
+        # Authentication failed
+        return Response(serializer.data, status=400)
