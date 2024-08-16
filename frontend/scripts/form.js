@@ -38,11 +38,13 @@ document.addEventListener('submit', (event) => {
 
 function showNotification(message, type) {
     notificationEl.textContent = message;
-    notificationEl.className = `show ${type}`;  // add the class `show` and `type
+    notificationEl.className = `show ${type}`;  // add the class `show` and `type`
     notificationEl.style.display = 'block';
 
+    // after 3s call the func to remove .show
     setTimeout(() => {
         notificationEl.classList.remove('show');
+        // then after 0.3s turn style display to none to fade out the noti
         setTimeout(() => {
             notificationEl.style.display = 'none';
         }, 300); // Match the transition duration
