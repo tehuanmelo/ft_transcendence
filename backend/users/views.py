@@ -20,6 +20,11 @@ def login(request):
     username = request.data.get('username')
     password = request.data.get('password')
 
+    if not username:
+        return Response({"error": "Username is required."}, status=400)
+    if not password:
+        return Response({"error": "Password is required."}, status=400)
+
     # need to authenticate if the user exists in the database
     user = authenticate(request, username=username, password=password)
     if user is not None:
@@ -28,4 +33,4 @@ def login(request):
         return Response(serializer.data, status=200)
     else:
         # Authentication failed
-        return Response(serializer.data, status=400)
+        return Response({"error": "Invalid username or password."}, status=401)

@@ -5,6 +5,7 @@ const notificationEl = document.getElementById('notification');
 // Event listener listens for submitting the registration info
 document.addEventListener('submit', (event) => {
     event.preventDefault();
+
     const formEl = event.target.closest('form');
 
     if (formEl) {
@@ -24,10 +25,12 @@ document.addEventListener('submit', (event) => {
                     const errorMessages = Object.values(data).flat().join(' ');
                     throw new Error(errorMessages);
                 }
+
                 showNotification(isLoginForm ? 'Login successful' : 'User registered successfully', 'success');
+
                 setTimeout(() => {
                     // should redirect to home if login successful
-                    history.back(); // go back
+                    history.back(); //! go back
                 }, 2000);
             }))
             .catch(error => {
