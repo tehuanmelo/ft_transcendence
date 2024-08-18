@@ -21,6 +21,10 @@ body {
     min-height: 100dvh;
 }
 
+label {
+    color: var(--border-color);
+}
+
 .form-control {
     border-radius: 0;
     border: 2px solid var(--border-color);
