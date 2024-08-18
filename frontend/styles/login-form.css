@@ -7,6 +7,11 @@
     --form-button-hover-color: #88622d;
 }
 
+body {
+    /* background: url('../images/night-sky.jpg') no-repeat center center fixed; */
+    background-size: cover;
+}
+
 form {
     background-color: white;
     color: var(--form-primary-color);
