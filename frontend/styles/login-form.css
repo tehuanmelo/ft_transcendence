@@ -24,6 +24,14 @@ form {
     background-color: var(--form-field-color);
 }
 
+/* Label color when the input is focused or has a value */
+.form-floating .form-control:focus ~ label,
+.form-floating .form-control:focus ~ label::after {
+    color: var(--form-primary-color);
+    font-size: 0.8rem;
+    background-color: transparent;
+}
+
 #login-btn {
     background-color: var(--form-button-color);
     color: white;
