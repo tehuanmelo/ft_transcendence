@@ -5,10 +5,30 @@ TODO:
 - have logo (image ?) resize with buttons seemlessly
 */
 
+:root {
+    --field-color: #fbe1a8;
+    --border-color: #866a16;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: sans-serif;
-    /* border: solid red 2px; */
+    font-family: 'Press Start 2P', sans-serif;
+}
+
+body {
+    min-height: 100dvh;
+}
+
+.form-control {
+    border-radius: 0;
+    border: 2px solid var(--border-color);
+    background-color: var(--field-color);
+}
+
+.form-control:focus {
+    border: 2px solid var(--border-color);
+    box-shadow: none;
+    background-color: var(--field-color);
 }
