@@ -1,0 +1,59 @@
+/* form.css: CSS file for login form */
+
+:root {
+    --form-field-color: #fbe1a8;
+    --form-primary-color: #866a16;
+    --form-button-color: #6b4d23;
+    --form-button-hover-color: #88622d;
+}
+
+form {
+    background-color: white;
+    color: var(--form-primary-color);
+}
+
+.form-control {
+    border-radius: 0;
+    border: 2px solid var(--form-primary-color);
+    background-color: var(--form-field-color);
+}
+
+.form-control:focus {
+    border: 2px solid var(--form-primary-color);
+    box-shadow: none;
+    background-color: var(--form-field-color);
+}
+
+#login-btn {
+    background-color: var(--form-button-color);
+    color: white;
+    border-radius: 0;
+}
+
+#login-btn:hover {
+    background-color: var(--form-button-hover-color);
+}
+
+#login-btn:active {
+    background-color: var(--form-button-color);
+}
+
+.password-opts {
+    font-size: 0.8em;
+    margin: 0;
+}
+
+#forgot-password {
+    color: var(--form-primary-color);
+    text-decoration: none;
+}
+
+#forgot-password:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 575.98px) {
+    form {
+        width: 100%;
+    }
+}
