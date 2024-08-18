@@ -1,0 +1,49 @@
+services:
+  nginx:
+    build: ./containers/nginx
+    image: nginx_img
+    container_name: nginx
+    restart: on-failure
+    volumes:
+      - ./frontend:/usr/local/nginx/static
+    networks:
+      - pong
+    ports:
+      - 443:443
+    depends_on:
+      - django
+
+  postgres:
+    build: ./containers/postgres
+    image: postgres_img
+    container_name: postgres
+    restart: on-failure
+    volumes:
+      - pongdb:/usr/local/postgresql/data # NOTE this is the only volume, might fail on MAC
+    networks:
+      - pong
+
+  django:
+    build: ./containers/django
+    image: django_img
+    container_name: django
+    restart: on-failure
+    volumes:
+      - ./backend:/usr/local/django/pong-backend
+    networks:
+      - pong
+    depends_on:
+      - postgres
+
+volumes:
+  pongdb:
+    name: "pongdb"
+    driver_opts:
+      type: local 
+      o: bind
+      device: "${PWD}/pongdb"
+
+networks:
+  pong:
+    name: pong
+    driver: bridge
