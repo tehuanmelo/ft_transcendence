@@ -2,8 +2,7 @@
 
 :root {
     --form-field-color: #fbe1a8;
-    --form-primary-color: #866a16;
-    --form-button-color: #6b4d23;
+    --form-primary-color: #6b4d23;
     --form-button-hover-color: #88622d;
 }
 
@@ -17,38 +16,33 @@ form {
     color: var(--form-primary-color);
 }
 
-.form-control {
-    border-radius: 0;
-    border: 2px solid var(--form-primary-color);
-    background-color: var(--form-field-color);
-}
-
+.form-control,
 .form-control:focus {
-    border: 2px solid var(--form-primary-color);
+    border-radius: 0;
     box-shadow: none;
     background-color: var(--form-field-color);
+    border: 3px solid var(--form-primary-color);
 }
 
 /* Label color when the input is focused or has a value */
-.form-floating .form-control:focus ~ label,
-.form-floating .form-control:focus ~ label::after {
+.form-floating>.form-control:focus~label,
+.form-floating>.form-control:not(:placeholder-shown)~label,
+.form-floating>.form-control:focus~label::after,
+.form-floating>.form-control:not(:placeholder-shown)~label::after {
     color: var(--form-primary-color);
     font-size: 0.8rem;
     background-color: transparent;
 }
 
-#login-btn {
-    background-color: var(--form-button-color);
+#login-btn,
+#login-btn:active {
+    background-color: var(--form-primary-color);
     color: white;
     border-radius: 0;
 }
 
 #login-btn:hover {
     background-color: var(--form-button-hover-color);
-}
-
-#login-btn:active {
-    background-color: var(--form-button-color);
 }
 
 .password-opts {
