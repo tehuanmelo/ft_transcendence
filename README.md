@@ -7,7 +7,6 @@ Multiplayer Pong Game
 | Use a Framework as backend                           | Major  | 1.0      | Use Django for backend development.                                                                                                       |
 | Use a front-end framework or toolkit                 | Minor  | 0.5      | Use Bootstrap toolkit for the frontend development.                                                                                       |
 | Use a database for the backend                       | Minor  | 0.5      | Use PostgreSQL for all DB instances to ensure data consistency and compatibility.                                                         |
-| Store the score of a tournament in the Blockchain    | Major  | 1.0      | Implement a feature in Solidity to store tournament scores on Ethereum. Use a testing blockchain environment for development and testing. |
 | Add Another Game with User History and Matchmaking   | Major  | 1.0      | Introduce an additional game, including features for user history and matchmaking.                                                        |
 | Designing the Backend as Microservices               | Major  | 1.0      | Structure the backend as microservices for improved modularity and scalability.                                                           |
 | Introduce an AI Opponent                             | Major  | 1.0      | Develop and integrate an AI opponent for users to play against. AI must replicate keyboard input and do not use the A* algorithm.         |
@@ -17,4 +16,4 @@ Multiplayer Pong Game
 **Note**:
 - 100% Pass requirement: 7 Major modules.
 - 2 Minor modules count as 1 Major.
-- Currently there are 6 Major modules in the table and 3 Minor modules.
+- Currently there are 5 Major modules in the table and 3 Minor modules.
