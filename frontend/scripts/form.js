@@ -11,7 +11,7 @@ document.addEventListener('submit', (event) => {
     if (formEl) {
         const formData = new FormData(formEl);
         const data = Object.fromEntries(formData);
-        const isLoginForm = formEl.classList.contains('login-form');
+        const isLoginForm = formEl.classList.contains('login-section');
 
         fetch(`${usersApiUrl}/${isLoginForm ? 'login' : 'register'}`, {
             method: 'POST',

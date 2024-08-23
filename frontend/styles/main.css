@@ -1,0 +1,39 @@
+/* main.css: CSS file containing all styles */
+
+@font-face {
+    font-family: 'Press Start 2P';
+    src: url('../assets/fonts/PressStart2P-Regular.ttf');
+}
+
+:root {
+    --background-color: rgb(29, 27, 21);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Press Start 2P', sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+    min-height: 100dvh;
+}
+
+#content {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#PONG-logo {
+    max-width: 300px;
+}
+
+button {
+    border-radius: none;
+}
+

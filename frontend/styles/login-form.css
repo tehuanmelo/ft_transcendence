@@ -6,12 +6,7 @@
     --form-button-hover-color: #88622d;
 }
 
-body {
-    /* background: url('../images/night-sky.jpg') no-repeat center center fixed; */
-    background-size: cover;
-}
-
-form {
+form#login-section {
     background-color: white;
     color: var(--form-primary-color);
 }
@@ -34,14 +29,14 @@ form {
     background-color: transparent;
 }
 
-#login-btn,
-#login-btn:active {
+#login-section#login-btn,
+#login-section#login-btn:active {
     background-color: var(--form-primary-color);
     color: white;
     border-radius: 0;
 }
 
-#login-btn:hover {
+#login-section#login-btn:hover {
     background-color: var(--form-button-hover-color);
 }
 

@@ -4,47 +4,30 @@ window.addEventListener("popstate", (event) => {
     if (event.state) {
         // Simulate the loading of the previous page
         // document.documentElement.outerHTML = event.state.content;
-        document.getElementById('login-menu').innerHTML = event.state.content;
+        document.getElementById('welcome-menu').innerHTML = event.state.content;
     }
 });
 
 const initialState = {
-    content: document.getElementById('login-menu').innerHTML,
+    content: document.getElementById('welcome-menu').innerHTML,
     url: ''
 };
 window.history.replaceState(initialState, 0, '');
 
-async function displayRegister() {
-    const response = await fetch('form.html', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'text/html',
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    });
-    const formHtml = await response.text();
-    document.getElementById('login-menu').innerHTML = formHtml;
-    const state = {
-        content: formHtml,
-        url: 'register',
-    }
-    window.history.pushState(state, '', 'register');
-}
-
-async function displayLogin() {
-    const response = await fetch('login.html', {
-        method: 'GET',
+async function displaySection(file, sectionUrl) {
+    const response = await fetch(file, {
+        method: 'Get',
         headers: {
             'Content-Type': 'text/html',
             'X-Requested-With': 'XMLHttpRequest'
         }
     });
 
-    const loginHtml = await response.text();
-    document.getElementById('login-menu').innerHTML = loginHtml;
+    const sectionHtml = await response.text();
+    document.getElementById('content').innerHTML = sectionHtml;
     const state = {
-        content: loginHtml,
-        url: 'login'
+        content: sectionHtml,
+        url: sectionUrl
     }
-    window.history.pushState(state, '', 'login');
+    window.history.pushState(state, '', sectionUrl);
 }
