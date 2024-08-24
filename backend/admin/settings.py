@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+AUTH_USER_MODEL = "users.CustomUser"
+
 
 MIDDLEWARE = [
     # to allow cross-origin requests
