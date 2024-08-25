@@ -37,6 +37,9 @@ jobs:
     - name: Install dependencies
       run: brew install make
 
+    - name: Setup Docker on macOS
+      uses: douglascamata/setup-docker-macos-action@v1-alpha
+
     - name: Build and bring up the Docker Compose services
       run: make up
 
