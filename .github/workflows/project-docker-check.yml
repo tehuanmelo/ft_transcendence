@@ -2,9 +2,11 @@ name: Project set up check
 
 on:
   push:
-    branches: [ "*" ]
+    branches:
+      - '**'
   pull_request:
-    branches: [ "*" ]
+    branches:
+      - '**'
 
 jobs:
 
