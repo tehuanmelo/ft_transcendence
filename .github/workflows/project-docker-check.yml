@@ -27,27 +27,3 @@ jobs:
 
     - name: Tear down the Docker Compose services
       run: make down
-
-  build-mac:
-    runs-on: macos-latest
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Install dependencies
-      run: |
-        brew install make
-        brew install --cask docker
-
-    - name: Start Docker
-      run: open /Applications/Docker.app
-
-    - name: Wait for Docker to start
-      run: |
-        while ! docker info > /dev/null 2>&1; do sleep 1; done
-
-    - name: Build and bring up the Docker Compose services
-      run: make up
-
-    - name: Tear down the Docker Compose services
-      run: make down
