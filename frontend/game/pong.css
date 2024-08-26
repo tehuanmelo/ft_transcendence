@@ -20,7 +20,25 @@
     align-items: center;
 }
 canvas {
-    width: 100%; /* Full width of container */
-    height: auto; /* Maintain aspect ratio */
-    border: 2px solid #b57309e3;
+	width: 100%; /* Full width of container */
+	height: auto; /* Maintain aspect ratio */
+	border: 2px solid #b57309e3;
+}
+
+.parent {
+	height: 100vh; /* Full viewport height */
+	border: 1px solid #000; /* Optional: For visual reference */
+}
+
+.button-alignment {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	flex-direction: column;
+}
+
+.textcontrol {
+    font-size: 15px
+    font-family: 'Arial';
+    color: black;
 }
