@@ -12,6 +12,8 @@ services:
       - 443:443
     depends_on:
       - django
+    env_file:
+      - .env
 
   postgres:
     image: postgres:16-alpine
@@ -21,6 +23,8 @@ services:
       - pongdb:/usr/local/postgresql/data
     networks:
       - pong
+    env_file:
+      - .env
 
   django:
     build: ./containers/django
@@ -33,6 +37,8 @@ services:
       - pong
     depends_on:
       - postgres
+    env_file:
+      - .env
 
 volumes:
   pongdb:
