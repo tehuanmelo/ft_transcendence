@@ -1,7 +1,7 @@
 services:
   nginx:
     build: ./containers/nginx
-    image: nginx_img
+    image: nginx
     container_name: nginx
     restart: on-failure
     volumes:
@@ -14,29 +14,18 @@ services:
       - django
 
   postgres:
-    image: postgres:16
+    image: postgres:16-alpine
     container_name: postgres
     restart: on-failure
     volumes:
-      - pongdb:/usr/local/postgresql/data # NOTE this is the only volume, might fail on MAC
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres_user
-      - POSTGRES_PASSWORD=postgres_pass
+      - pongdb:/usr/local/postgresql/data
     networks:
       - pong
 
   django:
     build: ./containers/django
-    image: django_img
+    image: django
     container_name: django
-    environment:
-      - DJANGO_KEY="django-insecure-a#0xsbdlf9cse5_r4jym5_cmc90ymvc-sr4t!#(w2omjn2=_jm"
-      - DB_NAME=postgres
-      - DB_USER=postgres_user
-      - DB_PASSWORD=postgres_pass
-      - DB_HOST=postgres
-      - DB_PORT=5432
     restart: on-failure
     volumes:
       - ./backend:/usr/local/django/pong-backend
@@ -49,7 +38,7 @@ volumes:
   pongdb:
     name: "pongdb"
     driver_opts:
-      type: local 
+      type: local
       o: bind
       device: "${PWD}/pongdb"
 
