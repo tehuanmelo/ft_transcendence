@@ -8,7 +8,6 @@ from django.contrib.auth import authenticate
 # request, and response to json
 @api_view(['POST'])
 def register(request):
-    # print(request)
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()

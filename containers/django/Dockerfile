@@ -10,8 +10,6 @@ COPY requirements.txt .
 
 EXPOSE 8000
 
-RUN pip install -r requirements.txt
-
 RUN pip install --root-user-action=ignore -r requirements.txt --no-cache-dir
 
 ENTRYPOINT ["python3"]
