@@ -6,12 +6,14 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /usr/local/django
 
-COPY tools/requirements.txt .
+COPY requirements.txt .
 
 EXPOSE 8000
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT ["sh", "-c", "python3 pong-backend/manage.py makemigrations && \
-                         python3 pong-backend/manage.py migrate && \
-                         exec python3 pong-backend/manage.py runserver 0.0.0.0:8000"]
+RUN pip install --root-user-action=ignore -r requirements.txt --no-cache-dir
+
+ENTRYPOINT ["python3"]
+
+CMD ["pong-backend/manage.py", "runserver", "0.0.0.0:8000"]
