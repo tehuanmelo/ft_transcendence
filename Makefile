@@ -19,9 +19,16 @@ all: up
 
 check_docker:
 	@if ! docker info > /dev/null 2>&1; then \
-		echo "$(RED)Docker is not running.$(RESET) 😨"; \
-		echo "Please start $(BOLD_BLUE)Docker 🐳$(RESET) and try again."; \
-		exit 1; \
+		if ! command -v docker > /dev/null 2>&1; then \
+			echo "$(RED)Docker is not installed.$(RESET) 😨"; \
+			exit 1; \
+		else \
+			echo "$(RED)Docker is not running.$(RESET) 😨"; \
+			echo "Please start $(BOLD_BLUE)Docker 🐳$(RESET) and try again."; \
+			exit 1; \
+		fi \
+	else \
+		echo "$(BOLD_BLUE)Docker is running successfully! 🐳$(RESET)"; \
 	fi
 
 up: check_docker
@@ -30,6 +37,7 @@ up: check_docker
 		mkdir -p $(VOL_PONGDB); \
 	fi
 	$(DOCKER_COMPOSE) up --build --detach
+	@echo "Access the app at https://localhost:443"
 
 down: check_docker
 	$(DOCKER_COMPOSE) down
