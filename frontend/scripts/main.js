@@ -1,18 +1,21 @@
-window.addEventListener("popstate", (event) => {
-    // If a state has been provided, we have a "simulated" page
-    // and we update the current page.
-    if (event.state) {
-        // Simulate the loading of the previous page
-        // document.documentElement.outerHTML = event.state.content;
-        document.getElementById('welcome-menu').innerHTML = event.state.content;
-    }
+// Ensure the initial content is stored in the history state when the page first loads
+window.addEventListener("DOMContentLoaded", () => {
+    const initialState = {
+        content: document.getElementById('content').innerHTML,
+        url: ''
+    };
+    window.history.replaceState(initialState, '', '');
 });
 
-const initialState = {
-    content: document.getElementById('welcome-menu').innerHTML,
-    url: ''
-};
-window.history.replaceState(initialState, 0, '');
+// Listen for the popstate event to handle back/forward navigation
+window.addEventListener("popstate", (event) => {
+    if (event.state) {
+        document.getElementById('content').innerHTML = event.state.content;
+    } else {
+        // Handle the case where there is no state (e.g., the first page load)
+        document.getElementById('content').innerHTML = initialState.content;
+    }
+});
 
 async function displaySection(file, sectionUrl) {
     const response = await fetch(file, {
@@ -25,6 +28,8 @@ async function displaySection(file, sectionUrl) {
 
     const sectionHtml = await response.text();
     document.getElementById('content').innerHTML = sectionHtml;
+
+    // Save the new state
     const state = {
         content: sectionHtml,
         url: sectionUrl
