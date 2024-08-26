@@ -14,12 +14,15 @@ services:
       - django
 
   postgres:
-    build: ./containers/postgres
-    image: postgres_img
+    image: postgres:16
     container_name: postgres
     restart: on-failure
     volumes:
       - pongdb:/usr/local/postgresql/data # NOTE this is the only volume, might fail on MAC
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres_user
+      - POSTGRES_PASSWORD=postgres_pass
     networks:
       - pong
 
@@ -27,6 +30,13 @@ services:
     build: ./containers/django
     image: django_img
     container_name: django
+    environment:
+      - DJANGO_KEY="django-insecure-a#0xsbdlf9cse5_r4jym5_cmc90ymvc-sr4t!#(w2omjn2=_jm"
+      - DB_NAME=postgres
+      - DB_USER=postgres_user
+      - DB_PASSWORD=postgres_pass
+      - DB_HOST=postgres
+      - DB_PORT=5432
     restart: on-failure
     volumes:
       - ./backend:/usr/local/django/pong-backend

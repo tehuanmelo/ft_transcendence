@@ -1,4 +1,8 @@
-FROM python:3.12
+FROM python:3.12-slim-bullseye
+
+ENV PIP_DISABLE_PIP_VERSION_CHECK 1
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 WORKDIR /usr/local/django
 
@@ -6,8 +10,7 @@ COPY tools/requirements.txt .
 
 EXPOSE 8000
 
-RUN python3 -m venv .venv && chmod +x .venv/bin/activate && \
-    .venv/bin/activate && pip3 install -r requirements.txt
+RUN pip install -r requirements.txt
 
 ENTRYPOINT ["sh", "-c", "python3 pong-backend/manage.py makemigrations && \
                          python3 pong-backend/manage.py migrate && \
