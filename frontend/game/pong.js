@@ -113,6 +113,19 @@ class Pong {
 		ctx.lineTo(this.width / 2, this.height); //  Line final point
 		ctx.stroke(); // Apply line stile and draw
 	}
+	drawControlText(line) {
+		// Set text style
+		ctx.textAlign = 'center';
+		ctx.textBaseline = 'middle';
+		ctx.fillStyle = 'white';
+
+		// Define the starting y position for the first line of text
+		lineHeight = fontSize * 0.8; // Space between lines
+		let startY = canvasHeight / 2 - (lineHeight * (textLines.length - 0.8)) / 2;
+
+		ctx.fillText(line, canvasWidth / 2, startY);
+
+	}
 	pongRender() {
 		this.drawSquare();
 		this.paddle1.drawPaddle();
@@ -121,6 +134,7 @@ class Pong {
 			this.paddle3.drawPaddle();
 			this.paddle4.drawPaddle();
 		}
+		// draw score text
 	}
 
 	handleKeyboardEvent(event) {
@@ -134,28 +148,9 @@ class Pong {
 
 }
 
-class Control {
-	constructor() {
-		this.width = canvas.width; // Canvas width in pixels
-		this.height = canvas.height; // Canvas height in pixels
-	}
 
-	drawControlText() {
-		// Set text style
-		ctx.textAlign = 'center';
-		ctx.textBaseline = 'middle';
-		ctx.fillStyle = 'white';
 
-		// Define the starting y position for the first line of text
-		lineHeight = fontSize * 0.8; // Space between lines
-		let startY = canvasHeight / 2 - (lineHeight * (textLines.length - 0.8)) / 2;
 
-		for (const line of textLines) {
-			ctx.fillText(line, canvasWidth / 2, startY);
-			startY += lineHeight;
-		}
-	}
-}
 
 /* paddle1 = new Paddle(PaddleTypes.LEFT1);
  paddle2 = new Paddle(PaddleTypes.RIGHT1);
