@@ -1,5 +1,7 @@
 const canvas = document.getElementById('ponggame');
 const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 const PaddleTypes = Object.freeze({
 	LEFT1: 1,
@@ -51,15 +53,16 @@ class Paddle {
 		}
 	}
 	up() {
-		if (this.y > 0) {
-			this.y -= 8; // pixels to move per key event
+		if (this.y > Pong.REC_HEIGHT_SIZE + 5) {
+			this.y -= Pong.PADDLE_SPEED; // pixels to move per key event
 		}
 	}
 
 	// Check if the paddle is not at the bottom of the canvas
 	down() {
-		if (this.y < this.height - this.height / 8) {
-			this.y += 10;
+		if (this.y < this.height - Pong.REC_HEIGHT_SIZE - this.height/8 - 5) {
+
+			this.y += Pong.PADDLE_SPEED;
 		}
 	}
 
@@ -79,6 +82,8 @@ class Paddle {
 }
 
 class Pong {
+	static REC_HEIGHT_SIZE = 20;
+	static PADDLE_SPEED = 30;
 	constructor(nbPlayers) {
 		// Get canvas attributes
 		this.width = canvas.width; // Canvas width in pixels
@@ -87,6 +92,7 @@ class Pong {
 		this.nbPlayers = nbPlayers;
 		this.paddle1 = new Paddle(PaddleTypes.LEFT1);
 		this.paddle2 = new Paddle(PaddleTypes.RIGHT1);
+		this.score = new Score();
 
 		if (this.nbPlayers == 4) {
 			this.paddle3 = new Paddle(PaddleTypes.LEFT2);
@@ -103,8 +109,9 @@ class Pong {
 
 		// Set properties for the rectangle
 		ctx.fillStyle = 'white'; // Fill color
-		ctx.fillRect(0, 0, this.width, 5); // Draw a rectangle (x, y, width, height)
-		ctx.fillRect(0, this.height - 5, this.width, 5); // Draw a rectangle (x, y, width, height)
+		ctx.fillRect(0, 0, this.width, Pong.REC_HEIGHT_SIZE); // Draw a rectangle (x, y, width, height)
+		console.log(this.height);
+		ctx.fillRect(0, this.height - Pong.REC_HEIGHT_SIZE, this.width, Pong.REC_HEIGHT_SIZE); // Draw a rectangle (x, y, width, height)
 		ctx.strokeStyle = 'white'; // Line color
 		ctx.lineWidth = 2; // line Width
 		ctx.setLineDash([6, 3]); // LineDash: 6px and 3px space
@@ -134,7 +141,8 @@ class Pong {
 			this.paddle3.drawPaddle();
 			this.paddle4.drawPaddle();
 		}
-		// draw score text
+		this.score.drawScore();
+
 	}
 
 	handleKeyboardEvent(event) {
@@ -144,27 +152,68 @@ class Pong {
 		} else if (event.key === 'a') {
 			this.paddle1.down();
 		}
+		if (event.key === 'p') {
+			this.paddle2.up();
+		}
+		else if (event.key === 'l') {
+			this.paddle2.down();
+		}
+		if (this.nbPlayers == 4) {
+			if (event.key === 'd') {
+				this.paddle3.up();
+			} else if (event.key === 'c') {
+				this.paddle3.down();
+			}
+			if (event.key === 'j') {
+				this.paddle4.up();
+			}
+			else if (event.key === 'n') {
+				this.paddle4.down();
+			}
+		}
+	}
+}
+
+class Score {
+	constructor() {
+		this.scoreL = 0;
+		this.scoreR = 0;
+		this.finalScore = 11; // TO DO: final score: allow custom score
+	}
+	//if(ball.x < 0) {
+	//	this.scoreR++;
+
+	//}
+	//if(ball.x > canvas.width) {
+	//this.scoreL++;
+	//if (this.scoreL === finalScore || this.scoreR === finalScore) {
+	// Game over
+	//}
+
+	drawScore() {
+	ctx.font = "72px Bungee Tint";
+	ctx.fillText(this.scoreL, canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Left player score
+	ctx.fillText(this.scoreR, 3 * canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Right player score
 	}
 
+	resetScore() {
+	this.scoreL = 0;
+	this.scoreR = 0;
+	}
 }
 
 
 
 
 
-/* paddle1 = new Paddle(PaddleTypes.LEFT1);
- paddle2 = new Paddle(PaddleTypes.RIGHT1);
-paddle3 = new Paddle(PaddleTypes.LEFT2);
-paddle4 = new Paddle(PaddleTypes.RIGHT2);
 
-ball = new Ball();
 
-pong.drawSquare();
-paddle1.drawPaddle();
-paddle2.drawPaddle();
-paddle3.drawPaddle();
-paddle4.drawPaddle();
-ball.drawBall(); */
-pong = new Pong(2);
+
+
+
+
+
+
+pong = new Pong(4);
 pong.start();
 
