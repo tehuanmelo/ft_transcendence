@@ -7,6 +7,10 @@
 
 :root {
     --background-color: rgb(29, 27, 21);
+
+    --form-field-color: #fbe1a8;
+    --form-primary-color: #6b4d23;
+    --form-button-hover-color: #88622d;
 }
 
 * {
@@ -28,7 +32,56 @@ body {
     max-width: 300px;
 }
 
-button {
-    border-radius: none;
+.entry-form {
+    background-color: white;
+    color: var(--form-primary-color);
 }
 
+.form-control,
+.form-control:focus {
+    border-radius: 0;
+    box-shadow: none;
+    background-color: var(--form-field-color);
+    border: 3px solid var(--form-primary-color);
+}
+
+/* Label color when the input is focused or has a value */
+.form-floating>.form-control:focus~label,
+.form-floating>.form-control:not(:placeholder-shown)~label,
+.form-floating>.form-control:focus~label::after,
+.form-floating>.form-control:not(:placeholder-shown)~label::after {
+    color: var(--form-primary-color);
+    font-size: 0.8rem;
+    background-color: transparent;
+}
+
+.entry-form-btn,
+.entry-form-btn:active {
+    background-color: var(--form-primary-color);
+    color: white;
+    border-radius: 0;
+}
+
+.entry-form-btn:hover {
+    background-color: var(--form-button-hover-color);
+}
+
+.password-opts {
+    font-size: 0.8em;
+    margin: 0;
+}
+
+#forgot-password {
+    color: var(--form-primary-color);
+    text-decoration: none;
+}
+
+#forgot-password:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 575.98px) {
+    form {
+        width: 100%;
+    }
+}
