@@ -15,7 +15,7 @@ RESET=\033[0m
 #                                    TARGETS                                   #
 # ---------------------------------------------------------------------------- #
 
-all: up
+all: up migrations migrate
 
 check_docker:
 	@if ! docker info > /dev/null 2>&1; then \
@@ -41,6 +41,12 @@ up: check_docker
 
 down: check_docker
 	$(DOCKER_COMPOSE) down
+
+migrate:
+	@docker-compose exec django sh -c "cd pong-backend && python manage.py migrate"
+
+migrations:
+	@docker-compose exec django sh -c "cd pong-backend && python manage.py makemigrations users"
 
 nuke: check_docker
 	docker system prune -a 
