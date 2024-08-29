@@ -33,7 +33,7 @@ check_docker:
 
 up: check_docker
 	@if [ ! -d $(VOL_PONGDB) ]; then \
-		echo "Creating volumes..."; \
+		echo "Creating volumes 📂 ..."; \
 		mkdir -p $(VOL_PONGDB); \
 	fi
 	$(DOCKER_COMPOSE) up --build --detach
