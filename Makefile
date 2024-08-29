@@ -58,4 +58,8 @@ fclean: clean nuke
 
 re: fclean up
 
-.PHONY: all check_docker up down re nuke clean fclean
+# run container in shell
+exec-%:
+	$(DOCKER_COMPOSE) exec -it $* /bin/sh
+
+.PHONY: all check_docker up down re nuke clean fclean exec-%
