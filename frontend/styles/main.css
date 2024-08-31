@@ -5,8 +5,13 @@
     src: url('../assets/fonts/PressStart2P-Regular.ttf');
 }
 
+@font-face {
+    font-family: '04B_19';
+    src: url('../assets/fonts/04B_19__.TTF');
+}
+
 :root {
-    --background-color: rgb(29, 27, 21);
+    --background-color: #1d1b15;
 
     --form-field-color: #fbe1a8;
     --form-primary-color: #6b4d23;
@@ -28,8 +33,10 @@ body {
     align-items: center;
 }
 
-#PONG-logo {
-    max-width: 300px;
+#pong-logo {
+    font-family: '04B_19';
+    color: white;
+    font-size: 10rem;
 }
 
 .entry-form {
@@ -51,7 +58,6 @@ body {
 .form-floating>.form-control:focus~label::after,
 .form-floating>.form-control:not(:placeholder-shown)~label::after {
     color: var(--form-primary-color);
-    font-size: 0.8rem;
     background-color: transparent;
 }
 
@@ -78,6 +84,11 @@ body {
 
 #forgot-password:hover {
     text-decoration: underline;
+}
+
+.register-prompt>p {
+    font-size: 0.8rem;
+    margin: 0;
 }
 
 @media (max-width: 575.98px) {
