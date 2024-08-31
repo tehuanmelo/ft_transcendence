@@ -42,3 +42,23 @@ canvas {
     font-family: 'Arial';
     color: black;
 }
+
+
+.handjet-font {
+  font-family: "Handjet", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: medium;
+  font-variation-settings:
+    "ELGR" 1,
+    "ELSH" 2;
+}
+
+.modal-body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 200px;
+        align-content: center;
+        flex-direction: column;
+}
