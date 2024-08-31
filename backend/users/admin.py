@@ -18,6 +18,6 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         (None, {'fields': ('display_name',)}),  # Add display_name to fieldsets
     )
-  
+
 admin.site.register(CustomUser, CustomUserAdmin)
-    
+

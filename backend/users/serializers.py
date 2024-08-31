@@ -2,9 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 
-
 User = get_user_model()
-
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,22 +17,20 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Username must be at least 5 characters.")
         if not any(char.isalpha() for char in value):
             raise serializers.ValidationError("Username must contain at least one letter.")
-        return value 
+        return value
 
     def validate_password(self, value):
         if len(value) < 8:
             raise serializers.ValidationError("Password must be at least 8 characters.")
         if not any(char.isdigit() for char in value):
             raise serializers.ValidationError("Password must contain at least one digit.")
-        return value 
+        return value
 
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
         return User.objects.create(**validated_data)
-    
+
 class UserDetailSerializer(serializers.ModelSerializer):
-    
     class Meta:
         fields = ('username', 'display_name', 'email')
         model = User
-    
