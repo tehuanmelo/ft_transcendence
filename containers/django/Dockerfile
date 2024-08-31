@@ -6,12 +6,13 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /usr/local/django
 
-COPY requirements.txt .
+COPY requirements.txt ./tools/entrypoint.sh ./
 
 EXPOSE 8000
 
-RUN pip install --root-user-action=ignore -r requirements.txt --no-cache-dir
+RUN pip install --root-user-action=ignore -r requirements.txt --no-cache-dir && chmod +x ./entrypoint.sh
 
-ENTRYPOINT ["python3"]
 
-CMD ["pong-backend/manage.py", "runserver", "0.0.0.0:8000"]
+ENTRYPOINT ["./entrypoint.sh"]
+
+CMD ["python3", "pong-backend/manage.py", "runserver", "0.0.0.0:8000"]

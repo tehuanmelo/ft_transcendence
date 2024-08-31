@@ -7,7 +7,7 @@ from .forms import CustomUserChangeForm, CustomUserCreationForm
 CustomUser = get_user_model()
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
-    form = CustomUserCreationForm
+    form = CustomUserChangeForm
     model = CustomUser
     list_display = (
         "username",
@@ -15,5 +15,9 @@ class CustomUserAdmin(UserAdmin):
         "is_superuser",
     )
     
+    fieldsets = UserAdmin.fieldsets + (
+        (None, {'fields': ('display_name',)}),  # Add display_name to fieldsets
+    )
+  
 admin.site.register(CustomUser, CustomUserAdmin)
     

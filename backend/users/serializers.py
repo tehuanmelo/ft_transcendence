@@ -31,3 +31,10 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
         return User.objects.create(**validated_data)
+    
+class UserDetailSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        fields = ('username', 'display_name', 'email')
+        model = User
+    
