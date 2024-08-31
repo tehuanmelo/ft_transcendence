@@ -24,10 +24,10 @@ async function submitFormData(form, action) {
     try {
         const response = await fetch(`${usersApiUrl}/${action}`, {
             method: 'POST',
-            body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify(data)
         });
 
         if (!response.ok) {
