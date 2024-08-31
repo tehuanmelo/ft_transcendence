@@ -17,22 +17,35 @@ window.addEventListener("popstate", (event) => {
     }
 });
 
-async function displaySection(file, sectionUrl) {
-    const response = await fetch(file, {
-        method: 'Get',
-        headers: {
-            'Content-Type': 'text/html',
-            'X-Requested-With': 'XMLHttpRequest'
+async function displaySection(file, sectionUrl, postLoadHandler = null) {
+    try {
+        const response = await fetch(file, {
+            method: 'Get',
+            headers: {
+                'Content-Type': 'text/html',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+
+        if (!response.ok) {
+            throw Error('Network response was not ok');
         }
-    });
 
-    const sectionHtml = await response.text();
-    document.getElementById('content').innerHTML = sectionHtml;
+        const sectionHtml = await response.text();
+        document.getElementById('content').innerHTML = sectionHtml;
 
-    // Save the new state
-    const state = {
-        content: sectionHtml,
-        url: sectionUrl
+        // Save the new state
+        const state = {
+            content: sectionHtml,
+            url: sectionUrl
+        }
+        window.history.pushState(state, '', sectionUrl);
+
+        if (postLoadHandler)
+            await postLoadHandler();
+    } catch (error) {
+        // ! to be removed
+        console.error('Failed to load section:', error);
+        alert('There was an issue loading the content. Please try again.');
     }
-    window.history.pushState(state, '', sectionUrl);
 }

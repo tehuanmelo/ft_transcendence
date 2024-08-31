@@ -21,22 +21,23 @@
 
 <body>
     <div id="content" class="d-flex justify-content-center align-items-center flex-column">
-        <div id="logo" class="row mb-4">
-            <img src="assets/PONG.svg" alt="Logo of the website" class="img-fluid" />
-        </div>
+        <!-- <div> -->
+        <h1 id="pong-logo" style="margin: 0;">PONG</h1>
+        <!-- </div> -->
 
         <!-- welcome menu -->
-        <div id="welcome-menu" class="row flex-column">
-            <button id="login-btn" type="button" class="btn btn-primary mb-3"
-                onclick="displaySection('login-form.html', 'login')">Log in</button>
-            <button id="42-login-btn" type="button" class="btn btn-info mb-3">42 Intra Login</button>
-            <button id="register-btn" type="button" class="btn btn-danger mb-3"
-                onclick="displaySection('register-form.html', 'register')">Register</button>
-            <button id="guest-login-btn" type="button" class="btn btn-secondary">Continue as Guest</button>
+        <div class="row flex-column mb-3">
+            <button type="button" class="btn btn-primary mb-3"
+                onclick="displaySection('login-form.html', 'login', handleFormLoad)">Log
+                in</button>
+            <button type="button" class="btn btn-info mb-3">42 Intra Login</button>
+            <button type="button" class="btn btn-danger mb-3"
+                onclick="displaySection('register-form.html', 'register', handleFormLoad)">Register</button>
+            <button type="button" class="btn btn-secondary">Continue as Guest</button>
         </div>
 
         <footer class="text-center text-light">
-            <p>&copy; 2024 Pong Multiplayer Game. All rights reserved.</p>
+            <p>&copy; 2024 Pong Multiplayer Game.</p>
         </footer>
     </div>
 

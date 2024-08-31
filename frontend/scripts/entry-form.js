@@ -1,43 +1,47 @@
-// const usersApiUrl = 'https://127.0.0.1:8000/api/users'; // development
 const usersApiUrl = 'https://localhost:443/api/users';
 
-document.querySelector('form').forEach(formEl => {
-    formEl.addEventListener('submit', async (event) => {
-        event.preventDefault();
+async function handleFormLoad() {
+    const loginForm = document.getElementById('login-form');
+    const registrationForm = document.getElementById('registration-form');
 
-        const formData = new FormData(formEl);
-        const data = Object.fromEntries(formData.entries());
-        const isLoginForm = formEl.classList.contains('login-section');
-        const endpoint = `${usersApiUrl}/${isLoginForm ? 'login' : 'register'}`;
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            await submitFormData(loginForm, 'login');
+        })
+    }
 
-        try {
-            const response = await fetch(endpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
+    if (registrationForm) {
+        registrationForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            await submitFormData(loginForm, 'register');
+        })
+    }
+}
 
-            const result = await response.json();
-            if (!response.ok) {
-                const errorMessages = Object.values(result).flat().join(' ');
-                throw new Error(errorMessages);
+async function submitFormData(form, action) {
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+        const response = await fetch(`${usersApiUrl}/${action}`, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
             }
+        });
 
-            if (isLoginForm)
-                console.log('Login successful');
-            else
-                console.log('Registration successful');
-
-            setTimeout(() => {
-                // should redirect to home if login successful
-                history.back(); //! go back
-            }, 2000);
-
-        } catch (error) {
-            console.log(`Error: ${error.message}`);
-            // formEl.reset(); // clear the form
+        const result = await response.json();
+        if (!response.ok) {
+            throw new Error(Object.values(result).flat().join(" "));
         }
-    })
-})
+
+        console.log('Success:', result);
+        alert('success!')
+        // Handle the success response here, like redirecting or showing a success message
+    } catch (error) {
+        console.error('There was an issue with the request: ', error);
+        alert('Failed to submit the form. Please try again.');
+    }
+}
