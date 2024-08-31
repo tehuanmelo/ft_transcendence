@@ -1,9 +1,5 @@
-const usersApiUrl = 'https://localhost:443/api/users';
-
 async function handleFormLoad() {
     const loginForm = document.getElementById('login-form');
-    const registrationForm = document.getElementById('registration-form');
-
     if (loginForm) {
         loginForm.addEventListener('submit', async (event) => {
             event.preventDefault();
@@ -11,15 +7,17 @@ async function handleFormLoad() {
         })
     }
 
+    const registrationForm = document.getElementById('registration-form');
     if (registrationForm) {
         registrationForm.addEventListener('submit', async (event) => {
             event.preventDefault();
-            await submitFormData(loginForm, 'register');
+            await submitFormData(registrationForm, 'register');
         })
     }
 }
 
 async function submitFormData(form, action) {
+    const usersApiUrl = 'https://localhost:443/api/users';
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
 
@@ -32,9 +30,9 @@ async function submitFormData(form, action) {
             }
         });
 
-        const result = await response.json();
         if (!response.ok) {
-            throw new Error(Object.values(result).flat().join(" "));
+            const errorData = await response.json();
+            throw new Error(errorData.message);
         }
 
         console.log('Success:', result);

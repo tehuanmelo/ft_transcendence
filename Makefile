@@ -36,6 +36,11 @@ up: check_docker
 		echo "Creating volumes 📂 ..."; \
 		mkdir -p $(VOL_PONGDB); \
 	fi
+	@if [ ! -f .env ]; then \
+		echo "$(RED).env file is missing! Cannot proceed without it. 😵$(RESET)"; \
+		echo "Please create the $(BOLD_BLUE).env$(RESET) file with the necessary environment variables."; \
+		exit 1; \
+	fi
 	$(DOCKER_COMPOSE) up --build --detach
 	@echo "Access the app at https://localhost:443"
 
@@ -49,7 +54,7 @@ migrations:
 	@docker-compose exec django sh -c "cd pong-backend && python manage.py makemigrations users"
 
 nuke: check_docker
-	docker system prune -a 
+	docker system prune -a
 
 clean: check_docker
 	$(DOCKER_COMPOSE) down --rmi all --volumes
