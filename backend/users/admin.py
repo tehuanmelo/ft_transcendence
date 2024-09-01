@@ -14,10 +14,9 @@ class CustomUserAdmin(UserAdmin):
         "email",
         "is_superuser",
     )
-    
+
     fieldsets = UserAdmin.fieldsets + (
         (None, {'fields': ('display_name',)}),  # Add display_name to fieldsets
     )
 
 admin.site.register(CustomUser, CustomUserAdmin)
-

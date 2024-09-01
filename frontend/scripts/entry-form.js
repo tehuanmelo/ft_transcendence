@@ -35,7 +35,7 @@ async function submitFormData(form, action) {
             throw new Error(errorData.message);
         }
 
-        console.log('Success:', result);
+        console.log('Success!');
         alert('success!')
         // Handle the success response here, like redirecting or showing a success message
     } catch (error) {
