@@ -7,16 +7,12 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'password']
+        fields = ['email', 'password']
 
     # the validate_fieldname are automatically called by the serializer's is_valid() method
-    def validate_username(self, value):
-        if User.objects.filter(username=value).exists():
-            raise serializers.ValidationError("Username already exists.")
-        if len(value) < 5:
-            raise serializers.ValidationError("Username must be at least 5 characters.")
-        if not any(char.isalpha() for char in value):
-            raise serializers.ValidationError("Username must contain at least one letter.")
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Email already exists.")
         return value
 
     def validate_password(self, value):

@@ -39,6 +39,40 @@ body {
     font-size: 10rem;
 }
 
+button {
+    border: none;
+}
+
+.menu-btn {
+    color: white;
+    border: 3px solid transparent;
+    background-color: transparent;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.menu-btn::before {
+    content: '\25B6';
+    color: gold;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+    margin-right: 0.5rem;
+}
+
+.menu-btn:hover,
+.menu-btn:hover::before {
+    opacity: 1;
+    color: gold;
+}
+
+.menu-btn:active {
+    transform: translateY(10%);
+}
+
+.menu-btn:active::before {
+    opacity: 1;
+}
+
+
 .entry-form {
     background-color: white;
     color: var(--form-primary-color);
@@ -86,9 +120,17 @@ body {
     text-decoration: underline;
 }
 
-.register-prompt>p {
+.form-prompt>p {
     font-size: 0.8rem;
     margin: 0;
+}
+
+.prompt-link {
+    cursor: pointer;
+}
+
+.prompt-link:hover {
+    text-decoration: underline;
 }
 
 @media (max-width: 575.98px) {

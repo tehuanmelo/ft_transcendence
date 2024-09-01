@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import generics, permissions
 from .serializers import UserSerializer, UserDetailSerializer
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate
 
 from .models import CustomUser
 
@@ -19,23 +19,18 @@ def register(request):
 
 @api_view(['POST'])
 def login(request):
-    username = request.data.get('username')
+    email = request.data.get('email')
     password = request.data.get('password')
 
-    if not username:
-        return Response({"error": "Username is required."}, status=400)
-    if not password:
-        return Response({"error": "Password is required."}, status=400)
-
     # need to authenticate if the user exists in the database
-    user = authenticate(request, username=username, password=password)
+    user = authenticate(request, email=email, password=password)
     if user is not None:
         # Authentication success
         serializer = UserSerializer(user)
         return Response(serializer.data, status=200)
     else:
         # Authentication failed
-        return Response({"error": "Invalid username or password."}, status=401)
+        return Response({"error": "Invalid email or password."}, status=401)
 
 class UsersDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticated,)
