@@ -1,7 +1,9 @@
+const contentDiv = document.getElementById('content');
+
 // Ensure the initial content is stored in the history state when the page first loads
 window.addEventListener("DOMContentLoaded", () => {
     const initialState = {
-        content: document.getElementById('content').innerHTML,
+        content: contentDiv.innerHTML,
         url: ''
     };
     window.history.replaceState(initialState, '', '');
@@ -10,10 +12,10 @@ window.addEventListener("DOMContentLoaded", () => {
 // Listen for the popstate event to handle back/forward navigation
 window.addEventListener("popstate", (event) => {
     if (event.state) {
-        document.getElementById('content').innerHTML = event.state.content;
+        contentDiv.innerHTML = event.state.content;
     } else {
         // Handle the case where there is no state (e.g., the first page load)
-        document.getElementById('content').innerHTML = initialState.content;
+        contentDiv.innerHTML = initialState.content;
     }
 });
 
@@ -32,7 +34,7 @@ async function displaySection(file, sectionUrl, postLoadHandler = null) {
         }
 
         const sectionHtml = await response.text();
-        document.getElementById('content').innerHTML = sectionHtml;
+        contentDiv.innerHTML = sectionHtml;
 
         // Save the new state
         const state = {

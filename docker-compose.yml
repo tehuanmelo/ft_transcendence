@@ -20,7 +20,7 @@ services:
     container_name: postgres
     restart: on-failure
     volumes:
-      - pongdb:/usr/local/postgresql/data
+      - pongdb:/var/lib/postgresql/data
     networks:
       - pong
     env_file:
