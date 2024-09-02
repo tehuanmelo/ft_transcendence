@@ -2,7 +2,6 @@
 #                                   VARIABLES                                  #
 # ---------------------------------------------------------------------------- #
 DOCKER_COMPOSE:= docker compose -f ./docker-compose.yml
-VOL_PONGDB:= $(PWD)/pongdb
 
 # ---------------------------------------------------------------------------- #
 #                                COLOR VARIABLES                               #
@@ -32,9 +31,10 @@ check_docker:
 	fi
 
 up: check_docker
-	@if [ ! -d $(VOL_PONGDB) ]; then \
-		echo "Creating volumes..."; \
-		mkdir -p $(VOL_PONGDB); \
+	@if [ ! -f .env ]; then \
+		echo "$(RED).env file is missing! Cannot proceed without it. 😵$(RESET)"; \
+		echo "Please create the $(BOLD_BLUE).env$(RESET) file with the necessary environment variables."; \
+		exit 1; \
 	fi
 	$(DOCKER_COMPOSE) up --build --detach
 	@echo "Access the app at https://localhost:443"
@@ -43,7 +43,7 @@ down: check_docker
 	$(DOCKER_COMPOSE) down
 
 nuke: check_docker
-	docker system prune -a 
+	docker system prune -a
 
 clean: check_docker
 	$(DOCKER_COMPOSE) down --rmi all --volumes
@@ -52,4 +52,8 @@ fclean: clean nuke
 
 re: fclean up
 
-.PHONY: all check_docker up down re nuke clean fclean
+# run container in shell
+exec-%:
+	$(DOCKER_COMPOSE) exec -it $* /bin/sh
+
+.PHONY: all check_docker up down re nuke clean fclean exec-%

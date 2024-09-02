@@ -5,10 +5,9 @@ class Command(BaseCommand):
     help = 'Run migrations and create a superuser if it does not exist'
 
     def handle(self, *args, **options):
-
         # Create superuser
         User = get_user_model()
-        
+
         username = 'admin'
         email = 'admin@email.com'
         password = 'admin'

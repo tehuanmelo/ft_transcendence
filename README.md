@@ -16,4 +16,4 @@ Multiplayer Pong Game
 **Note**:
 - 100% Pass requirement: 7 Major modules.
 - 2 Minor modules count as 1 Major.
-- Currently there are 6 Major modules in the table and 3 Minor modules.
+- Currently there are 5 Major modules in the table and 3 Minor modules.
