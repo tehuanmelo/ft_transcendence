@@ -1,7 +1,7 @@
 services:
   nginx:
     build: ./containers/nginx
-    image: nginx_img
+    image: nginx
     container_name: nginx
     restart: on-failure
     volumes:
@@ -12,20 +12,23 @@ services:
       - 443:443
     depends_on:
       - django
+    env_file:
+      - .env
 
   postgres:
-    build: ./containers/postgres
-    image: postgres_img
+    image: postgres:16-alpine
     container_name: postgres
     restart: on-failure
     volumes:
-      - pongdb:/usr/local/postgresql/data # NOTE this is the only volume, might fail on MAC
+      - pongdb:/var/lib/postgresql/data
     networks:
       - pong
+    env_file:
+      - .env
 
   django:
     build: ./containers/django
-    image: django_img
+    image: django
     container_name: django
     restart: on-failure
     volumes:
@@ -34,12 +37,16 @@ services:
       - pong
     depends_on:
       - postgres
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
 
 volumes:
   pongdb:
     name: "pongdb"
     driver_opts:
-      type: local 
+      type: local
       o: bind
       device: "${PWD}/pongdb"
 

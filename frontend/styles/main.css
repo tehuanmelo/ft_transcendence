@@ -5,8 +5,17 @@
     src: url('../assets/fonts/PressStart2P-Regular.ttf');
 }
 
+@font-face {
+    font-family: '04B_19';
+    src: url('../assets/fonts/04B_19__.TTF');
+}
+
 :root {
-    --background-color: rgb(29, 27, 21);
+    --background-color: #1d1b15;
+
+    --form-field-color: #fbe1a8;
+    --form-primary-color: #6b4d23;
+    --form-button-hover-color: #88622d;
 }
 
 * {
@@ -19,21 +28,112 @@
 body {
     background-color: var(--background-color);
     min-height: 100dvh;
-}
-
-#content {
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
 }
 
-#PONG-logo {
-    max-width: 300px;
+#pong-logo {
+    font-family: '04B_19';
+    color: white;
+    font-size: 10rem;
 }
 
 button {
-    border-radius: none;
+    border: none;
 }
 
+.menu-btn {
+    color: white;
+    border: 3px solid transparent;
+    background-color: transparent;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.menu-btn::before {
+    content: '\25B6';
+    color: gold;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+    margin-right: 0.5rem;
+}
+
+.menu-btn:hover,
+.menu-btn:hover::before {
+    opacity: 1;
+    color: gold;
+}
+
+.menu-btn:active {
+    transform: translateY(10%);
+}
+
+.menu-btn:active::before {
+    opacity: 1;
+}
+
+.entry-form {
+    background-color: white;
+    color: var(--form-primary-color);
+}
+
+.form-control,
+.form-control:focus {
+    border-radius: 0;
+    box-shadow: none;
+    background-color: var(--form-field-color);
+    border: 3px solid var(--form-primary-color);
+}
+
+/* Label color when the input is focused or has a value */
+.form-floating>.form-control:focus~label,
+.form-floating>.form-control:not(:placeholder-shown)~label,
+.form-floating>.form-control:focus~label::after,
+.form-floating>.form-control:not(:placeholder-shown)~label::after {
+    color: var(--form-primary-color);
+    background-color: transparent;
+}
+
+.entry-form-btn,
+.entry-form-btn:active {
+    background-color: var(--form-primary-color);
+    color: white;
+    border-radius: 0;
+}
+
+.entry-form-btn:hover {
+    background-color: var(--form-button-hover-color);
+}
+
+.password-opts {
+    font-size: 0.8em;
+    margin: 0;
+}
+
+#forgot-password {
+    color: var(--form-primary-color);
+    text-decoration: none;
+}
+
+#forgot-password:hover {
+    text-decoration: underline;
+}
+
+.form-prompt>p {
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+.prompt-link {
+    cursor: pointer;
+}
+
+.prompt-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 575.98px) {
+    form {
+        width: 100%;
+    }
+}
