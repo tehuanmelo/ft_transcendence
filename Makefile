@@ -2,7 +2,6 @@
 #                                   VARIABLES                                  #
 # ---------------------------------------------------------------------------- #
 DOCKER_COMPOSE:= docker compose -f ./docker-compose.yml
-VOL_PONGDB:= $(PWD)/pongdb
 
 # ---------------------------------------------------------------------------- #
 #                                COLOR VARIABLES                               #
@@ -32,10 +31,6 @@ check_docker:
 	fi
 
 up: check_docker
-	@if [ ! -d $(VOL_PONGDB) ]; then \
-		echo "Creating volumes 📂 ..."; \
-		mkdir -p $(VOL_PONGDB); \
-	fi
 	@if [ ! -f .env ]; then \
 		echo "$(RED).env file is missing! Cannot proceed without it. 😵$(RESET)"; \
 		echo "Please create the $(BOLD_BLUE).env$(RESET) file with the necessary environment variables."; \
