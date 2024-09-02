@@ -3,6 +3,12 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+// Global variables for the game configuration
+var g_PADDLE_SPEED = 30;
+var g_BALL_SPEED = 15;
+var g_SOUND = true;
+var g_SCORE_TO_WIN = 5;
+
 const PaddleTypes = Object.freeze({
 	LEFT1: 1,
 	RIGHT1: 2,
@@ -15,8 +21,6 @@ class Ball {
 		this.width = canvas.width;
 		this.height = canvas.height;
 		this.ballMoving = false;
-		this.speedX = 15; // Ball speed in the x direction
-		this.speedY = 15; // Ball speed in the y direction
 		this.ballX = this.width/2; // X position of the ball
 		this.ballY = this.height/2; // Y position of the ball
 		this.dx = 0; // Change in x direction
@@ -28,6 +32,7 @@ class Ball {
 		this.nbPlayers = nbPlayers;
 		this.ballRadius = this.width/100;
 		this.score = score;
+		this.sound = new Sound("bounce.mp3");
 	}
 
 	drawBall() {
@@ -57,8 +62,8 @@ class Ball {
 	}
 
 	startBallMovement() {
-		this.dx = this.ballStartAngle() * this.speedX; // Initialize dx based on random angle
-		this.dy = this.ballStartAngle() * this.speedY; // Initialize dy based on random angle
+		this.dx = this.ballStartAngle() * g_BALL_SPEED; // Initialize dx based on random angle
+		this.dy = this.ballStartAngle() * g_BALL_SPEED; // Initialize dy based on random angle
 		this.ballMoving = true; // Set flag to true to start movement
 	}
 
@@ -66,30 +71,29 @@ class Ball {
 		if (this.ballMoving) {
 			// top and bottom walls
 			if (this.ballY + this.dy + this.ballRadius > canvas.height - Pong.REC_HEIGHT_SIZE || this.ballY + this.dy - this.ballRadius < Pong.REC_HEIGHT_SIZE) {
+				this.sound.play();
 				this.dy = -this.dy;
 			}
-			// left and right walls TO DO: remove if we dont implement this mode in the future
-			//if (this.ballX + this.dx > canvas.width || this.ballX + this.dx < 0) {
-			//	this.dx = -this.dx;
-			//}
-			console.log(this.ballX +" "+ this.dx  +" "+  this.ballRadius)
 			// left paddle collision
 			if (this.ballX + this.dx - this.ballRadius < this.paddle1.x + this.paddle1.paddleWidth && this.ballY > this.paddle1.y && this.ballY < this.paddle1.y + this.paddle1.paddleHeight) {
-				console.log("inverte");
+				this.sound.play();
 				this.dx = -this.dx;
 			}
 			// right paddle collision
 			if (this.ballX + this.dx + this.ballRadius > this.paddle2.x && this.ballY > this.paddle2.y && this.ballY < this.paddle2.y + this.paddle2.paddleHeight) {
+				this.sound.play();
 				this.dx = -this.dx;
 			}
 
 			if (this.nbPlayers == 4) {
 				// left paddle collision (player 3)
 				if (this.ballX + this.dx - this.ballRadius < this.paddle3.x + this.paddle3.paddleWidth && this.ballY > this.paddle3.y && this.ballY < this.paddle3.y + this.paddle3.paddleHeight) {
+					this.sound.play();
 					this.dx = -this.dx;
 				}
 				// right paddle collision (player 4)
 				if (this.ballX + this.dx + this.ballRadius > this.paddle4.x && this.ballY > this.paddle4.y && this.ballY < this.paddle4.y + this.paddle4.paddleHeight) {
+					this.sound.play();
 					this.dx = -this.dx;
 				}
 			}
@@ -98,15 +102,8 @@ class Ball {
 			this.ballY += this.dy;
 
 			this.updateScore();
-
 		}
-
-
 	}
-
-	//this.ballX = this.width/2;
-	//this.ballY = this.height/2;
-	//this.ballMoving = true;
 
 	updateScore() {
 		if (this.ballX < 0) {
@@ -155,11 +152,11 @@ class Paddle {
 		}
 	}
 	up() {
-		if (this.y - Pong.PADDLE_SPEED - Pong.REC_HEIGHT_SIZE < 0) {
+		if (this.y - g_PADDLE_SPEED - Pong.REC_HEIGHT_SIZE < 0) {
 			this.y = Pong.REC_HEIGHT_SIZE; // pixels to move per key event
 		}
 		else if (this.y > Pong.REC_HEIGHT_SIZE) {
-			this.y -= Pong.PADDLE_SPEED; // pixels to move per key event
+			this.y -= g_PADDLE_SPEED; // pixels to move per key event
 		}
 	}
 
@@ -169,7 +166,7 @@ class Paddle {
 			this.y = this.height - Pong.REC_HEIGHT_SIZE - this.paddleHeight - 5;
 		}
 		else if (this.y < this.height - Pong.REC_HEIGHT_SIZE - this.paddleHeight - 5) {
-			this.y += Pong.PADDLE_SPEED;
+			this.y += g_PADDLE_SPEED;
 		}
 	}
 
@@ -194,7 +191,7 @@ class Paddle {
 
 class Pong {
 	static REC_HEIGHT_SIZE = 20;
-	static PADDLE_SPEED = 30;
+
 	constructor(nbPlayers) {
 		// Get canvas attributes
 		this.width = canvas.width; // Canvas width in pixels
@@ -203,6 +200,7 @@ class Pong {
 		this.paddle1 = new Paddle(PaddleTypes.LEFT1);
 		this.paddle2 = new Paddle(PaddleTypes.RIGHT1);
 		this.score = new Score();
+		this.countdown = new Countdown(this);
 
 		if (this.nbPlayers == 4) {
 			this.paddle3 = new Paddle(PaddleTypes.LEFT2);
@@ -216,6 +214,11 @@ class Pong {
 		this.intervalId =0;
 	}
 	start() {
+		this.render();
+		this.countdown.start();
+	}
+
+	startGame() {
 		this.score.resetScore();
 		this.ball.ballResetPosition();
 		this.intervalId =setInterval(this.pongRender.bind(this), 1000 / 60); // 60 FPS (frames per second)
@@ -225,6 +228,16 @@ class Pong {
 				this.ball.startBallMovement(); // Start ball movement on Enter key press
 			}
 		});
+	}
+
+	pause()	{
+		clearInterval(this.intervalId);
+	}
+
+	resume(){
+		this.ball.startBallMovement();
+		this.intervalId =setInterval(this.pongRender.bind(this), 1000 / 60);
+
 	}
 
 	stop() {
@@ -239,7 +252,6 @@ class Pong {
 		// Set properties for the rectangle
 		ctx.fillStyle = 'white'; // Fill color
 		ctx.fillRect(0, 0, this.width, Pong.REC_HEIGHT_SIZE); // Draw a rectangle (x, y, width, height)
-		//console.log(this.height);
 		ctx.fillRect(0, this.height - Pong.REC_HEIGHT_SIZE, this.width, Pong.REC_HEIGHT_SIZE); // Draw a rectangle (x, y, width, height)
 		ctx.strokeStyle = 'white'; // Line color
 		ctx.lineWidth = 2; // line Width
@@ -265,7 +277,7 @@ class Pong {
 	displayWinner() {
 		var element = document.getElementById('winner');
 
-		if (this.score.scoreL == this.score.finalScore) {
+		if (this.score.scoreL == g_SCORE_TO_WIN) {
 			element.innerText = "Left Player wins!";
 		}
 		else {
@@ -285,12 +297,11 @@ class Pong {
 		}
 		this.score.drawScore();
 		this.ball.drawBall(); // Draw the ball
-		this.ball.ballMove(); // Move the ball
 	}
 
 	pongRender() {
 		this.render();
-
+		this.ball.ballMove(); // Move the ball
 		if (this.score.checkGameOver() == true) {
 			this.displayWinner();
 			this.stop();
@@ -332,7 +343,6 @@ class Score {
 	constructor() {
 		this.scoreL = 0;
 		this.scoreR = 0;
-		this.finalScore = 3; // TO DO: final score: allow custom score
 	}
 
 	incrementScoreR() {
@@ -344,7 +354,7 @@ class Score {
 	}
 
 	checkGameOver() {
-		if (this.scoreL === this.finalScore || this.scoreR === this.finalScore) {
+		if (this.scoreL === g_SCORE_TO_WIN || this.scoreR === g_SCORE_TO_WIN) {
 			return true;
 		}
 		return false;
@@ -363,22 +373,82 @@ class Score {
 	}
 }
 
+class Sound {
+	constructor(src) {
+		this.sound = document.createElement("audio");
+		this.sound.src = src;
+		this.sound.setAttribute("preload", "auto");
+		this.sound.setAttribute("controls", "none");
+		this.sound.style.display = "none";
+		document.body.appendChild(this.sound);
+		}
+		play() {
+			if (g_SOUND) {
+				this.sound.play();
+			}
+		}
+}
 
+class Countdown {
+	constructor(pong) {
+		this.pong = pong;
+		this.count = 3;
+		this.intervalId = 0;
+	}
+
+	start() {
+		this.intervalId = setInterval(this.countdown.bind(this), 1000);
+	}
+
+	countdown() {
+		if (this.count === 0) {
+			clearInterval(this.intervalId);
+			this.pong.startGame();
+		}
+		else {
+			this.drawCountdown();
+			this.count--;
+		}
+	}
+	drawCountdown() {
+		this.pong.render();
+		ctx.font = "180px Bungee Tint";
+		ctx.fillText(this.count, canvas.width / 2, canvas.height / 2);
+	}
+}
 
 pong = new Pong(4);
 pong.start();
+
 
 function playAgain() {
 	pong.start();
 }
 
 
+function loadConfiguration() {
+	pong.pause();
+	document.getElementById('playerspeed').value = g_PADDLE_SPEED;
+	document.getElementById('ballspeed').value = g_BALL_SPEED;
+	document.getElementById('score').value = g_SCORE_TO_WIN;
+	document.getElementById('customSwitch').checked = g_SOUND;
+	document.getElementById('currentScore').innerText= "Score - " + g_SCORE_TO_WIN;
+}
+
+function applyConfiguration() {
+	g_PADDLE_SPEED = parseInt(document.getElementById('playerspeed').value, 10);
+	g_BALL_SPEED = parseInt(document.getElementById('ballspeed').value, 10);
+	g_SCORE_TO_WIN = parseInt(document.getElementById('score').value, 10);
+	g_SOUND = document.getElementById('customSwitch').checked;
+	pong.resume();
+}
+
 
 // Add 2 balls?
 // Add sound effects?
-// Custom score?
-// Add different ball speeds?
-// Add different paddle speeds? paddle colors?
-// Add different paddle sizes?
-// Add different ball sizes?
+// Custom score? DONE
+// Add different ball speeds? DONE
+// Add different paddle speeds? DONE
+
+
 // Add different backgrounds/themes?

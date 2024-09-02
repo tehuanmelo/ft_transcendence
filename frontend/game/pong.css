@@ -62,3 +62,17 @@ canvas {
         align-content: center;
         flex-direction: column;
 }
+
+.chakra-petch-regular {
+    font-family: "Chakra Petch", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  .switch-container {
+    display: flex;
+    align-items: center;
+}
+.switch-label {
+    margin-right: 10px; /* Adjust spacing between label and switch */
+}
