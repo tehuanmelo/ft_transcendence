@@ -1,12 +1,13 @@
 const contentDiv = document.getElementById('content');
+let initialState;
 
 // Ensure the initial content is stored in the history state when the page first loads
 window.addEventListener("DOMContentLoaded", () => {
-    const initialState = {
-        content: contentDiv.innerHTML,
-        url: ''
-    };
-    window.history.replaceState(initialState, '', '');
+    initialState = { content: contentDiv.innerHTML };
+    window.history.replaceState(initialState, '');
+
+    const currentPath = window.location.pathname;
+    loadContent(currentPath);
 });
 
 // Listen for the popstate event to handle back/forward navigation
@@ -19,9 +20,31 @@ window.addEventListener("popstate", (event) => {
     }
 });
 
-async function displaySection(file, sectionUrl, postLoadHandler = null) {
+const validRoutes = [
+    { url: '/', file: 'index.html' },
+    { url: '/login', file: 'login-form.html' },
+    { url: '/register', file: 'register-form.html' },
+    { url: '/2fa', file: '2fa.html' },
+    // { url: '/home', file: 'home.html' },
+    // { url: '/tournament', file: 'tournament.html' },
+    // { url: '/about', file: 'about.html' },
+    // { url: '/profile', file: 'profile.html' },
+    // { url: '/game', file: 'game.html' },
+];
+
+async function loadContent(url, postLoadHandler = null) {
+    // basically check if the url requested is in the validRoutes
+    // if it is then display that content
+    const route = validRoutes.find(route => route.url === url);
+    if (!route) {
+        //! to be worked upon
+        console.error('Invalid route:', url);
+        alert('Requested content not found.');
+        return;
+    }
+
     try {
-        const response = await fetch(file, {
+        const response = await fetch(route.file, {
             method: 'Get',
             headers: {
                 'Content-Type': 'text/html',
@@ -39,9 +62,9 @@ async function displaySection(file, sectionUrl, postLoadHandler = null) {
         // Save the new state
         const state = {
             content: sectionHtml,
-            url: sectionUrl
+            url: url
         }
-        window.history.pushState(state, '', sectionUrl);
+        window.history.pushState(state, '', url);
 
         if (postLoadHandler)
             await postLoadHandler();

@@ -37,7 +37,9 @@ async function submitFormData(form, action) {
 
         console.log('Success!');
         alert('success!')
-        // Handle the success response here, like redirecting or showing a success message
+        // show success message
+        // load 2fa
+
     } catch (error) {
         console.error('There was an issue with the request: ', error);
         alert('Failed to submit the form. Please try again.');
