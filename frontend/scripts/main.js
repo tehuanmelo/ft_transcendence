@@ -2,12 +2,12 @@ const contentDiv = document.getElementById('content');
 let initialState;
 
 // Ensure the initial content is stored in the history state when the page first loads
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
+    const currentPath = window.location.pathname;
+    await loadContent(currentPath);
+
     initialState = { content: contentDiv.innerHTML };
     window.history.replaceState(initialState, '');
-
-    const currentPath = window.location.pathname;
-    loadContent(currentPath);
 });
 
 // Listen for the popstate event to handle back/forward navigation
@@ -21,10 +21,10 @@ window.addEventListener("popstate", (event) => {
 });
 
 const validRoutes = [
-    { url: '/', file: 'index.html' },
+    { url: '/', file: 'start.html' },
     { url: '/login', file: 'login-form.html' },
     { url: '/register', file: 'register-form.html' },
-    { url: '/2fa', file: '2fa.html' },
+    { url: '/2fa', file: '2fa-form.html' },
     // { url: '/home', file: 'home.html' },
     // { url: '/tournament', file: 'tournament.html' },
     // { url: '/about', file: 'about.html' },

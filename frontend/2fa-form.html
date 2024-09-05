@@ -1,0 +1,26 @@
+<!-- 2FA form -->
+<div class="start-btn position-absolute top-0 start-0 m-3">
+    <button onclick="loadContent('/')" class="btn btn-secondary">
+        &larr; Back to start
+    </button>
+</div>
+<form id="2fa-form" class="entry-form border p-4" method="post">
+    <div class="mb-3 text-center">Verify it's you</div>
+    <div class="text-center mb-3">
+        <p>A verification email has been sent to <strong>[initial]*****@[initial]*****.com</strong>.</p>
+        <p>Please enter the 6-digit code below:</p>
+    </div>
+    <div class="otp-inputs">
+        <input type="text" maxlength="1" autofocus aria-label="2fa">
+        <input type="text" maxlength="1" aria-label="2fa">
+        <input type="text" maxlength="1" aria-label="2fa">
+        <input type="text" maxlength="1" aria-label="2fa">
+        <input type="text" maxlength="1" aria-label="2fa">
+        <input type="text" maxlength="1" aria-label="2fa">
+    </div>
+    <p>Didn't get the OTP? <a href="#">Resend</a></p>
+    <div class="d-flex justify-content-center mb-3">
+        <!-- enable buttons once verified -->
+        <button type="submit" class="entry-form-btn p-2 w-75" disabled>Verify</button>
+    </div>
+</form>
