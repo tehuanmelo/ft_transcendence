@@ -15,11 +15,10 @@
 	<link href="https://fonts.googleapis.com/css2?family=Bungee+Tint&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Handjet:wght@100..900&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 
 <body id="gradbackground">
-
-
 
 	<!-- PONG Game Grid -->
 
@@ -102,6 +101,26 @@
 				</div>
 			</div>
 		</div>
+
+				<!-- Modal Tounament Winner Pop-up-->
+				<div class="modal fade" id="winnerTpopup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+				aria-labelledby="staticBackdropLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content" style="background-color: #fec66b;">
+						<div class="modal-header">
+							<h1 class="modal-title handjet-font" id="staticBackdropLabel">Pong Game</h1>
+						</div>
+						<div class="modal-body">
+							<h2 id="winnerT" class="handjet-font"></h2>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+								onclick="nextGame()">Next Match!</button>
+							<button type="button" class="btn btn-secondary">Back to Home Page</button>
+						</div>
+					</div>
+				</div>
+			</div>
 
 <!-- Modal Config-->
 <div class="modal fade" id="config" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"

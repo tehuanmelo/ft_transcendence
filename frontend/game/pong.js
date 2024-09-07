@@ -192,7 +192,7 @@ class Paddle {
 class Pong {
 	static REC_HEIGHT_SIZE = 20;
 
-	constructor(nbPlayers) {
+	constructor(nbPlayers, isTournament = false, notifyWinner = null) {
 		// Get canvas attributes
 		this.width = canvas.width; // Canvas width in pixels
 		this.height = canvas.height; // Canvas height in pixels
@@ -201,6 +201,7 @@ class Pong {
 		this.paddle2 = new Paddle(PaddleTypes.RIGHT1);
 		this.score = new Score();
 		this.countdown = new Countdown(this);
+		this.notifyWinner = notifyWinner;
 
 		if (this.nbPlayers == 4) {
 			this.paddle3 = new Paddle(PaddleTypes.LEFT2);
@@ -284,7 +285,7 @@ class Pong {
 			element.innerText = "Right Player wins!";
 		}
 		var myModal = new bootstrap.Modal(document.getElementById('winnerpopup'));
-			myModal.show(); // Show the modal
+			myModal.show();
 	}
 
 	render() {
@@ -299,11 +300,23 @@ class Pong {
 		this.ball.drawBall(); // Draw the ball
 	}
 
+	getWinner() {
+		if (this.score.scoreL == g_SCORE_TO_WIN) {
+			return ("left");
+		}
+		else {
+			return ("right");
+		}
+	}
+
 	pongRender() {
 		this.render();
 		this.ball.ballMove(); // Move the ball
 		if (this.score.checkGameOver() == true) {
-			this.displayWinner();
+			if (this.isTournament == false)
+				this.displayWinner();
+			else
+				this.notifyWinner(this.getWinner());
 			this.stop();
 			this.render();
 		}
@@ -417,8 +430,8 @@ class Countdown {
 	}
 }
 
-pong = new Pong(4);
-pong.start();
+//pong = new Pong(4);
+//pong.start();
 
 
 function playAgain() {
@@ -443,6 +456,89 @@ function applyConfiguration() {
 	pong.resume();
 }
 
+class Tournament {
+	// player1 will be the logged user
+	constructor(players) {
+		this.players = players;
+		this.pong = new Pong(players.length, true, this.winnerCallback);
+		if (this.players.length == 3) {
+			this.playerArray = this.getUniqueRandomPlayers3();
+		}
+		else {
+			this.playerArray = this.getUniqueRandomPlayers4();
+		}
+		this.keyboardEventHandlerBind =  this.handleKeyboardEvent.bind(this);
+		this.currentPlayer1 = this.players[this.playerArray[0]];
+		this.currentPlayer2 = this.players[this.playerArray[1]];
+	}
+
+		// lambda =>
+	winnerCallback = (winner) => {
+		var element = document.getElementById('winnerT');
+		if (winner == 'left'){
+			element.innerText = this.currentPlayer1 + " Player wins!";
+		}
+		else {
+			element.innerText = this.currentPlayer2 + " Player wins!";
+		}
+
+		var myModal = new bootstrap.Modal(document.getElementById('winnerTpopup'));
+		myModal.show();
+	}
+
+	getUniqueRandomPlayers3() {
+		const numbers = [0, 1, 2];
+		return this.shuffleArray(numbers);
+	}
+
+	getUniqueRandomPlayers4() {
+		const numbers = [0, 1, 2, 3];
+		return this.shuffleArray(numbers);
+	}
+
+	shuffleArray(array) {
+		for (let i = array.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[array[i], array[j]] = [array[j], array[i]];
+		}
+		return (array);
+	}
+
+	startTournament() {
+		if (this.players.length == 4) {
+			this.displayGameAnnouncement("Quarter Final", this.players[this.playerArray[0]], this.players[this.playerArray[1]]);
+		}
+		document.addEventListener('keydown',this.keyboardEventHandlerBind);
+	}
+
+	handleKeyboardEvent(event) {
+		if (event.key === 'Enter') {
+			document.removeEventListener('keydown', this.keyboardEventHandlerBind);
+			this.pong.start();
+		}
+	}
+
+	displayGameAnnouncement(gameType, firstPlayerName, secondPlayerName) {
+		// ! Press Start 2P is not being properly displayed when inside the canvas
+		ctx.fillStyle = 'black'; // Fill color
+		ctx.fillRect(0, 0, canvas.width, canvas.height); // Draw a rectangle (x, y, width, height)
+		ctx.fillStyle = 'red'; // Fill color
+		ctx.font = "50px 'Press Start 2P'";
+
+		var textWidth = ctx.measureText(gameType).width;
+		ctx.fillText(gameType, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2)- 200);
+		ctx.font = "150px 'Press Start 2P'";
+		textWidth = ctx.measureText(firstPlayerName + " X " + secondPlayerName).width;
+		ctx.fillText(firstPlayerName + " X " + secondPlayerName, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2)- 50);
+		ctx.font = "50px 'Press Start 2P'";
+		textWidth = ctx.measureText("Press Enter to Start").width;
+		ctx.fillText("Press Enter to Start",  (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) + 100);
+
+	}
+}
+
+var tournament = new Tournament(["Player1", "Player2","Player3", "Player4"]);
+tournament.startTournament();
 
 // Add 2 balls?
 // Add sound effects?
