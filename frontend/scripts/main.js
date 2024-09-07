@@ -106,7 +106,8 @@ async function loadContent(url, postLoadHandler = null) {
 
 async function loadGame() {
     loadScript('/scripts/pong.js', function() {
-console.log('Script loaded and callback executed.');
+    console.log('Script loaded and callback executed.');
+    document.body.id = "gradbackground";
 });
 
 }
