@@ -29,8 +29,37 @@ const validRoutes = [
     // { url: '/tournament', file: 'tournament.html' },
     // { url: '/about', file: 'about.html' },
     // { url: '/profile', file: 'profile.html' },
-    // { url: '/game', file: 'game.html' },
+     { url: '/pong', file: 'pong.html' },
 ];
+
+const loadedScripts = new Set();
+function loadScript(src, callback) {
+
+    if (loadedScripts.has(src)) {
+        console.log('Script already loaded:', url);
+        return;
+    }
+
+
+    var script = document.createElement('script');
+    script.src = src;
+    script.type = 'text/javascript';
+    script.async = true;
+
+    // Handle script load
+    script.onload = function() {
+        console.log('Script loaded successfully:', src);
+        loadedScripts.add(src);
+        if (callback) callback();
+    };
+
+    // Handle script error
+    script.onerror = function() {
+        console.error('Script failed to load:', src);
+    };
+
+    document.head.appendChild(script);
+}
 
 async function loadContent(url, postLoadHandler = null) {
     // basically check if the url requested is in the validRoutes
@@ -73,4 +102,11 @@ async function loadContent(url, postLoadHandler = null) {
         console.error('Failed to load section:', error);
         alert('There was an issue loading the content. Please try again.');
     }
+}
+
+async function loadGame() {
+    loadScript('/scripts/pong.js', function() {
+console.log('Script loaded and callback executed.');
+});
+
 }
