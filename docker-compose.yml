@@ -5,7 +5,7 @@ services:
     container_name: nginx
     restart: on-failure
     volumes:
-      - ./frontend:/var/lib/nginx/html
+      - ./frontend:/usr/local/nginx/static
     networks:
       - pong
     ports:

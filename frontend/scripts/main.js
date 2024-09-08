@@ -25,11 +25,11 @@ const validRoutes = [
     { url: '/login', file: 'login-form.html' },
     { url: '/register', file: 'register-form.html' },
     { url: '/2fa', file: '2fa-form.html' },
-    // { url: '/home', file: 'home.html' },
+    { url: '/game', file: 'pong.html' },
+    { url: '/home', file: 'home.html' },
     // { url: '/tournament', file: 'tournament.html' },
     // { url: '/about', file: 'about.html' },
     // { url: '/profile', file: 'profile.html' },
-     { url: '/pong', file: 'pong.html' },
 ];
 
 const loadedScripts = new Set();
@@ -62,8 +62,6 @@ function loadScript(src, callback) {
 }
 
 async function loadContent(url, postLoadHandler = null) {
-    // basically check if the url requested is in the validRoutes
-    // if it is then display that content
     const route = validRoutes.find(route => route.url === url);
     if (!route) {
         //! to be worked upon

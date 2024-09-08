@@ -1,10 +1,12 @@
 <!-- login-form -->
+<!-- ! this button is extremely ugly to use -->
 <div class="start-btn position-absolute top-0 start-0 m-3">
-    <button onclick="loadContent('/')" class="btn btn-secondary">
+    <button onclick="loadContent('/')" class="btn btn-outline-light">
         &larr; Back to start
     </button>
 </div>
-<form id="login-form" class="entry-form border p-4" method="post">
+
+<form id="login-form" class="entry-form" method="post">
     <div class="mb-3 text-center">Login to save your progress!</div>
     <div class="form-floating mb-2">
         <input id="email" type="email" name="email" class="form-control" placeholder="name@example.com" required>
@@ -35,3 +37,7 @@
         </p>
     </div>
 </form>
+
+<div class="modal">
+    <!-- 2fa as a modal -->
+</div>

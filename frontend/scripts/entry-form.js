@@ -1,19 +1,9 @@
-async function handleFormLoad() {
-    const loginForm = document.getElementById('login-form');
-    if (loginForm) {
-        loginForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            await submitFormData(loginForm, 'login');
-        })
-    }
-
-    const registrationForm = document.getElementById('registration-form');
-    if (registrationForm) {
-        registrationForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            await submitFormData(registrationForm, 'register');
-        })
-    }
+async function handleFormLoad(formType) {
+    const form = document.getElementById(`${formType}-form`);
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        await submitFormData(form, formType);
+    })
 }
 
 async function submitFormData(form, action) {
@@ -38,7 +28,8 @@ async function submitFormData(form, action) {
         console.log('Success!');
         alert('success!')
         // show success message
-        // load 2fa
+        // if the form is /register then redirect to log in page
+        // if the form is /login then redirect to 2fa
 
     } catch (error) {
         console.error('There was an issue with the request: ', error);

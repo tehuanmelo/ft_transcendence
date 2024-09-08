@@ -1,16 +1,13 @@
 <!-- start -->
-<img src="assets/Pong.svg" alt="Logo of the website" />
+<img src="assets/Pong.svg" class="mb-4" alt="Logo of the website" />
 
+<!-- ! for accessibility improve tabindex -->
 
-
-
-
-<button type="button" class="menu-btn" tabindex="-1" onclick="loadContent('/login')">Log
-    in</button>
-<button type="button" class="menu-btn" tabindex="-1">42 Login</button>
-<button type="button" class="menu-btn" tabindex="-1" onclick="loadContent('/register')">Register</button>
-<button type="button" class="menu-btn" tabindex="-1" onclick="loadContent('/pong',loadGame)">Play as Guest</button>
-<button type="button" class="menu-btn" tabindex="-1" onclick="loadContent('/2fa')">2fa</button>
+<button type="button" class="menu-btn mb-3" onclick="loadContent('/login', handleFormLoad('login'))">Log in</button>
+<button type="button" class="menu-btn mb-3">42 Login</button>
+<button type="button" class="menu-btn mb-3" onclick="loadContent('/register', handleFormLoad('register'))">Register</button>
+<button type="button" class="menu-btn mb-3">Play as Guest</button>
+<button type="button" class="menu-btn mb-3" onclick="loadContent('/2fa')">2fa</button>
 
 <footer class="text-center text-light">
     <p>&copy; 2024 PONG.</p>
