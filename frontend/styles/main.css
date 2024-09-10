@@ -27,21 +27,21 @@
 body {
     font-family: 'Press Start 2P', sans-serif;
     background-color: var(--background-color);
-    min-height: 100dvh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 button {
     border: none;
 }
 
+#content {
+    min-height: 100dvh;
+}
+
 /* --------------------------------- Start ---------------------------------- */
 .menu-btn {
     color: white;
     background-color: transparent;
-    transition: transform 0.2s ease, background-color 0.2s ease;
+    transition: transform 0.2s ease;
 }
 
 .menu-btn::before {
