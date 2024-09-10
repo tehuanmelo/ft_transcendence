@@ -49,21 +49,19 @@ button {
     color: gold;
     opacity: 0;
     transition: opacity 0.1s ease;
-    margin-right: 0.5rem;
+    margin-right: 0.1rem;
 }
 
 .menu-btn:hover,
-.menu-btn:hover::before {
+.menu-btn:hover::before,
+.menu-btn:focus,
+.menu-btn:focus::before {
     opacity: 1;
     color: gold;
 }
 
 .menu-btn:active {
     transform: translateY(10%);
-}
-
-.menu-btn:active::before {
-    opacity: 1;
 }
 
 /* --------------------------------- Forms ---------------------------------- */
