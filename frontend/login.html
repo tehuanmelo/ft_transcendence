@@ -30,14 +30,34 @@
     </div>
     <div class="form-prompt text-center">
         <p>Don't have an account?</p>
-        <p>
-            <span class="prompt-link" onclick="loadContent('/register')">
-                Register Here
-            </span>
-        </p>
+        <p><span class="prompt-link" onclick="loadContent('/register')">Register Here</span></p>
     </div>
 </form>
 
-<div class="modal">
-    <!-- 2fa as a modal -->
+<!-- 2fa as a modal -->
+<div id="2faModal" class="modal" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="model-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Verify it's you</h5>
+                <button type="button" class="btn-close" onclick="hideModal()"></button>
+            </div>
+            <div class="modal-body">
+                <p>A verification email has been sent to <strong>[a-z]***@[a-z]****.com</strong>.</p>
+                <p>Please enter the 6-digit code below:</p>
+                <div class="otp-inputs">
+                    <input type="text" maxlength="1" aria-label="2fa" autofocus>
+                    <input type="text" maxlength="1" aria-label="2fa">
+                    <input type="text" maxlength="1" aria-label="2fa">
+                    <input type="text" maxlength="1" aria-label="2fa">
+                    <input type="text" maxlength="1" aria-label="2fa">
+                    <input type="text" maxlength="1" aria-label="2fa">
+                </div>
+                <p>Didn't get the OTP? <a href="#">Resend</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="entry-form-btn p-2 w-75" disabled>Verify</button>
+            </div>
+        </div>
+    </div>
 </div>
