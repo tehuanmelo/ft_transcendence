@@ -1,5 +1,4 @@
 const canvas = document.getElementById('ponggame');
-// ! canvas is null cause its not loaded up when the full document is loaded
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -16,6 +15,9 @@ const PaddleTypes = Object.freeze({
     LEFT2: 3,
     RIGHT2: 4,
 });
+
+const pong = new Pong(4);
+pong.start();
 
 class Ball {
     constructor(score, nbPlayers, paddle1, paddle2, paddle3, paddle4) {
@@ -337,7 +339,6 @@ class Pong {
     }
 }
 
-
 class Score {
     constructor() {
         this.scoreL = 0;
@@ -416,14 +417,9 @@ class Countdown {
     }
 }
 
-const pong = new Pong(4);
-pong.start();
-
-
 function playAgain() {
     pong.start();
 }
-
 
 function loadConfiguration() {
     pong.pause();

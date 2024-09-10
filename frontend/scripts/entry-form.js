@@ -1,10 +1,10 @@
-async function handleFormLoad(formType) {
-    const form = document.getElementById(`${formType}-form`);
-    form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        await submitFormData(form, formType);
-    })
-}
+const form = document.querySelector('[id$="-form"]');
+form.addEventListener('submit', async (event) => {
+    // TODO: improve this!
+    const formType = form.id == 'login-form' ? 'login' : 'register';
+    event.preventDefault();
+    await submitFormData(form, formType);
+});
 
 async function submitFormData(form, action) {
     const usersApiUrl = 'https://localhost:443/api/users';
