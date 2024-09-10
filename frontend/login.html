@@ -1,4 +1,4 @@
-<!-- login-form -->
+<!-- login -->
 <!-- ! this button is extremely ugly to use -->
 <div class="start-btn position-absolute top-0 start-0 m-3">
     <button onclick="loadContent('/')" class="btn btn-outline-light">
@@ -6,7 +6,7 @@
     </button>
 </div>
 
-<form id="login-form" class="entry-form" method="post">
+<form id="login" class="entry-form" method="post">
     <div class="mb-3 text-center">Login to save your progress!</div>
     <div class="form-floating mb-2">
         <input id="email" type="email" name="email" class="form-control" placeholder="name@example.com" required>
@@ -31,7 +31,7 @@
     <div class="form-prompt text-center">
         <p>Don't have an account?</p>
         <p>
-            <span class="prompt-link" onclick="displaySection('register-form.html', 'register', handleFormLoad)">
+            <span class="prompt-link" onclick="loadContent('/register')">
                 Register Here
             </span>
         </p>

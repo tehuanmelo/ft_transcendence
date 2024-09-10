@@ -1,12 +1,12 @@
 <!-- start -->
-<img src="assets/Pong.svg" class="mb-4" alt="Logo of the website" />
+<!-- TODO: to make accessibility cleaner, have a way to separate the > and the button -->
 
-<!-- ! for accessibility improve tabindex -->
+<img src="assets/Pong.svg" class="mb-4" alt="Pong Logo" />
 
-<button type="button" class="menu-btn mb-3" onclick="loadContent('/login', handleFormLoad('login'))">Log in</button>
-<button type="button" class="menu-btn mb-3">42 Login</button>
-<button type="button" class="menu-btn mb-3" onclick="loadContent('/register', handleFormLoad('register'))">Register</button>
-<button type="button" class="menu-btn mb-3">Play as Guest</button>
+<button class="menu-btn mb-3" onclick="loadContent('/login')">Log in</button>
+<button class="menu-btn mb-3">42 Login</button>
+<button class="menu-btn mb-3" onclick="loadContent('/register')">Register</button>
+<button class="menu-btn mb-3" onclick="loadContent('/game')">Play as Guest</button>
 <button type="button" class="menu-btn mb-3" onclick="loadContent('/2fa')">2fa</button>
 
 <footer class="text-center text-light">

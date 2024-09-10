@@ -24,8 +24,8 @@ window.addEventListener("popstate", (event) => {
 
 const validRoutes = [
     { url: '/', file: 'start.html', title: 'Pong', script: null },
-    { url: '/login', file: 'login-form.html', title: 'Login', script: 'scripts/entry-form.js' },
-    { url: '/register', file: 'register-form.html', title: 'Registration', script: 'scripts/entry-form.js' },
+    { url: '/login', file: 'login.html', title: 'Login', script: 'scripts/entry-form.js' },
+    { url: '/register', file: 'register.html', title: 'Registration', script: 'scripts/entry-form.js' },
     { url: '/game', file: 'pong.html', title: 'Game', script: 'scripts/pong.js' },
     { url: '/home', file: 'home.html', title: 'Home', script: null },
     // { url: '/tournament', file: 'tournament.html', title: '', script: null },

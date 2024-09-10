@@ -1,18 +1,17 @@
 const form = document.querySelector('[id$="-form"]');
 form.addEventListener('submit', async (event) => {
     // TODO: improve this!
-    const formType = form.id == 'login-form' ? 'login' : 'register';
     event.preventDefault();
-    await submitFormData(form, formType);
+    await submitFormData(form);
 });
 
-async function submitFormData(form, action) {
+async function submitFormData(form) {
     const usersApiUrl = 'https://localhost:443/api/users';
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
 
     try {
-        const response = await fetch(`${usersApiUrl}/${action}`, {
+        const response = await fetch(`${usersApiUrl}/${form.id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
