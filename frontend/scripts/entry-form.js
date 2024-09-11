@@ -1,28 +1,19 @@
-async function handleFormLoad() {
-    const loginForm = document.getElementById('login-form');
-    if (loginForm) {
-        loginForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            await submitFormData(loginForm, 'login');
-        })
-    }
+const form = document.getElementById('login') || document.getElementById('register');
+console.log(form.id);
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    await submitFormData(form);
+});
 
-    const registrationForm = document.getElementById('registration-form');
-    if (registrationForm) {
-        registrationForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            await submitFormData(registrationForm, 'register');
-        })
-    }
-}
-
-async function submitFormData(form, action) {
+async function submitFormData(form) {
     const usersApiUrl = 'https://localhost:443/api/users';
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
 
+    console.log(`api url: ${usersApiUrl}/${form.id}`);
+
     try {
-        const response = await fetch(`${usersApiUrl}/${action}`, {
+        const response = await fetch(`${usersApiUrl}/${form.id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -36,10 +27,26 @@ async function submitFormData(form, action) {
         }
 
         console.log('Success!');
-        alert('success!')
-        // Handle the success response here, like redirecting or showing a success message
+        alert('success!');
+        show2faModal();
+        // show success message
+        // if the form is /register then redirect to log in page
+        // if the form is /login then redirect to 2fa
+
     } catch (error) {
         console.error('There was an issue with the request: ', error);
         alert('Failed to submit the form. Please try again.');
     }
+}
+
+function show2faModal() {
+    const modal = document.getElementById('2faModal');
+    modal.style.display = 'block';
+    modal.setAttribute('aria-hidden', 'false');
+}
+
+function hide2faModal() {
+    const modal = document.getElementById('2faModal');
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', 'true');
 }

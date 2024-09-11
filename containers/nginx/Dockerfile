@@ -1,15 +1,17 @@
 FROM alpine:3.19
 
-WORKDIR /usr/local/nginx/
+WORKDIR /var/lib/nginx/
 
-COPY tools/setup.sh .
+RUN apk add --update --no-cache openssl ca-certificates nginx
 
-RUN chmod +x setup.sh && ./setup.sh \
-    && mkdir logs && touch logs/error.log
+RUN mkdir /etc/nginx/certs && cd /etc/nginx/certs && \
+    openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
+    -out /etc/nginx/certs/test.crt \
+    -keyout /etc/nginx/certs/key.key \
+    -subj "/C=US/CN=pong.com"
 
 COPY pong.conf /etc/nginx/http.d
 
 EXPOSE 443
 
-# CMD tail -f /dev/null
 CMD ["nginx", "-g", "daemon off;"]
