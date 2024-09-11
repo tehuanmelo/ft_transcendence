@@ -15,22 +15,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     window.addEventListener('popstate', () => {
-        url = document.location.pathname;
+        const url = document.location.pathname;
         getPage(url);
     });
 });
 
 function updateContent(pageHtml, url) {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(pageHtml, 'text/html');
+    const page = parser.parseFromString(pageHtml, 'text/html');
 
-    const newContent = doc.querySelector('#content').innerHTML;
+    const newContent = page.querySelector('#content').innerHTML;
     document.querySelector('#content').innerHTML = newContent;
 
-    const newTitle = doc.querySelector('title').innerHTML;
+    const newTitle = page.querySelector('title').innerHTML;
     document.title = newTitle;
 
-    history.pushState(null, newTitle, url);
+    const oldUrl = document.location.pathname;
+    if (oldUrl !== url)
+        history.pushState(null, newTitle, url);
 }
 
 function getPage(url) {

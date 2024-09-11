@@ -29,17 +29,19 @@
 
 {% else %}
 
-<div class="d-flex flex-column">
-    <img src="{% static 'Pong.svg' %}" alt="PONG" class="mb-5">
-    <div id="auth-container" class="d-flex flex-column text-center mb-4">
-        <a class="menu-btn mb-3 spa-link" href="{% url 'login' %}" data-method="GET">Log In</a>
-        <a class="menu-btn mb-3 spa-link" href="{% url 'register' %}" data-method="GET">Register</a>
-        <a class="menu-btn mb-3" href="#">42 Log In</a>
-        <a class="menu-btn mb-3" href="{% url 'game' %}">Play as Guest</a>
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="d-flex flex-column">
+        <img src="{% static 'Pong.svg' %}" alt="PONG" class="mb-5">
+        <div id="auth-container" class="d-flex flex-column text-center mb-4">
+            <a class="menu-btn mb-3 spa-link" href="{% url 'login' %}" data-method="GET">Log In</a>
+            <a class="menu-btn mb-3 spa-link" href="{% url 'register' %}" data-method="GET">Register</a>
+            <a class="menu-btn mb-3" href="#">42 Log In</a>
+            <a class="menu-btn mb-3" href="{% url 'game' %}">Play as Guest</a>
+        </div>
+        <footer class="text-center text-light">
+            <p>&copy; 2024 PONG.</p>
+        </footer>
     </div>
-    <footer class="text-center text-light">
-        <p>&copy; 2024 PONG.</p>
-    </footer>
 </div>
 
 {% endif %}
