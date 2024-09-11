@@ -43,7 +43,7 @@ down: check_docker
 	$(DOCKER_COMPOSE) down
 
 nuke: check_docker
-	docker system prune -a
+	docker system prune -a -f
 
 clean: check_docker
 	$(DOCKER_COMPOSE) down --rmi all --volumes
