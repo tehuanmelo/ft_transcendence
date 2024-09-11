@@ -66,16 +66,14 @@ button {
 
 /* --------------------------------- Forms ---------------------------------- */
 .entry-form {
-    background-color: white;
-    color: var(--form-primary-color);
+    color: white;
 }
 
 .form-control,
 .form-control:focus {
     border-radius: 0;
     box-shadow: none;
-    background-color: var(--form-field-color);
-    border: 3px solid var(--form-primary-color);
+    background-color: rgb(112, 112, 112);
 }
 
 /* Label color when the input is focused or has a value */
@@ -83,19 +81,20 @@ button {
 .form-floating>.form-control:not(:placeholder-shown)~label,
 .form-floating>.form-control:focus~label::after,
 .form-floating>.form-control:not(:placeholder-shown)~label::after {
-    color: var(--form-primary-color);
     background-color: transparent;
 }
 
-.entry-form-btn,
-.entry-form-btn:active {
-    background-color: var(--form-primary-color);
+.entry-form-btn {
+    background-color: gray;
     color: white;
-    border-radius: 0;
+}
+
+.entry-form-btn:active {
+    transform: translateY(5%);
 }
 
 .entry-form-btn:hover {
-    background-color: var(--form-button-hover-color);
+    background-color: rgb(85, 85, 85);
 }
 
 .password-opts {
@@ -104,7 +103,7 @@ button {
 }
 
 #forgot-password {
-    color: var(--form-primary-color);
+    color: white;
     text-decoration: none;
 }
 
@@ -123,6 +122,16 @@ button {
 
 .prompt-link:hover {
     text-decoration: underline;
+}
+
+.otp-inputs {
+    display: grid;
+    justify-content: center;
+}
+
+.otp-inputs input {
+    width: 3rem;
+    height: 2rem;
 }
 
 @media (max-width: 575.98px) {

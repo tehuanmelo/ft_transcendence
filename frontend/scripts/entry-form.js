@@ -1,6 +1,6 @@
-const form = document.querySelector('[id$="-form"]');
+const form = document.getElementById('login') || document.getElementById('register');
+console.log(form.id);
 form.addEventListener('submit', async (event) => {
-    // TODO: improve this!
     event.preventDefault();
     await submitFormData(form);
 });
@@ -9,6 +9,8 @@ async function submitFormData(form) {
     const usersApiUrl = 'https://localhost:443/api/users';
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
+
+    console.log(`api url: ${usersApiUrl}/${form.id}`);
 
     try {
         const response = await fetch(`${usersApiUrl}/${form.id}`, {
@@ -25,7 +27,8 @@ async function submitFormData(form) {
         }
 
         console.log('Success!');
-        alert('success!')
+        alert('success!');
+        show2faModal();
         // show success message
         // if the form is /register then redirect to log in page
         // if the form is /login then redirect to 2fa
@@ -34,4 +37,16 @@ async function submitFormData(form) {
         console.error('There was an issue with the request: ', error);
         alert('Failed to submit the form. Please try again.');
     }
+}
+
+function show2faModal() {
+    const modal = document.getElementById('2faModal');
+    modal.style.display = 'block';
+    modal.setAttribute('aria-hidden', 'false');
+}
+
+function hide2faModal() {
+    const modal = document.getElementById('2faModal');
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', 'true');
 }
