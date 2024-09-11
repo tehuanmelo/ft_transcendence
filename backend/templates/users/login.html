@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Login{% endblock title %}
+
+{% block nav %}
+<a href="{% url 'home' %}" class="spa-link" data-method="GET">Back to home</a>
+{% endblock nav %}
+
+{% block content %}
+<h2>Login</h2>
+
+<form id="login-form" data-redirect="{% url 'home' %}">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <a class="btn btn-primary spa-link" href="{% url 'login' %}" data-method="POST" data-form="#login-form">Log In</a>
+</form>
+
+<p>Do not have account? <a href="{% url 'register' %}" class="spa-link" data-method="GET">Register here</a></p>
+
+{% endblock content %}
