@@ -7,14 +7,18 @@
 <a href="{% url 'home' %}" class="spa-link" data-method="GET">Back to home</a>
 {% endblock nav %}
 
+
 {% block content %}
+
 <h2>Register</h2>
 
 <form id="register-form" data-redirect="{% url 'login' %}">
     {% csrf_token %}
     {{ form|crispy }}
-    <a class="btn btn-primary spa-link" href="{% url 'register' %}" data-method="POST"
+    <a class="entry-form-btn spa-link" href="{% url 'register' %}" data-method="POST"
         data-form="#register-form">Register</a>
 </form>
+
+<p>Already have an account? <a href="{% url 'login' %}" class="spa-link" data-method="GET">Login here</a></p>
 
 {% endblock content %}

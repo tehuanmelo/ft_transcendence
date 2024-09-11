@@ -8,6 +8,8 @@
 <link rel="stylesheet" href="{% static 'styles/pong.css' %}">
 {% endblock %}
 
+{% block content %}
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-1 d-flex d-md-flex button-alignment">
@@ -125,6 +127,8 @@
         </div>
     </div>
 </div>
+
+{% endblock content %}
 
 {% block extra_js %}
 <script src="{% static 'scripts/pong.js' %}"></script>
