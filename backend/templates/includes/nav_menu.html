@@ -1,0 +1,39 @@
+<nav class="navbar bg-primary navbar-expand-lg bg-body-tertiary mb-5" data-bs-theme="dark">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#">PONG</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link spa-link" href="{% url 'home' %}" data-method="GET">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link spa-link" href="{% url 'about' %}" data-method="GET">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link spa-link" href="{% url 'contact' %}" data-method="GET">Contact</a>
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Hello! {{ user.username }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Edit Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Change Password</a></li>
+                        <li><a class="dropdown-item spa-link" href="{% url 'logout' %}" data-method="GET">Log Out</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
