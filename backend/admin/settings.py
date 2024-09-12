@@ -26,6 +26,10 @@ SECRET_KEY = os.getenv('DJANGO_KEY')
 #! SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://localhost'
+]
+
 ALLOWED_HOSTS = []
 CORS_ORIGIN_ALLOW_ALL = True # to allow cross-origin requests
 
