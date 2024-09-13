@@ -2,10 +2,12 @@ from django.shortcuts import render
 
 
 def home(request):
-    return render(request, 'pages/home.html')
+    return render(request, "pages/home.html")
+
 
 def about(request):
-    return render(request, 'pages/about.html')
+    return render(request, "pages/about.html")
+
 
 def game(request):
-    return render(request, 'pages/pong.html')
+    return render(request, "pages/pong.html")
