@@ -7,8 +7,5 @@ def home(request):
 def about(request):
     return render(request, 'pages/about.html')
 
-def contact(request):
-    return render(request, 'pages/contact.html')
-
 def game(request):
     return render(request, 'pages/pong.html')
