@@ -160,3 +160,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # django-crispy-forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5" 
+
+# allow csfr from https
+CSRF_TRUSTED_ORIGINS = [
+    'https://localhost'
+]
+
+# directory where collectstatic will move the static files
+STATIC_ROOT = BASE_DIR / 'collectstatic'
