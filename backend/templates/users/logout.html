@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Log Out{% endblock title %}
+
+{% block nav %}
+{% if user.is_authenticated %}
+{% include "includes/nav_menu.html" %}
+{% endif %}
+{% endblock nav %}
+
+
+{% block content %}
+
+<h1>Log Out</h1>
+
+<p>Are you sure you want log out?</p>
+<form id="logout-form" data-redirect="{% url 'home' %}">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <a class="btn btn-danger spa-link" href="{% url 'logout' %}" data-method="POST" data-form="#logout-form">Log Out</a>
+</form>
+
+{% endblock content %}

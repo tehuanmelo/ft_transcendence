@@ -1,43 +1,42 @@
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import generics, permissions
-from .serializers import UserSerializer, UserDetailSerializer
-from django.contrib.auth import authenticate
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login
+from django.shortcuts import render
+from django.contrib.auth import logout
 
-from .models import CustomUser
+from .forms import CustomUserCreationForm
 
-# the benifit of adding api_view is that it automatically converts
-# request, and response to json
-@api_view(['POST'])
-def register(request):
-    serializer = UserSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=201) # created
-    return Response(serializer.errors, status=400)
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        # print(request.POST)
 
-@api_view(['POST'])
-def login(request):
-    email = request.data.get('email')
-    password = request.data.get('password')
-
-    # need to authenticate if the user exists in the database
-    user = authenticate(request, email=email, password=password)
-    if user is not None:
-        # Authentication success
-        serializer = UserSerializer(user)
-        return Response(serializer.data, status=200)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return render(request, "pages/home.html")
     else:
-        # Authentication failed
-        return Response({"error": "Invalid email or password."}, status=401)
+        form = AuthenticationForm()
 
-class UsersDetailView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
-    queryset = CustomUser.objects.all()
-    serializer_class = UserDetailSerializer
+    return render(request, 'users/login.html', {'form': form})
 
-class UsersListView(generics.ListCreateAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
-    queryset = CustomUser.objects.all()
-    serializer_class = UserDetailSerializer
+
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)
+        return render(request, "pages/home.html")
+    else:
+        return render(request, "users/logout.html")
+
+
+def register_view(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(data=request.POST)
+
+        if form.is_valid():
+            form.save()
+            form = AuthenticationForm()
+            return render(request, "users/login.html", {'form': form})
+    else:
+        form = CustomUserCreationForm()
+
+    return render(request, 'users/register.html', {'form': form})
