@@ -8,7 +8,6 @@ from .forms import CustomUserCreationForm
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
-        # print(request.POST)
 
         if form.is_valid():
             user = form.get_user()
