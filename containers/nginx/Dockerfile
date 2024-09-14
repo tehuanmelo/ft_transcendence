@@ -12,6 +12,6 @@ RUN mkdir /etc/nginx/certs && cd /etc/nginx/certs && \
 
 COPY pong.conf /etc/nginx/http.d
 
-EXPOSE 443
+EXPOSE 80 443
 
 CMD ["nginx", "-g", "daemon off;"]

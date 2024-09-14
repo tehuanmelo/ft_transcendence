@@ -37,18 +37,21 @@ up: check_docker
 		exit 1; \
 	fi
 	$(DOCKER_COMPOSE) up --build --detach
-	@echo "Access the app at https://localhost:443"
+	@echo "Access the website at https://localhost:443"
 
 down: check_docker
 	$(DOCKER_COMPOSE) down
 
 nuke: check_docker
+	@echo "$(RED)Nuking docker files... ☢️$(RESET)";
 	docker system prune -a -f
 
 clean: check_docker
+	@echo "$(RED)Initiating clean... 🧹$(RESET)";
 	$(DOCKER_COMPOSE) down --rmi all --volumes
 
 fclean: clean nuke
+	@echo "$(RED)Clean complete 🧼$(RESET)";
 
 re: fclean up
 
