@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ user.username }}{% endblock title %}
+
+{% block nav %}
+    {% include "includes/nav_menu.html" %}
+{% endblock nav %}
+
+
+{% block content %}
+
+<div class="p-5 mb-4 bg-body-tertiary rounded-3 border border-dark">
+    <div class="container-fluid py-5">
+      
+
+
+        <div class="card mb-3" >
+            <div class="row g-0">
+              <div class="col-md-3">
+                {% if user.profile_image %}
+                    <img src="{{ user.profile_image.url }}" class="img-fluid rounded-start square-image" alt="Profile Image" style="max-width: 300px;">
+                {% else %}
+                    <img src="{% static 'images/default_user.jpg' %}" class="img-fluid rounded-start square-image" alt="Default User Image">
+                {% endif %}
+              </div>
+              <div class="col-md-9">
+                <div class="card-body">
+                    <h1 class="card-title">@{{user.username}}</h1>
+                    {% if user.first_name %}
+                        <h3 class="card-text">{{user.first_name|capfirst}} {{user.last_name|capfirst}}</h3>
+                    {% endif %}
+                    <p class="card-text"><small class="text-body-secondary">Member since: {{ user.date_joined|date:"F Y" }}</small></p>
+                    {% if user.bio %}
+                        <p class="card-text">{{user.bio}}</p>
+                    {% endif %}
+                    <p class="card-text">
+                        {% if user.github %}
+                        <a href="{{user.github}}" target="_blank">Github</a>
+                        {% endif %}
+                        {% if user.twiter %}
+                        <a href="{{user.twitter}}" target="_blank">Twiter</a>
+                        {% endif %}
+                    </p>
+                    {% if user.email %}
+                        <p class="card-text">email: <a href="mailto:{{user.email}}">{{user.email}}</a></p>
+                    {% endif %}
+                    <p class="card-text"><small class="text-body-secondary">Last login: {{ user.last_login }}</small></p>
+                    
+                </div>
+              </div>
+            </div>
+          </div>
+        
+            
+
+
+    </div>
+</div>
+
+{% endblock content %}

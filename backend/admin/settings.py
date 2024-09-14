@@ -146,7 +146,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Dubai'
 
 USE_I18N = True
 
@@ -177,3 +177,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 # directory where collectstatic will move the static files
 STATIC_ROOT = BASE_DIR / 'collectstatic'
+
+# Media files config
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
