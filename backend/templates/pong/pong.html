@@ -2,7 +2,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Game{% endblock title %}
+{% block title %}Pong{% endblock title %}
+
+{% block nav %}
+    <a href="{% url 'home' %}" class="spa-link" data-method="GET">Back to home</a>
+{% endblock nav %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'styles/pong.css' %}">

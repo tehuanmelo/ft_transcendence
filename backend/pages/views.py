@@ -9,6 +9,3 @@ def about(request):
 
 def contact(request):
     return render(request, 'pages/contact.html')
-
-def game(request):
-    return render(request, 'pages/pong.html')
