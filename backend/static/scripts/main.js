@@ -1,7 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     document.body.addEventListener('click', (event) => {
-        event.preventDefault();
+
         const target = event.target;
+        if (target.matches('.allow-click'))
+            return
+
+        event.preventDefault();
+        
+
         if (target.matches('.spa-link')) {
             const method = target.getAttribute('data-method');
             const url = target.getAttribute('href');

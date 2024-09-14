@@ -8,4 +8,4 @@ class CustomUser(AbstractUser):
     bio = models.TextField(blank=True, null=True)
     github = models.URLField(max_length=200, blank=True, null=True)
     twitter = models.URLField(max_length=200, blank=True, null=True)
-    display_name = models.CharField(max_length=100, null=True, blank=True)
+    nick_name = models.CharField(max_length=100, null=True, blank=True)

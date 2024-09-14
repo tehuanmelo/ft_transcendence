@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm, UserProfileForm
 from .models import CustomUser
 
 def login_view(request):
@@ -44,8 +44,21 @@ def register_view(request):
     return render(request, 'users/register.html', {'form': form})
 
 @login_required
-def profile_view(request, pk):
-    user = get_object_or_404(CustomUser, pk=pk)
+def profile_view(request):
     return render(request, "users/profile.html", {
-        "user": user,
+        "user": request.user,
     })
+ 
+def edit_profile_view(request):
+    print('request is in edit')
+    if request.method == 'POST':
+        print('request is a post')
+        form = UserProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return render(request, 'users/profile.html')
+    else:
+        form = UserProfileForm(instance=request.user)
+            
+    return render(request, 'users/edit_profile.html', {'form': form})
+            
