@@ -37,7 +37,7 @@ button {
     min-height: 100dvh;
 }
 
-/* --------------------------------- Start ---------------------------------- */
+/* ---------------------------------- Home ---------------------------------- */
 .menu-btn {
     color: white;
     background-color: transparent;
@@ -67,9 +67,12 @@ button {
 
 /* --------------------------------- Forms ---------------------------------- */
 .entry-form {
-    /* color: var(--form-primary-color); */
     color: white;
     border: none;
+}
+
+.form-text {
+    color: white;
 }
 
 .form-control,
@@ -84,7 +87,6 @@ button {
 .form-floating>.form-control:not(:placeholder-shown)~label,
 .form-floating>.form-control:focus~label::after,
 .form-floating>.form-control:not(:placeholder-shown)~label::after {
-    /* color: var(--form-primary-color); */
     background-color: transparent;
 }
 

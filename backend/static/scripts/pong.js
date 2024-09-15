@@ -8,6 +8,7 @@ var g_PADDLE_SPEED = 30;
 var g_BALL_SPEED = 15;
 var g_SOUND = true;
 var g_SCORE_TO_WIN = 5;
+var g_CURRENT_LEVEL = "Medium";
 
 const PaddleTypes = Object.freeze({
     LEFT1: 1,
@@ -15,9 +16,6 @@ const PaddleTypes = Object.freeze({
     LEFT2: 3,
     RIGHT2: 4,
 });
-
-const pong = new Pong(4);
-pong.start();
 
 class Ball {
     constructor(score, nbPlayers, paddle1, paddle2, paddle3, paddle4) {
@@ -35,7 +33,7 @@ class Ball {
         this.nbPlayers = nbPlayers;
         this.ballRadius = this.width / 100;
         this.score = score;
-        this.sound = new Sound("../assets/bounce.mp3");
+        this.sound = new Sound("../sound/bounce.mp3");
     }
 
     drawBall() {
@@ -137,22 +135,7 @@ class Paddle {
         this.height = canvas.height; // Canvas height in pixels
         this.paddleWidth = this.width / 50;
         this.paddleHeight = this.height / 8;
-        if (this.paddleType == PaddleTypes.LEFT1) {
-            this.x = 2;
-            this.y = this.height / 2.5;
-        }
-        if (this.paddleType == PaddleTypes.RIGHT1) {
-            this.x = this.width - 2 - this.paddleWidth;
-            this.y = this.height / 2.5;
-        }
-        if (this.paddleType == PaddleTypes.LEFT2) {
-            this.x = this.paddleWidth + 2 + 3;
-            this.y = this.height / 2.5;
-        }
-        if (this.paddleType == PaddleTypes.RIGHT2) {
-            this.x = this.width - 5 - this.paddleWidth - this.paddleWidth;
-            this.y = this.height / 2.5;
-        }
+        this.resetPosition();
     }
     up() {
         if (this.y - g_PADDLE_SPEED - Pong.REC_HEIGHT_SIZE < 0) {
@@ -189,12 +172,30 @@ class Paddle {
         if (this.paddleType == PaddleTypes.RIGHT2)
             ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight);
     }
+    resetPosition() {
+        if (this.paddleType == PaddleTypes.LEFT1) {
+            this.x = 2;
+            this.y = this.height / 2.5;
+        }
+        if (this.paddleType == PaddleTypes.RIGHT1) {
+            this.x = this.width - 2 - this.paddleWidth;
+            this.y = this.height / 2.5;
+        }
+        if (this.paddleType == PaddleTypes.LEFT2) {
+            this.x = this.paddleWidth + 2 + 3;
+            this.y = this.height / 2.5;
+        }
+        if (this.paddleType == PaddleTypes.RIGHT2) {
+            this.x = this.width - 5 - this.paddleWidth - this.paddleWidth;
+            this.y = this.height / 2.5;
+        }
+    }
 }
 
 class Pong {
     static REC_HEIGHT_SIZE = 20;
 
-    constructor(nbPlayers) {
+    constructor(nbPlayers, isTournament = false, notifyWinner = null) {
         // Get canvas attributes
         this.width = canvas.width; // Canvas width in pixels
         this.height = canvas.height; // Canvas height in pixels
@@ -203,6 +204,8 @@ class Pong {
         this.paddle2 = new Paddle(PaddleTypes.RIGHT1);
         this.score = new Score();
         this.countdown = new Countdown(this);
+        this.notifyWinner = notifyWinner;
+        this.isGameRunning = false;
 
         if (this.nbPlayers == 4) {
             this.paddle3 = new Paddle(PaddleTypes.LEFT2);
@@ -215,7 +218,14 @@ class Pong {
         this.intervalId = 0;
     }
     start() {
+        this.paddle1.resetPosition();
+        this.paddle2.resetPosition();
+        if (this.nbPlayers == 4) {
+            this.paddle3.resetPosition();
+            this.paddle4.resetPosition();
+        }
         this.render();
+        this.isGameRunning = true;
         this.countdown.start();
     }
 
@@ -244,6 +254,7 @@ class Pong {
     stop() {
         clearInterval(this.intervalId);
         document.removeEventListener('keydown', this.handleKeyboardEvent.bind(this));
+        this.isGameRunning = false;
     }
 
     drawSquare() {
@@ -285,7 +296,7 @@ class Pong {
             element.innerText = "Right Player wins!";
         }
         var myModal = new bootstrap.Modal(document.getElementById('winnerpopup'));
-        myModal.show(); // Show the modal
+        myModal.show();
     }
 
     render() {
@@ -300,11 +311,23 @@ class Pong {
         this.ball.drawBall(); // Draw the ball
     }
 
+    getWinner() {
+        if (this.score.scoreL == g_SCORE_TO_WIN) {
+            return ("left");
+        }
+        else {
+            return ("right");
+        }
+    }
+
     pongRender() {
         this.render();
         this.ball.ballMove(); // Move the ball
         if (this.score.checkGameOver() == true) {
-            this.displayWinner();
+            if (this.isTournament == false)
+                this.displayWinner();
+            else
+                this.notifyWinner(this.getWinner());
             this.stop();
             this.render();
         }
@@ -338,6 +361,7 @@ class Pong {
         }
     }
 }
+
 
 class Score {
     constructor() {
@@ -417,12 +441,66 @@ class Countdown {
     }
 }
 
+class Game {
+    constructor(isTournament, players) {
+        this.isTournament = isTournament;
+        if (this.isTournament == true) {
+            this.tournament = new Tournament(players);
+        }
+        else {
+            this.pong = new Pong(players.length);
+        }
+    }
+
+    start() {
+        if (this.isTournament == true) {
+            this.tournament.startTournament();
+        }
+        else {
+            this.pong.start();
+        }
+    }
+
+    isGameRunning() {
+        if (this.isTournament == true) {
+            return (this.tournament.pong.isGameRunning);
+        }
+        else {
+            return (this.pong.isGameRunning);
+        }
+    }
+
+    pause() {
+        if (this.isTournament == true) {
+            this.tournament.pong.pause();
+        }
+        else {
+            this.pong.pause();
+        }
+    }
+
+    resume() {
+        if (this.isGameRunning() == true) {
+            if (this.isTournament == true) {
+                this.tournament.pong.resume();
+            }
+            else {
+                this.pong.resume();
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
 function playAgain() {
     pong.start();
 }
-
-function loadConfiguration() {
-    pong.pause();
+function refreshConfig() {
     document.getElementById('playerspeed').value = g_PADDLE_SPEED;
     document.getElementById('ballspeed').value = g_BALL_SPEED;
     document.getElementById('score').value = g_SCORE_TO_WIN;
@@ -430,20 +508,221 @@ function loadConfiguration() {
     document.getElementById('currentScore').innerText = "Score - " + g_SCORE_TO_WIN;
 }
 
+function loadConfiguration() {
+    if (game.isGameRunning() == true) {
+        document.getElementById('score').disabled = true;
+    }
+    else
+        document.getElementById('score').disabled = false;
+    game.pause();
+    refreshConfig();
+}
+
 function applyConfiguration() {
     g_PADDLE_SPEED = parseInt(document.getElementById('playerspeed').value, 10);
     g_BALL_SPEED = parseInt(document.getElementById('ballspeed').value, 10);
     g_SCORE_TO_WIN = parseInt(document.getElementById('score').value, 10);
     g_SOUND = document.getElementById('customSwitch').checked;
-    pong.resume();
+    game.resume();
+}
+
+class Tournament {
+    // player1 will be the logged user
+    constructor(players) {
+        this.players = players;
+        this.pong = new Pong(2, true, this.winnerCallback);
+        if (this.players.length == 3) {
+            this.playerArray = this.getUniqueRandomPlayers3();
+        }
+        else {
+            this.playerArray = this.getUniqueRandomPlayers4();
+        }
+        this.keyboardEventHandlerBind = this.handleKeyboardEvent.bind(this);
+        this.currentPlayer1 = this.players[this.playerArray[0]];
+        this.currentPlayer2 = this.players[this.playerArray[1]];
+        this.winner = "";
+        this.isFinalGame = false;
+        this.semiFinalWinner1 = "";
+        this.semiFinalWinner2 = "";
+    }
+
+    // lambda =>
+    winnerCallback = (winner) => {
+        var element = document.getElementById('winnerT');
+        var elementFinal = document.getElementById('winnerF');
+        if (winner == 'left') {
+            element.innerText = this.currentPlayer1 + " Player wins!";
+            elementFinal.innerText = this.currentPlayer1 + " won the Tournament!";
+            this.winner = this.currentPlayer1;
+        }
+        else {
+            element.innerText = this.currentPlayer2 + " Player wins!";
+            elementFinal.innerText = this.currentPlayer2 + " won the Tournament!";
+            this.winner = this.currentPlayer2;
+        }
+        if (this.players.length == 4) {
+            if (this.semiFinalWinner1 == "") {
+                this.semiFinalWinner1 = this.winner;
+            }
+            else {
+                this.semiFinalWinner2 = this.winner;
+            }
+        }
+        if (this.isFinalGame == true) {
+            var myModal = new bootstrap.Modal(document.getElementById('winnerFinalpopup'));
+            myModal.show();
+        }
+        else {
+            var myModal = new bootstrap.Modal(document.getElementById('winnerTpopup'));
+            myModal.show();
+        }
+
+
+    }
+
+    getUniqueRandomPlayers3() {
+        const numbers = [0, 1, 2];
+        return this.shuffleArray(numbers);
+    }
+
+    getUniqueRandomPlayers4() {
+        const numbers = [0, 1, 2, 3];
+        return this.shuffleArray(numbers);
+    }
+
+    shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return (array);
+    }
+
+    startTournament() {
+        this.displayGameAnnouncement("Semi Final", this.players[this.playerArray[0]], this.players[this.playerArray[1]]);
+        document.addEventListener('keydown', this.keyboardEventHandlerBind);
+    }
+
+    nextMatch() {
+        if (this.players.length == 4) {
+            if (this.semiFinalWinner1 == this.winner && this.semiFinalWinner2 == "") {
+                this.currentPlayer1 = this.players[this.playerArray[2]];
+                this.currentPlayer2 = this.players[this.playerArray[3]];
+                this.displayGameAnnouncement("Semi Final", this.players[this.playerArray[2]], this.players[this.playerArray[3]]);
+            }
+            if (this.semiFinalWinner2 == this.winner) {
+                this.displayGameAnnouncement("Final", this.semiFinalWinner1, this.semiFinalWinner2);
+                this.currentPlayer1 = this.semiFinalWinner1;
+                this.currentPlayer2 = this.semiFinalWinner2;
+                this.isFinalGame = true;
+            }
+        }
+        else {
+            this.displayGameAnnouncement("Final", this.winner, this.players[this.playerArray[2]]);
+            this.isFinalGame = true;
+        }
+        document.addEventListener('keydown', this.keyboardEventHandlerBind);
+    }
+
+
+    handleKeyboardEvent(event) {
+        if (event.key === 'Enter') {
+            document.removeEventListener('keydown', this.keyboardEventHandlerBind);
+            this.pong.start();
+        }
+    }
+
+    displayGameAnnouncement(gameType, firstPlayerName, secondPlayerName) {
+        // ! Press Start 2P is not being properly displayed on the first game
+        ctx.fillStyle = 'black'; // Fill color
+        ctx.fillRect(0, 0, canvas.width, canvas.height); // Draw a rectangle (x, y, width, height)
+        ctx.fillStyle = 'red'; // Fill color
+        ctx.font = "50px 'Press Start 2P'";
+
+        var textWidth = ctx.measureText(gameType).width;
+        ctx.fillText(gameType, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 200);
+        ctx.font = "50px 'Press Start 2P'";
+        textWidth = ctx.measureText(firstPlayerName + " X " + secondPlayerName).width;
+        ctx.fillText(firstPlayerName + " X " + secondPlayerName, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 50);
+        ctx.font = "50px 'Press Start 2P'";
+        textWidth = ctx.measureText("Press Enter to Start").width;
+        ctx.fillText("Press Enter to Start", (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) + 100);
+
+    }
+}
+
+function nextGame() {
+    game.tournament.nextMatch();
 }
 
 
+
+function onPageLoad() {
+    document.addEventListener('DOMContentLoaded', function () {
+        const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                // Get the text content and value of the selected item
+                const selectedText = this.textContent.trim();
+                const selectedValue = this.getAttribute('data-value');
+
+                // Log or use the selected item
+                console.log('Selected Text:', selectedText);
+                if (selectedText == "Easy") {
+                    g_PADDLE_SPEED = 15;
+                    g_BALL_SPEED = 7;
+                }
+                if (selectedText == "Medium") {
+                    g_PADDLE_SPEED = 30;
+                    g_BALL_SPEED = 15;
+                }
+                if (selectedText == "Hard") {
+                    g_PADDLE_SPEED = 66;
+                    g_BALL_SPEED = 33;
+                }
+                if (selectedText == "Visual Impaired") {
+                    g_PADDLE_SPEED = 15;
+                    g_BALL_SPEED = 10;
+                }
+                refreshConfig();
+                if (selectedText == "Custom") {
+                    customConfigShow(true);
+                }
+                else {
+                    customConfigShow(false);
+                }
+
+                // You can also update the button text with the selected item
+                const dropdownButton = document.getElementById('dropdownMenuButton');
+                dropdownButton.textContent = selectedText;
+
+                // Optionally, close the dropdown
+                const dropdownMenu = this.closest('.dropdown-menu');
+                const dropdown = new bootstrap.Dropdown(dropdownMenu.previousElementSibling);
+                dropdown.hide();
+            });
+        });
+    });
+
+
+}
+
+function customConfigShow(show) {
+    var x = document.getElementById("customConfig");
+    if (show == true) {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+
+onPageLoad();
+
+var game = new Game(true, ["Tehuan", "Tanvir", "Paula", "Samih"]);
+game.start();
+
 // Add 2 balls?
-// Add sound effects?
-// Custom score? DONE
-// Add different ball speeds? DONE
-// Add different paddle speeds? DONE
-
-
 // Add different backgrounds/themes?

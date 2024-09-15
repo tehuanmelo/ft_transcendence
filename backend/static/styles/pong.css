@@ -1,12 +1,12 @@
+@font-face {
+    font-family: 'Press Start 2P';
+    src: url('../fonts/PressStart2P-Regular.woff');
+}
+
 #gradbackground {
     background-color: #d9800b;
     /* For browsers that do not support gradients */
     background-image: linear-gradient(0deg, #d9800b, #f5de2f);
-}
-
-.full-height {
-    height: 100vh;
-    /* 100% of the viewport height */
 }
 
 .canvas-container {
@@ -79,4 +79,17 @@ canvas {
 .switch-label {
     margin-right: 10px;
     /* Adjust spacing between label and switch */
+}
+
+.press-start-2p-regular {
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.press-start-2p-regular-conf {
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 25px;
 }

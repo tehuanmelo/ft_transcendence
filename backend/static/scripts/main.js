@@ -62,7 +62,7 @@ function postForm(formSelector, url) {
     })
         .then(response => {
             if (!response.ok)
-                throw new Error('Invalid login post request');
+                throw new Error('Invalid form post request');
             return response.text();
         })
         .then(pageHtml => updateContent(pageHtml, redirectUrl))
