@@ -15,7 +15,7 @@
 <h1>Log Out</h1>
 
 <p>Are you sure you want log out?</p>
-<form id="logout-form" data-redirect="{% url 'home' %}">
+<form id="logout-form" data-redirect="{% url 'home' %}" class="entry-form">
     {% csrf_token %}
     {{ form|crispy }}
     <a class="btn btn-danger spa-link" href="{% url 'logout' %}" data-method="POST" data-form="#logout-form">Log Out</a>
