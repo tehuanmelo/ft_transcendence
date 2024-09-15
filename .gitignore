@@ -4,3 +4,4 @@ __pycache__/
 pongdb/
 .DS_Store
 .venv
+db.sqlite3
