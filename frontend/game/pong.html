@@ -14,7 +14,9 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Bungee+Tint&display=swap" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Handjet:wght@100..900&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+		rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 
@@ -64,7 +66,8 @@
 				</div>
 
 				<div class="row">
-					<button type="button" data-bs-toggle="modal" data-bs-target="#config" class="btn btn-light fa fa-gear" onclick="loadConfiguration()"></button>
+					<button type="button" data-bs-toggle="modal" data-bs-target="#config"
+						class="btn btn-light fa fa-gear" onclick="loadConfiguration()"></button>
 				</div>
 
 				<div class="row">
@@ -102,66 +105,108 @@
 			</div>
 		</div>
 
-				<!-- Modal Tounament Winner Pop-up-->
-				<div class="modal fade" id="winnerTpopup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-				aria-labelledby="staticBackdropLabel" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content" style="background-color: #fec66b;">
-						<div class="modal-header">
-							<h1 class="modal-title handjet-font" id="staticBackdropLabel">Pong Game</h1>
-						</div>
-						<div class="modal-body">
-							<h2 id="winnerT" class="handjet-font"></h2>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-								onclick="nextGame()">Next Match!</button>
-							<button type="button" class="btn btn-secondary">Back to Home Page</button>
-						</div>
+		<!-- Modal Tounament Winner Pop-up-->
+		<div class="modal fade" id="winnerTpopup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+			aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content" style="background-color: #fec66b;">
+					<div class="modal-header">
+						<h1 class="modal-title handjet-font" id="staticBackdropLabel">Pong Game</h1>
+					</div>
+					<div class="modal-body">
+						<h2 id="winnerT" class="handjet-font"></h2>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+							onclick="nextGame()">Next Match!</button>
+						<button type="button" class="btn btn-secondary">Back to Home Page</button>
 					</div>
 				</div>
 			</div>
-
-<!-- Modal Config-->
-<div class="modal fade" id="config" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-aria-labelledby="staticBackdropLabel" aria-hidden="true">
-<div class="modal-dialog">
-	<div class="modal-content" style="background-color: #fec66b;">
-		<div class="modal-header border-0">
-			<h1 class="modal-title handjet-font" id="staticBackdropLabel">Pong Configurations</h1>
 		</div>
-		<div class="modal-body">
-			<form>
 
-
-				<div class="switch-container">
-					<label class="switch-label chakra-petch-regular" for="customSwitch">Sound</label>
-					<div class="form-check form-switch">
-						<input class="form-check-input" type="checkbox" id="customSwitch"checked>
+		<!-- Modal Tounament FINAL Winner Pop-up-->
+		<div class="modal fade" id="winnerFinalpopup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+			aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content" style="background-color: #fec66b;">
+					<div class="modal-header">
+						<h1 class="modal-title handjet-font" id="staticBackdropLabel">Pong Game</h1>
+					</div>
+					<div class="modal-body">
+						<h2 id="winnerF" class="handjet-font"></h2>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary">Back to Home Page</button>
 					</div>
 				</div>
-				<div>
-					<label for="ballspeed" class="form-label chakra-petch-regular">Ball Speed</label>
-					<input type="range" class="form-range" id="ballspeed" min="5" max="40" step="1">
-				</div>
-				<div>
-					<label for="playerspeed" class="form-label chakra-petch-regular">Paddle Speed</label>
-					<input type="range" class="form-range" id="playerspeed" min="5" max="60" step="1">
-				</div>
-				<div>
-					<label id="currentScore" for="score" class="form-label chakra-petch-regular">Score</label>
-					<input type="range" class="form-range" id="score" min="1" max="11" step="1" oninput="this.previousElementSibling.innerHTML = 'Score - '+this.value">
-				</div>
+			</div>
+		</div>
 
-			</form>
+		<!-- Modal Config-->
+		<div class="modal fade" id="config" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+			aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content" style="background-color: #fec66b;">
+					<div class="modal-header border-0">
+						<h1 class="modal-title press-start-2p-regular-conf" id="staticBackdropLabel">Pong Configurations
+						</h1>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="switch-container">
+								<label class="switch-label chakra-petch-regular" for="customSwitch">Sound</label>
+								<div class="form-check form-switch">
+									<input class="form-check-input" type="checkbox" id="customSwitch" checked>
+								</div>
+							</div>
+
+							<!-- Large button groups (default and split) -->
+							<div class="btn-group">
+								<button class="btn btn-secondary btn-lg dropdown-toggle" type="button"
+									data-bs-toggle="dropdown" aria-expanded="false">Level
+								</button>
+								<ul class="dropdown-menu">
+									<li><a class="dropdown-item" href="#">Easy</a></li>
+									<li><a class="dropdown-item active" href="#">Medium</a></li>
+									<li><a class="dropdown-item" href="#">Hard</a></li>
+									<li><a class="dropdown-item" href="#">Custom</a></li>
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" href="#">Visual Impaired</a></li>
+
+								</ul>
+							</div>
+
+
+
+						<div id="customConfig">
+							<div>
+								<label for="ballspeed" class="form-label chakra-petch-regular">Ball Speed</label>
+								<input type="range" class="form-range" id="ballspeed" min="5" max="40" step="1">
+							</div>
+							<div>
+								<label for="playerspeed" class="form-label chakra-petch-regular">Paddle Speed</label>
+								<input type="range" class="form-range" id="playerspeed" min="5" max="60" step="1">
+							</div>
+						</div>
+
+
+							<div>
+								<label id="currentScore" for="score"
+									class="form-label chakra-petch-regular">Score</label>
+								<input type="range" class="form-range" id="score" min="1" max="11" step="1"
+									oninput="this.previousElementSibling.innerHTML = 'Score - '+this.value">
+							</div>
+
+						</form>
+					</div>
+					<div class="modal-footer border-0">
+						<button type="button" class="btn btn-secondary chakra-petch-regular" data-bs-dismiss="modal"
+							onclick="applyConfiguration()">Confirm</button>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="modal-footer border-0">
-			<button type="button" class="btn btn-secondary chakra-petch-regular" data-bs-dismiss="modal"
-				onclick="applyConfiguration()">Confirm</button>
-		</div>
-	</div>
-</div>
-</div>
 
 	</div>
 	</div>

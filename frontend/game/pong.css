@@ -82,3 +82,11 @@ canvas {
     font-weight: 400;
     font-style: normal;
   }
+
+  .press-start-2p-regular-conf {
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 25px;
+  }
+
