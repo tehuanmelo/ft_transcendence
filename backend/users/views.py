@@ -1,9 +1,11 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 
 from .forms import CustomUserCreationForm
+from .models import CustomUser
 
 def login_view(request):
     if request.method == 'POST':
@@ -19,7 +21,7 @@ def login_view(request):
 
     return render(request, 'users/login.html', {'form': form})
 
-
+@login_required
 def logout_view(request):
     if request.method == 'POST':
         logout(request)
@@ -40,3 +42,10 @@ def register_view(request):
         form = CustomUserCreationForm()
 
     return render(request, 'users/register.html', {'form': form})
+
+@login_required
+def profile_view(request, pk):
+    user = get_object_or_404(CustomUser, pk=pk)
+    return render(request, "users/profile.html", {
+        "user": user,
+    })

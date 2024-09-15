@@ -4,9 +4,7 @@
 {% block title %}Log Out{% endblock title %}
 
 {% block nav %}
-{% if user.is_authenticated %}
-{% include "includes/nav_menu.html" %}
-{% endif %}
+    {% include "includes/nav_menu.html" %}
 {% endblock nav %}
 
 

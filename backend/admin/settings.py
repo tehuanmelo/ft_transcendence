@@ -23,6 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 #! SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('DJANGO_KEY')
 
+# this config is just to run django without containers
+# SECRET_KEY = "remember_to_delete_this_key_is_just_for_dev"
+
 #! SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -111,6 +114,12 @@ DATABASES = {
         'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT'),
     }
+    
+    # this configuration is just to dev
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
 }
 
 # Password validation
@@ -137,7 +146,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Dubai'
 
 USE_I18N = True
 
@@ -168,3 +177,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 # directory where collectstatic will move the static files
 STATIC_ROOT = BASE_DIR / 'collectstatic'
+
+# Media files config
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

@@ -1,39 +1,52 @@
-<nav class="navbar bg-primary navbar-expand-lg bg-body-tertiary mb-5" data-bs-theme="dark">
-    <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="#">PONG</a>
-        <div class="collapse navbar-collapse" id="navbarNav">
+{% load static %}
+{% if user.is_authenticated %}
 
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link spa-link" href="{% url 'home' %}" data-method="GET">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link spa-link" href="{% url 'about' %}" data-method="GET">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link spa-link" href="{% url 'contact' %}" data-method="GET">Contact</a>
-            </ul>
+    <nav class="navbar bg-primary navbar-expand-lg bg-body-tertiary mb-5" data-bs-theme="dark">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">PONG</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
 
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        Hello! {{ user.username }}
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><a class="dropdown-item" href="#">Edit Profile</a></li>
-                        <li><a class="dropdown-item" href="#">Change Password</a></li>
-                        <li><a class="dropdown-item spa-link" href="{% url 'logout' %}" data-method="GET">Log Out</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link spa-link" href="{% url 'home' %}" data-method="GET">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link spa-link" href="{% url 'about' %}" data-method="GET">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link spa-link" href="{% url 'contact' %}" data-method="GET">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link spa-link" href="{% url 'pong' %}" data-method="GET">Pong</a>
+                    </li>
+                </ul>
 
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            {% if user.profile_image %}
+                                <img src="{{ user.profile_image.url }}" class="img-fluid rounded square-image" alt="Profile Image" style="max-width: 30px;">
+                            {% else %}
+                                <img src="{% static 'images/default_user.jpg' %}" class="img-fluid rounded square-image" alt="Default User Image" style="max-width: 30px;">
+                            {% endif %}
+                            {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item spa-link" href="{% url "profile" user.pk %}" data-method="GET">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Change Password</a></li>
+                            <li><a class="dropdown-item spa-link" href="{% url 'logout' %}" data-method="GET">Log Out</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+
+{% endif %}
