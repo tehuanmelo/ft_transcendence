@@ -1,7 +1,6 @@
-const canvas = document.getElementById('ponggame');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas = null;
+ctx = null;
+
 
 // Global variables for the game configuration
 var g_PADDLE_SPEED = 30;
@@ -33,7 +32,7 @@ class Ball {
         this.nbPlayers = nbPlayers;
         this.ballRadius = this.width / 100;
         this.score = score;
-        this.sound = new Sound("../sound/bounce.mp3");
+        this.sound = new Sound("../static/sound/bounce.mp3");
     }
 
     drawBall() {
@@ -659,6 +658,10 @@ function nextGame() {
 
 function onPageLoad() {
     document.addEventListener('DOMContentLoaded', function () {
+
+
+
+
         const dropdownItems = document.querySelectorAll('.dropdown-item');
 
         dropdownItems.forEach(item => {
@@ -705,9 +708,24 @@ function onPageLoad() {
                 dropdown.hide();
             });
         });
+
+
+
+
     });
 
 
+}
+
+
+function gameInitialization() {
+    canvas = document.getElementById('ponggame');
+    ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    var game = new Game(true, ["Tehuan", "Tanvir", "Paula", "Samih"]);
+    game.start();
 }
 
 function customConfigShow(show) {
@@ -721,8 +739,7 @@ function customConfigShow(show) {
 
 onPageLoad();
 
-var game = new Game(true, ["Tehuan", "Tanvir", "Paula", "Samih"]);
-game.start();
+
 
 // Add 2 balls?
 // Add different backgrounds/themes?
