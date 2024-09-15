@@ -46,13 +46,12 @@ def register_view(request):
 
 
 @login_required
-def profile_view(request, pk):
-    user = get_object_or_404(CustomUser, pk=pk)
+def profile_view(request):
     return render(
         request,
         "users/profile.html",
         {
-            "user": user,
+            "user": request.user,
         },
     )
 

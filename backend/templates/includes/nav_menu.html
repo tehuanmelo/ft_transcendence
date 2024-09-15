@@ -36,7 +36,7 @@
                         {{ user.username }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item spa-link" href="{% url 'profile' user.pk %}"
+                        <li><a class="dropdown-item spa-link" href="{% url 'profile' %}"
                                 data-method="GET">Profile</a></li>
                         <li><a class="dropdown-item" href="#">Change Password</a></li>
                         <li><a class="dropdown-item spa-link" href="{% url 'logout' %}" data-method="GET">Log Out</a>
