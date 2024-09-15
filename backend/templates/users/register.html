@@ -4,7 +4,7 @@
 {% block title %}Register{% endblock title %}
 
 {% block nav %}
-<a href="{% url 'home' %}" class="btn btn-secondary spa-link" data-method="GET">Back to home</a>
+<a href="{% url 'home' %}" class="btn btn-secondary spa-link" data-method="GET">&larr; Back to home</a>
 {% endblock nav %}
 
 
@@ -13,17 +13,14 @@
 <div class="container entry-form d-flex justify-content-center align-items-center flex-column">
     <h2>Register</h2>
 
-    <form id="register-form" data-redirect="{% url 'login' %}" class="">
+    <form id="register-form" data-redirect="{% url 'login' %}">
         {% csrf_token %}
         {{ form|crispy }}
-        <a class="entry-form-btn spa-link" href="{% url 'register' %}" data-method="POST"
+        <a class="btn btn-success spa-link mb-2" href="{% url 'register' %}" data-method="POST"
             data-form="#register-form">Register</a>
-        <div class="text-center">
-            <button type="submit" class="btn btn-success mb-2">Register</button>
-        </div>
     </form>
-    <p>Already have an account? <a href="{% url 'login' %}" class="spa-link" data-method="GET">Login here</a></p>
+    <p>Already have an account?</p>
+    <a href="{% url 'login' %}" class="spa-link" data-method="GET">Login here</a>
 </div>
-
 
 {% endblock content %}
