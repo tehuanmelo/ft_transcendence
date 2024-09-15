@@ -1,6 +1,6 @@
 canvas = null;
 ctx = null;
-
+game = null;
 
 // Global variables for the game configuration
 var g_PADDLE_SPEED = 30;
@@ -385,7 +385,7 @@ class Score {
 
 
     drawScore() {
-        ctx.font = "72px Bungee Tint";
+        ctx.font = "72px Press Start 2P";
         ctx.fillText(this.scoreL, canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Left player score
         ctx.fillText(this.scoreR, 3 * canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Right player score
     }
@@ -435,7 +435,8 @@ class Countdown {
     }
     drawCountdown() {
         this.pong.render();
-        ctx.font = "180px Bungee Tint";
+        ctx.font = "280px Press Start 2P";
+        ctx.fillStyle = 'red';
         ctx.fillText(this.count, canvas.width / 2, canvas.height / 2);
     }
 }
@@ -724,7 +725,7 @@ function gameInitialization() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    var game = new Game(true, ["Tehuan", "Tanvir", "Paula", "Samih"]);
+    game = new Game(true, ["Tehuan", "Tanvir", "Paula", "Samih"]);
     game.start();
 }
 
