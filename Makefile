@@ -49,7 +49,7 @@ nuke: check_docker
 clean: check_docker
 	@echo "$(RED)Initiating clean... 🧹$(RESET)";
 	$(DOCKER_COMPOSE) down --rmi all --volumes
-	rm -rf ./backend/media/profile_images
+	rm -rf ./backend/media/*
 
 fclean: clean nuke
 	@echo "$(RED)Clean complete 🧼$(RESET)";
