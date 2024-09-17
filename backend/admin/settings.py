@@ -91,8 +91,6 @@ STATIC_URL = "/static/"
 
 DEBUG_TEST = os.getenv('DEBUG', 'True').lower() in ('true', '1')
 
-print(DEBUG_TEST)
-
 if DEBUG_TEST:
     STATICFILES_DIRS = [
         os.path.join(BASE_DIR, "static"),
