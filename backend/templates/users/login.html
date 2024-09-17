@@ -12,7 +12,7 @@
 
 <h2>Login</h2>
 
-<form id="login-form" data-redirect="{% url 'home' %}" class="entry-form">
+<form id="login-form" class="entry-form">
     {% csrf_token %}
     {{ form|crispy }}
     <a class="btn btn-primary spa-link" href="{% url 'login' %}" data-method="POST" data-form="#login-form">Log In</a>

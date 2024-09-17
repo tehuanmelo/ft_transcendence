@@ -12,7 +12,7 @@
     <div class="container-fluid py-5">
         <h1 class="display-5 fw-bold">Edit Profile</h1>
 
-        <form id="edit-profile-form" data-redirect="{% url 'profile' %}">
+        <form id="edit-profile-form" >
             {% csrf_token %}
             {{ form|crispy }}
             <a class="btn btn-primary spa-link" href="{% url 'edit_profile' %}" data-method="POST"
