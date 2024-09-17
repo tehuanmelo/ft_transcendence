@@ -87,10 +87,15 @@ STATIC_URL = "/static/"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DEBUG_TEST = os.getenv('DEBUG', 'True').lower() in ('true', '1', 't')
+STATIC_URL = "/static/"
+
+DEBUG_TEST = os.getenv('DEBUG', 'True').lower() in ('true', '1')
+
+print(DEBUG_TEST)
+
 if DEBUG_TEST:
     STATICFILES_DIRS = [
-        BASE_DIR / 'static'
+        os.path.join(BASE_DIR, "static"),
     ]
     SECRET_KEY = "remember_to_delete_this_key_is_just_for_dev"
     DATABASES = {

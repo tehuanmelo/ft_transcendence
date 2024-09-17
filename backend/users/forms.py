@@ -15,10 +15,18 @@ class CustomUserCreationForm(UserCreationForm):
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = get_user_model()
-        fields = ["nick_name", "bio", "github", "twitter", "profile_image"]
-        widgets = {
-            "bio": forms.Textarea(attrs={"rows": 3, "cols": 40}),
-        }
+        fields = [
+        "username",
+        "first_name",
+        "last_name",
+        "email",
+        "nick_name",
+        "bio",
+        "github",
+        "twitter",
+        "profile_image",
+        "google_auth_key",
+        ]
 
 
 class UserProfileForm(forms.ModelForm):
