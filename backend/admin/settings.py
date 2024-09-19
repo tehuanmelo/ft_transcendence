@@ -82,12 +82,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "admin.wsgi.application"
 
+STATIC_URL = "/static/"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DEBUG_TEST = os.getenv("DEBUG", "True").lower() in ("true", "1", "t")
 if DEBUG_TEST:
+    STATICFILES_DIRS = [
+        BASE_DIR / 'static'
+    ]
     SECRET_KEY = "remember_to_delete_this_key_is_just_for_dev"
     DATABASES = {
         "default": {
@@ -96,6 +100,7 @@ if DEBUG_TEST:
         }
     }
 else:
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
     SECRET_KEY = os.getenv("DJANGO_KEY")
     DATABASES = {
         "default": {
@@ -142,9 +147,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "/static/"
-# directory where collectstatic will move the static files
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
 
 # STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 

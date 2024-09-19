@@ -36,14 +36,14 @@
                     {% endif %}
                     <p class="card-text">
                         {% if user.github %}
-                        <a href="{{user.github}}" target="_blank">Github</a>
+                        <a href="{{user.github}}" target="_blank" class="allow-click">Github</a>
                         {% endif %}
                         {% if user.twitter %}
-                        <a href="{{user.twitter}}" target="_blank">Twiter</a>
+                        <a href="{{user.twitter}}" target="_blank" class="allow-click">Twiter</a>
                         {% endif %}
                     </p>
                     {% if user.email %}
-                        <p class="card-text">email: <a href="mailto:{{user.email}}">{{user.email}}</a></p>
+                        <p class="card-text">email: <a href="mailto:{{user.email}}" class="allow-click">{{user.email}}</a></p>
                     {% endif %}
                     <p class="card-text"><small class="text-body-secondary">Last login: {{ user.last_login }}</small></p>
                     <a class="btn btn-primary spa-link" href="{% url 'edit_profile' %}" data-method="GET">Edit</a>

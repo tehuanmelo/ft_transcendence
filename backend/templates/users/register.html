@@ -13,7 +13,7 @@
 <div class="container entry-form d-flex justify-content-center align-items-center flex-column">
     <h2>Register</h2>
 
-    <form id="register-form" data-redirect="{% url 'login' %}" class="">
+    <form id="register-form" class="">
         {% csrf_token %}
         {{ form|crispy }}
         <a class="entry-form-btn spa-link" href="{% url 'register' %}" data-method="POST"
