@@ -1,7 +1,6 @@
-const canvas = document.getElementById('ponggame');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas = null;
+ctx = null;
+game = null;
 
 // Global variables for the game configuration
 var g_PADDLE_SPEED = 30;
@@ -33,7 +32,7 @@ class Ball {
         this.nbPlayers = nbPlayers;
         this.ballRadius = this.width / 100;
         this.score = score;
-        this.sound = new Sound("../sound/bounce.mp3");
+        this.sound = new Sound("../static/sound/bounce.mp3");
     }
 
     drawBall() {
@@ -386,7 +385,7 @@ class Score {
 
 
     drawScore() {
-        ctx.font = "72px Bungee Tint";
+        ctx.font = "72px Press Start 2P";
         ctx.fillText(this.scoreL, canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Left player score
         ctx.fillText(this.scoreR, 3 * canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Right player score
     }
@@ -436,7 +435,8 @@ class Countdown {
     }
     drawCountdown() {
         this.pong.render();
-        ctx.font = "180px Bungee Tint";
+        ctx.font = "280px Press Start 2P";
+        ctx.fillStyle = 'red';
         ctx.fillText(this.count, canvas.width / 2, canvas.height / 2);
     }
 }
@@ -659,6 +659,10 @@ function nextGame() {
 
 function onPageLoad() {
     document.addEventListener('DOMContentLoaded', function () {
+
+
+
+
         const dropdownItems = document.querySelectorAll('.dropdown-item');
 
         dropdownItems.forEach(item => {
@@ -705,9 +709,24 @@ function onPageLoad() {
                 dropdown.hide();
             });
         });
+
+
+
+
     });
 
 
+}
+
+
+function gameInitialization() {
+    canvas = document.getElementById('ponggame');
+    ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    game = new Game(true, ["Tehuan", "Tanvir", "Paula", "Samih"]);
+    game.start();
 }
 
 function customConfigShow(show) {
@@ -721,8 +740,7 @@ function customConfigShow(show) {
 
 onPageLoad();
 
-var game = new Game(true, ["Tehuan", "Tanvir", "Paula", "Samih"]);
-game.start();
+
 
 // Add 2 balls?
 // Add different backgrounds/themes?
