@@ -7,3 +7,6 @@ typing_extensions==4.12.2
 django-crispy-forms==2.3
 crispy-bootstrap5==2024.2
 pillow==10.4.0
+pyotp==2.9.0
+pypng==0.20220715.0
+qrcode==7.4.2
