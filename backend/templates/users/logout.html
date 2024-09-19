@@ -4,19 +4,20 @@
 {% block title %}Log Out{% endblock title %}
 
 {% block nav %}
-    {% include "includes/nav_menu.html" %}
+{% include "includes/nav_menu.html" %}
 {% endblock nav %}
 
 
 {% block content %}
 
-<h1>Log Out</h1>
-
-<p>Are you sure you want log out?</p>
-<form id="logout-form" class="entry-form">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <a class="btn btn-danger spa-link" href="{% url 'logout' %}" data-method="POST" data-form="#logout-form">Log Out</a>
-</form>
+<div class="container entry-form d-flex justify-content-center align-items-center flex-column">
+    <p>Are you sure you want log out?</p>
+    <form id="logout-form" data-redirect="{% url 'home' %}" class="entry-form">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <a class="btn btn-danger spa-link" href="{% url 'logout' %}" data-method="POST" data-form="#logout-form">Log
+            Out</a>
+    </form>
+</div>
 
 {% endblock content %}

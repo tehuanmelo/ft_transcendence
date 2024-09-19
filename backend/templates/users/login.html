@@ -4,20 +4,26 @@
 {% block title %}Login{% endblock title %}
 
 {% block nav %}
-<a href="{% url 'home' %}" class="btn btn-secondary spa-link" data-method="GET">Back to home</a>
+<div class="p-4">
+    <a href="{% url 'home' %}" class="btn btn-secondary spa-link" data-method="GET">&larr; Back to home</a>
+</div>
 {% endblock nav %}
 
 
 {% block content %}
 
-<h2>Login</h2>
+<div class="container entry-form d-flex justify-content-center align-items-center flex-column">
+    <h2 class="mb-4">Login</h2>
 
-<form id="login-form" class="entry-form">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <a class="btn btn-primary spa-link" href="{% url 'login' %}" data-method="POST" data-form="#login-form">Log In</a>
-</form>
+    <form id="login-form" data-redirect="{% url 'home' %}" class="d-flex flex-column ">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <a class="btn btn-success spa-link mb-4" href="{% url 'login' %}" data-method="POST" data-form="#login-form">Log
+            In</a>
+    </form>
 
-<p>Do not have an account? <a href="{% url 'register' %}" class="spa-link" data-method="GET">Register here</a></p>
+    <p>Don't have an account?</p>
+    <a href="{% url 'register' %}" class="spa-link" data-method="GET">Register here</a>
+</div>
 
 {% endblock content %}
