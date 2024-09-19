@@ -4,22 +4,66 @@
 {% block title %}About{% endblock title %}
 
 {% block nav %}
-    {% include "includes/nav_menu.html" %}
+{% include "includes/nav_menu.html" %}
 {% endblock nav %}
 
 
 {% block content %}
 
-<div class="p-5 mb-4 bg-body-tertiary rounded-3 border border-dark">
-    <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold">About Page</h1>
-        <p class="col-md-8 fs-4">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Totam, incidunt! Recusandae sit error blanditiis
-            quas libero dolorem iure velit ut voluptas, ad quo deserunt sequi voluptates possimus porro voluptate
-            suscipit quidem a, dolor, commodi in? Autem sunt qui ad officia, commodi dignissimos laudantium officiis
-            minima voluptas nobis expedita quam quis.
-        </p>
-
+<div class="container">
+    <div class="row justify-content-evenly text-center">
+        <!-- Paula -->
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card about-card">
+                <img src="{% static 'images/default_user.jpg' %}" class="card-img-top rounded-circle w-50 mx-auto"
+                    alt="Image of Paula">
+                <div class="card-body">
+                    <h5 class="card-title">Paula</h5>
+                    <a href="https://github.com/PaulaBalbino" class="btn btn-primary allow-click" target="_blank">
+                        <i class="bi bi-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Samih -->
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card about-card">
+                <img src="{% static 'images/default_user.jpg' %}" class="card-img-top rounded-circle w-50 mx-auto"
+                    alt="Image of Samih">
+                <div class="card-body">
+                    <h5 class="card-title">Samih</h5>
+                    <a href="https://github.com/samih713" class="btn btn-primary allow-click" target="_blank">
+                        <i class="bi bi-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Tanvir -->
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card about-card">
+                <img src="{% static 'images/tanvir.png' %}" class="card-img-top rounded-circle w-50 mx-auto"
+                    alt="Image of Tanvir">
+                <div class="card-body">
+                    <h5 class="card-title">Tanvir</h5>
+                    <a href="https://github.com/Taanviir" class="btn btn-primary allow-click" target="_blank">
+                        <i class="bi bi-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Tehuan -->
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card about-card">
+                <img src="{% static 'images/default_user.jpg' %}" class="card-img-top rounded-circle w-50 mx-auto"
+                    alt="Image of Tehuan">
+                <div class="card-body">
+                    <h5 class="card-title">Tehuan</h5>
+                    <a href="https://github.com/tehuanmelo" class="btn btn-primary allow-click" target="_blank">
+                        <i class="bi bi-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
