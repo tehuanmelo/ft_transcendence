@@ -16,16 +16,16 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = get_user_model()
         fields = [
-        "username",
-        "first_name",
-        "last_name",
-        "email",
-        "nick_name",
-        "bio",
-        "github",
-        "twitter",
-        "profile_image",
-        "google_auth_key",
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "nick_name",
+            "bio",
+            "github",
+            "twitter",
+            "profile_image",
+            "google_auth_key",
         ]
 
 
