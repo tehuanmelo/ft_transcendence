@@ -28,10 +28,10 @@
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         {% if user.profile_image %}
-                        <img src="{{ user.profile_image.url }}" class="img-fluid rounded square-image"
-                            alt="Profile Image" style="max-width: 30px;">
+                        <img src="{{ user.profile_image.url }}" class="rounded-circle" alt="Profile Image"
+                            style="max-width: 30px;">
                         {% else %}
-                        <img src="{% static 'images/default_user.jpg' %}" class="img-fluid rounded square-image"
+                        <img src="{% static 'images/default_user.jpg' %}" class="rounded-circle"
                             alt="Default User Image" style="max-width: 30px;">
                         {% endif %}
                         {{ user.username }}
@@ -41,7 +41,7 @@
                             <a class="dropdown-item spa-link" href="{% url 'profile' %}" data-method="GET">Profile</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="#">Settings</a>
+                            <a class="dropdown-item" href="#">Settings</a> <!-- TODO -->
                         </li>
                         <hr class="dropdown-divider">
                         <li>
