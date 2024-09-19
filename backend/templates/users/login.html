@@ -15,7 +15,7 @@
 <div class="container entry-form d-flex justify-content-center align-items-center flex-column">
     <h2 class="mb-4">Login</h2>
 
-    <form id="login-form" data-redirect="{% url 'home' %}" class="d-flex flex-column ">
+    <form id="login-form" class="d-flex flex-column">
         {% csrf_token %}
         {{ form|crispy }}
         <a class="btn btn-success spa-link mb-4" href="{% url 'login' %}" data-method="POST" data-form="#login-form">Log

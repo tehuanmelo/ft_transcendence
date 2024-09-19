@@ -12,7 +12,7 @@
 
 <div class="container entry-form d-flex justify-content-center align-items-center flex-column">
     <p>Are you sure you want log out?</p>
-    <form id="logout-form" data-redirect="{% url 'home' %}" class="entry-form">
+    <form id="logout-form" class="entry-form">
         {% csrf_token %}
         {{ form|crispy }}
         <a class="btn btn-danger spa-link" href="{% url 'logout' %}" data-method="POST" data-form="#logout-form">Log

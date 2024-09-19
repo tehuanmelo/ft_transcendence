@@ -14,7 +14,6 @@
     <h2>Register</h2>
 
     <form id="register-form" class="">
-    <!-- <form id="register-form" data-redirect="{% url 'login' %}"> -->
         {% csrf_token %}
         {{ form|crispy }}
         <a class="btn btn-success spa-link mb-2" href="{% url 'register' %}" data-method="POST"

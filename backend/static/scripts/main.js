@@ -8,12 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (target.matches('.spa-link')) {
             const method = target.getAttribute('data-method');
-            const jsInvocation = target.getAttribute('onSpaPageUpdate');
             const url = target.getAttribute('href');
             const formSelector = target.getAttribute('data-form');
 
-            if (method === 'GET')
+            if (method === 'GET') {
+                const jsInvocation = target.getAttribute('onSpaPageUpdate');
                 getPage(url, jsInvocation);
+            }
             else if (method === 'POST' && formSelector)
                 postForm(formSelector, url);
         }
@@ -36,12 +37,11 @@ function updateContent(pageHtml, url, jsInvocation = null) {
     document.title = newTitle;
 
     const oldUrl = document.location.pathname;
-    console.log(url)
     if (oldUrl !== url)
         history.pushState(null, newTitle, url);
-    if (jsInvocation != null) {
+
+    if (jsInvocation != null)
         eval(jsInvocation);
-    }
 }
 
 function getPage(url, jsInvocation = null) {
@@ -60,7 +60,7 @@ function getPage(url, jsInvocation = null) {
 function postForm(formSelector, url) {
     const form = document.querySelector(formSelector);
     const formData = new FormData(form);
-    let redirectUrl = url
+    let redirectUrl = url;
 
     fetch(url, {
         method: 'POST',
@@ -73,12 +73,12 @@ function postForm(formSelector, url) {
             if (!response.ok)
                 throw new Error('Invalid form post request');
             else if (response.redirected)
-                redirectUrl = response.url
+                redirectUrl = response.url;
             return response.text();
         })
         .then(pageHtml => {
-            updateContent(pageHtml, redirectUrl)
-}       )
+            updateContent(pageHtml, redirectUrl);
+        })
         .catch(error => {
             console.error('Error when submitting the form:', error);
         });
