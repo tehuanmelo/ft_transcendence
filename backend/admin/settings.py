@@ -82,40 +82,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "admin.wsgi.application"
 
-STATIC_URL = "/static/"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
-DEBUG_TEST = os.getenv('DEBUG', 'True').lower() in ('true', '1')
+SECRET_KEY = os.getenv('DJANGO_KEY')
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
+    }
 
-if DEBUG_TEST:
-    STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, "static"),
-    ]
-    SECRET_KEY = "remember_to_delete_this_key_is_just_for_dev"
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-else:
-    STATIC_ROOT = os.path.join(BASE_DIR, "static")
-    SECRET_KEY = os.getenv('DJANGO_KEY')
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('DB_NAME'),
-            'USER': os.getenv('DB_USER'),
-            'PASSWORD': os.getenv('DB_PASSWORD'),
-            'HOST': os.getenv('DB_HOST'),
-            'PORT': os.getenv('DB_PORT'),
-        }
-    
-    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

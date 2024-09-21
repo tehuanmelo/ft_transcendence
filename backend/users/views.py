@@ -6,17 +6,17 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 
 from .forms import CustomUserCreationForm, UserProfileForm
-from .auth import generate_jwt, generate_2fa_key_qrcode, jwt_required, user_id_required
+from .auth import generate_jwt, generate_2fa_key_qrcode, jwt_required, fetch_user, is_logged
 
 
 
-@user_id_required
+@fetch_user
 def reset_2fa_view(request):
     generate_2fa_key_qrcode(request.user)
     return redirect("verify_otp")
    
     
-@user_id_required
+@fetch_user
 def verify_otp_view(request):
     
     user = request.user
@@ -33,7 +33,7 @@ def verify_otp_view(request):
         totp = pyotp.TOTP(key)
         
         if totp.verify(otp):
-            request.session.flush()
+            # request.session.flush()
             token = generate_jwt(user)
             user.is_2fa_set = True # set this variable for not showing the qrcode again
             user.is_authenticated = True
@@ -45,10 +45,12 @@ def verify_otp_view(request):
             obj["error"] = True
     
     return render(request, "users/two_fact_auth.html", obj)
-            
-          
+    
+@is_logged          
 def login_view(request):
     if request.method == "POST":
+        if request.user:
+            return redirect('home')
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
@@ -72,7 +74,6 @@ def logout_view(request):
         return response
     else:
         return render(request, "users/logout.html")
-
 
 def register_view(request):
     if request.method == "POST":

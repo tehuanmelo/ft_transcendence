@@ -49,7 +49,25 @@ def jwt_required(func):
         return func(request, *args, **kwargs)
     return wrapper
 
-def user_id_required(func):
+
+def is_logged(func):
+    def wrapper(request, *args, **kwargs):
+        try:
+            jwt_token = request.COOKIES["jwt"]
+            payload = jwt.decode(jwt_token, settings.SECRET_KEY, algorithms=['HS256'])
+            user = CustomUser.objects.get(id=payload["user_id"])
+            token_version = payload["token_version"]
+            if token_version == user.token_version:
+                request.user = user
+            else:
+                request.user = None
+        except:
+            request.user = None
+        return func(request, *args, **kwargs)
+    return wrapper
+
+
+def fetch_user(func):
     def wrapper(request, *args, **kwargs):
         try:
             user_id = request.session['user_id']
@@ -59,3 +77,4 @@ def user_id_required(func):
             return redirect("login")
         return func(request, *args, **kwargs)
     return wrapper
+
