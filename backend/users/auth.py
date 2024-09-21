@@ -40,6 +40,7 @@ def jwt_required(func):
             jwt_token = request.COOKIES["jwt"]
             payload = jwt.decode(jwt_token, settings.SECRET_KEY, algorithms=['HS256'])
             user = CustomUser.objects.get(id=payload["user_id"])
+            request.user = user
             token_version = payload["token_version"]
             if token_version != user.token_version:
                 return redirect("login")

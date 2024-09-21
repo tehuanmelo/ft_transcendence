@@ -17,3 +17,4 @@ class CustomUser(AbstractUser):
         upload_to="qr_codes/", blank=True, null=True
     )
     token_version = models.IntegerField(default=0)
+    is_authenticated = models.BooleanField(default=False)

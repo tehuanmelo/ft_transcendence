@@ -33,13 +33,11 @@ def verify_otp_view(request):
         totp = pyotp.TOTP(key)
         
         if totp.verify(otp):
-            login(request, user)
-            # set the variable to true for not showing the qrcode again
-            user.is_2fa_set = True 
-            user.save()
-            
+            request.session.flush()
             token = generate_jwt(user)
-            print(token)
+            user.is_2fa_set = True # set this variable for not showing the qrcode again
+            user.is_authenticated = True
+            user.save()
             response = redirect("home")
             response.set_cookie("jwt", token, httponly=True, secure=True)
             return response
@@ -69,8 +67,7 @@ def logout_view(request):
     if request.method == "POST":
         request.user.token_version += 1
         request.user.save()
-        logout(request)
-        response = redirect("home")
+        response = redirect("index")
         response.delete_cookie("jwt")
         return response
     else:

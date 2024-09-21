@@ -1,22 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}
-{% if user.is_authenticated %}
-Home
-{% else %}
-Pong
-{% endif %}
-{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block nav %}
-{% include "includes/nav_menu.html" %}
+    {% include "includes/nav_menu.html" %}
 {% endblock nav %}
 
 
 {% block content %}
-
-{% if user.is_authenticated %}
 
 <div class="container d-flex flex-column">
     <a class="menu-btn mb-3 spa-link" href="#" data-method="GET">Play Pong 1v1</a>
@@ -26,23 +18,6 @@ Pong
     <a class="menu-btn mb-3 spa-link" href="#" data-method="GET">Help</a>
 </div>
 
-{% else %}
 
-<div class="d-flex justify-content-center align-items-center vh-100">
-    <div class="d-flex flex-column">
-        <img src="{% static 'Pong.svg' %}" alt="PONG logo" class="mb-5">
-        <div id="auth-container" class="d-flex flex-column text-center mb-4">
-            <a class="menu-btn mb-3 spa-link" href="{% url 'login' %}" data-method="GET">Log In</a>
-            <a class="menu-btn mb-3 spa-link" href="{% url 'register' %}" data-method="GET">Register</a>
-            <a class="menu-btn mb-3" href="#">42 Log In</a>
-            <a class="menu-btn mb-3 spa-link" href="{% url 'pong' %}" data-method="GET">Play as Guest</a>
-        </div>
-        <footer class="text-center text-light">
-            <p>&copy; 2024 PONG.</p>
-        </footer>
-    </div>
-</div>
-
-{% endif %}
 
 {% endblock content %}
