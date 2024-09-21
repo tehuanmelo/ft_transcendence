@@ -17,19 +17,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    color: white;
 }
 
 body {
     font-family: 'Press Start 2P', sans-serif;
     background-color: var(--background-color);
-}
-
-button {
-    border: none;
-}
-
-#content {
-    min-height: 100dvh;
 }
 
 /* ---------------------------------- Home ---------------------------------- */
@@ -61,11 +54,6 @@ button {
 }
 
 /* --------------------------------- Forms ---------------------------------- */
-.entry-form {
-    color: white;
-    border: none;
-}
-
 .form-text {
     color: white;
 }
@@ -75,14 +63,6 @@ button {
     border-radius: 0;
     box-shadow: none;
     background-color: rgb(112, 112, 112);
-}
-
-/* Label color when the input is focused or has a value */
-.form-floating>.form-control:focus~label,
-.form-floating>.form-control:not(:placeholder-shown)~label,
-.form-floating>.form-control:focus~label::after,
-.form-floating>.form-control:not(:placeholder-shown)~label::after {
-    background-color: transparent;
 }
 
 .entry-form-btn {
@@ -98,31 +78,9 @@ button {
     background-color: rgb(85, 85, 85);
 }
 
-.password-opts {
-    font-size: 0.8em;
-    margin: 0;
-}
-
-#forgot-password {
-    color: white;
-    text-decoration: none;
-}
-
-#forgot-password:hover {
-    text-decoration: underline;
-}
-
 .form-prompt>p {
     font-size: 0.8rem;
     margin: 0;
-}
-
-.prompt-link {
-    cursor: pointer;
-}
-
-.prompt-link:hover {
-    text-decoration: underline;
 }
 
 @media (max-width: 575.98px) {
