@@ -2,6 +2,8 @@
 
 python3 pong-backend/manage.py makemigrations users
 
+black .
+
 python3 pong-backend/manage.py migrate
 
 python3 pong-backend/manage.py create_superuser
