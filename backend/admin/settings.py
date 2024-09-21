@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     # Local
     "users.apps.UsersConfig",
     "pages.apps.PagesConfig",
+    "pong.apps.PongConfig",
     # 3rd-party apps
     "crispy_forms",
     "crispy_bootstrap5",
