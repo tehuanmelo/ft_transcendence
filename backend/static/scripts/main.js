@@ -38,7 +38,7 @@ function updateContent(pageHtml, url, jsInvocation = null) {
 
     const oldUrl = document.location.pathname;
     if (oldUrl !== url)
-        history.pushState(null, newTitle, url);
+        history.pushState(null, '', url);
 
     if (jsInvocation != null)
         eval(jsInvocation);
