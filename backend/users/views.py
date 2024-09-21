@@ -1,57 +1,25 @@
 
-import pyotp, qrcode, os, jwt, datetime, pytz
+import pyotp
 
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import login
 from django.shortcuts import render, redirect
-from django.contrib.auth import logout
-from django.contrib.auth.decorators import login_required
-from django.conf import settings
 
 from .forms import CustomUserCreationForm, UserProfileForm
-from .models import CustomUser
-from .utils import generate_key_qrcode, generate_jwt
+from .auth import generate_jwt, generate_2fa_key_qrcode, jwt_required, user_id_required
 
 
 
-def generate_key_qrcode(user):
-    secret = pyotp.random_base32()
-    qrcode_url = pyotp.totp.TOTP(secret).provisioning_uri(name=user.username, issuer_name="PONG")
-    
-    file_path = os.path.join(settings.MEDIA_ROOT, 'qr_codes', f'{user.username}_qrcode.png')
-    os.makedirs(os.path.dirname(file_path), exist_ok=True)
-    qrcode.make(qrcode_url).save(file_path)
-    
-    user.google_auth_key = secret
-    user.qrcode_img.name = f'qr_codes/{user.username}_qrcode.png'
-    user.is_2fa_set = False
-    user.save()
-    
-    
-    
-def generate_jwt(user):
-    utc = pytz.UTC
-    expiration_time = datetime.datetime.now(utc) + datetime.timedelta(hours=1)
-    payload = {
-        'user_id': user.id,
-        'username': user.username,
-        'exp': expiration_time
-    }
-    token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
-    return token
-
-
+@user_id_required
 def reset_2fa_view(request):
-    user_id = request.session['user_id']
-    user = CustomUser.objects.get(id=user_id)
-    generate_key_qrcode(user)
+    generate_2fa_key_qrcode(request.user)
     return redirect("verify_otp")
+   
     
-
+@user_id_required
 def verify_otp_view(request):
     
-    user_id = request.session['user_id']
-    user = CustomUser.objects.get(id=user_id)
+    user = request.user
     obj = {
         "error": False,
         "error_message": "Invalid OTP",
@@ -88,7 +56,7 @@ def login_view(request):
             user = form.get_user()
             request.session['user_id'] = user.id
             if not user.google_auth_key:
-                generate_key_qrcode(user)
+                generate_2fa_key_qrcode(user)
             return redirect("verify_otp")
     else:
         form = AuthenticationForm()
@@ -96,11 +64,15 @@ def login_view(request):
     return render(request, "users/login.html", {"form": form})
 
 
-@login_required
+@jwt_required
 def logout_view(request):
     if request.method == "POST":
+        request.user.token_version += 1
+        request.user.save()
         logout(request)
-        return redirect("home")
+        response = redirect("home")
+        response.delete_cookie("jwt")
+        return response
     else:
         return render(request, "users/logout.html")
 
@@ -118,11 +90,11 @@ def register_view(request):
     return render(request, "users/register.html", {"form": form})
 
 
-@login_required
+@jwt_required
 def profile_view(request):
     return render(request, "users/profile.html")
 
-
+@jwt_required
 def edit_profile_view(request):
     if request.method == "POST":
         form = UserProfileForm(request.POST, request.FILES, instance=request.user)
