@@ -1,20 +1,26 @@
+const initFunctions = {
+    '/pong/': gameInitialization,
+    // You can add more routes and their corresponding functions here
+    // '/another-route/': anotherInitializationFunction,
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Handling case of page reloading to invoke required js
+    const currentPath = document.location.pathname;
+    if (initFunctions[currentPath])
+        initFunctions[currentPath]();
+
     document.body.addEventListener('click', (event) => {
         const target = event.target;
-        if (target.matches('.allow-click'))
-            return;
-
-        event.preventDefault();
-
         if (target.matches('.spa-link')) {
+            event.preventDefault();
+
             const method = target.getAttribute('data-method');
             const url = target.getAttribute('href');
             const formSelector = target.getAttribute('data-form');
 
-            if (method === 'GET') {
-                const jsInvocation = target.getAttribute('onSpaPageUpdate');
-                getPage(url, jsInvocation);
-            }
+            if (method === 'GET')
+                getPage(url);
             else if (method === 'POST' && formSelector)
                 postForm(formSelector, url);
         }
@@ -26,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-function updateContent(pageHtml, url, jsInvocation = null) {
+function updateContent(pageHtml, url) {
     const parser = new DOMParser();
     const page = parser.parseFromString(pageHtml, 'text/html');
 
@@ -40,20 +46,20 @@ function updateContent(pageHtml, url, jsInvocation = null) {
     if (oldUrl !== url)
         history.pushState(null, '', url);
 
-    if (jsInvocation != null)
-        eval(jsInvocation);
+    if (initFunctions[url])
+        initFunctions[url]();
 }
 
-function getPage(url, jsInvocation = null) {
+function getPage(url) {
     fetch(url)
         .then(response => {
             if (!response.ok)
                 throw new Error('Invalid response');
             return response.text();
         })
-        .then(pageHtml => updateContent(pageHtml, url, jsInvocation))
+        .then(pageHtml => updateContent(pageHtml, url))
         .catch(error => {
-            console.error('Error when fetching the page:', error.message)
+            console.error('Error when fetching the page:', error.message);
         });
 }
 
