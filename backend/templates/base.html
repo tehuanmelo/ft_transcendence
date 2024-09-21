@@ -25,9 +25,9 @@
 </head>
 
 <body>
-    <div id="content">
-        {% block nav %}{% endblock nav %}
+    {% include "includes/nav_menu.html" %}
 
+    <div id="content">
         {% block content %}
         <!-- Content goes here basically -->
         {% endblock content %}

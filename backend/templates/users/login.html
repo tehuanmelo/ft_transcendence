@@ -3,15 +3,10 @@
 
 {% block title %}Login{% endblock title %}
 
-{% block nav %}
-{% include "includes/back_to_home.html" %}
-{% endblock nav %}
-
 
 {% block content %}
 
-<div class="container entry-form d-flex justify-content-center align-items-center flex-column">
-    <h2 class="mb-4">Login</h2>
+{% include "includes/back_to_home.html" %}
 
     <form id="login-form" class="d-flex flex-column">
         {% csrf_token %}

@@ -3,15 +3,10 @@
 
 {% block title %}Register{% endblock title %}
 
-{% block nav %}
-{% include "includes/back_to_home.html" %}
-{% endblock nav %}
-
 
 {% block content %}
 
-<div class="container entry-form d-flex justify-content-center align-items-center flex-column">
-    <h2>Register</h2>
+{% include "includes/back_to_home.html" %}
 
     <form id="register-form" class="">
         {% csrf_token %}
