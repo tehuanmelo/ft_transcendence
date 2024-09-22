@@ -1,10 +1,11 @@
 
-import pyotp, qrcode, os, jwt, datetime, pytz
+import pyotp, qrcode, os
 
 from django.shortcuts import redirect
 from django.conf import settings
 
 from .models import CustomUser
+from .token import decode_token, get_token
 
 
 def generate_2fa_key_qrcode(user):
@@ -20,28 +21,18 @@ def generate_2fa_key_qrcode(user):
     user.is_2fa_set = False
     user.save()
     
-     
-def generate_jwt(user):
-    utc = pytz.UTC
-    expiration_time = datetime.datetime.now(utc) + datetime.timedelta(hours=1)
-    payload = {
-        'user_id': user.id,
-        'username': user.username,
-        'token_version': user.token_version,
-        'exp': expiration_time
-    }
-    token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
-    return token
-
 
 def jwt_required(func):
     def wrapper(request, *args, **kwargs):
         try:
-            jwt_token = request.COOKIES["jwt"]
-            payload = jwt.decode(jwt_token, settings.SECRET_KEY, algorithms=['HS256'])
+            print("inside try")
+            token = get_token(request)
+            payload = decode_token(token)
+            print(payload)
             user = CustomUser.objects.get(id=payload["user_id"])
             request.user = user
-            token_version = payload["token_version"]
+            token_version = payload["version"]
+            print(f'this is the {token_version}')
             if token_version != user.token_version:
                 return redirect("login")
         except:
@@ -50,31 +41,14 @@ def jwt_required(func):
     return wrapper
 
 
-def is_logged(func):
-    def wrapper(request, *args, **kwargs):
-        try:
-            jwt_token = request.COOKIES["jwt"]
-            payload = jwt.decode(jwt_token, settings.SECRET_KEY, algorithms=['HS256'])
-            user = CustomUser.objects.get(id=payload["user_id"])
-            token_version = payload["token_version"]
-            if token_version == user.token_version:
-                request.user = user
-            else:
-                request.user = None
-        except:
-            request.user = None
-        return func(request, *args, **kwargs)
-    return wrapper
-
-
 def fetch_user(func):
     def wrapper(request, *args, **kwargs):
-        try:
-            user_id = request.session['user_id']
-            user = CustomUser.objects.get(id=user_id)
-            request.user = user
-        except:
-            return redirect("login")
+        user = None
+        token = request.COOKIES.get('jwt')
+        if token:
+            payload = decode_token(token)
+            user = CustomUser.objects.get(id=payload['user_id'])
+        request.user = user
         return func(request, *args, **kwargs)
     return wrapper
 
