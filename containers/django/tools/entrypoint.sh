@@ -4,7 +4,7 @@ python3 pong-backend/manage.py makemigrations users
 
 python3 pong-backend/manage.py migrate
 
-python3 pong-backend/manage.py collectstatic
+python3 pong-backend/manage.py collectstatic --noinput
 
 python3 pong-backend/manage.py create_superuser
 

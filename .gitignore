@@ -7,5 +7,5 @@ pongdb/
 db.sqlite3
 todo.md
 media/
-staticfiles/
 migrations/
+backend/static/admin
