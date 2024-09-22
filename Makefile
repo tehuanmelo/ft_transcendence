@@ -49,7 +49,8 @@ nuke: check_docker
 clean: check_docker
 	@echo "$(RED)Initiating clean... 🧹$(RESET)";
 	$(DOCKER_COMPOSE) down --rmi all --volumes
-	rm -rf ./backend/media/*
+	rm -rf ./backend/users/migrations/
+	rm -rf ./backend/media/
 	rm -rf ./backend/db.sqlite3
 
 fclean: clean nuke

@@ -1,6 +1,5 @@
 {% load static %}
 {% if user.is_authenticated %}
-
 <nav class="navbar bg-primary navbar-expand-lg bg-body-tertiary mb-5" data-bs-theme="dark">
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
@@ -36,8 +35,8 @@
                         {{ user.username }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item spa-link" href="{% url 'profile' %}"
-                                data-method="GET">Profile</a></li>
+                        <li><a class="dropdown-item spa-link" href="{% url 'profile' %}" data-method="GET">Profile</a>
+                        </li>
                         <li><a class="dropdown-item" href="#">Change Password</a></li>
                         <li><a class="dropdown-item spa-link" href="{% url 'logout' %}" data-method="GET">Log Out</a>
                         </li>
@@ -48,5 +47,4 @@
         </div>
     </div>
 </nav>
-
 {% endif %}
