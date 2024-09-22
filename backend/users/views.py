@@ -1,4 +1,3 @@
-
 import pyotp
 
 from django.contrib.auth.forms import AuthenticationForm
@@ -13,33 +12,39 @@ from .token import generate_token, get_token, add_property_token
 def reset_2fa_view(request):
     generate_2fa_key_qrcode(request.user)
     return redirect("verify_otp")
-   
-   
+
+
 @fetch_user
 def verify_otp_view(request):
     user = request.user
     error_message = None
     if request.method == "POST":
-        otp = request.POST['otp']
+        otp = request.POST["otp"]
         key = user.google_auth_key
         totp = pyotp.TOTP(key)
         if totp.verify(otp):
-            user.is_2fa_set = True # set this variable for not showing the qrcode again
+            user.is_2fa_set = True  # set this variable for not showing the qrcode again
             user.is_authenticated = True
             user.save()
             response = redirect("home")
             token = get_token(request)
-            new_token = add_property_token(token, authenticated=True, version=user.token_version)
-            response.set_cookie('jwt', new_token, httponly=True, secure=True)
+            new_token = add_property_token(
+                token, authenticated=True, version=user.token_version
+            )
+            response.set_cookie("jwt", new_token, httponly=True, secure=True)
             return response
         else:
             error_message = "Invalid OTP"
-    return render(request, "users/two_fact_auth.html", {
-        "error_message": error_message,
-        "user": user,
-    })
-    
-       
+    return render(
+        request,
+        "users/two_fact_auth.html",
+        {
+            "error_message": error_message,
+            "user": user,
+        },
+    )
+
+
 def login_view(request):
     if request.method == "POST":
         form = AuthenticationForm(data=request.POST)
@@ -47,7 +52,7 @@ def login_view(request):
             user = form.get_user()
             if not user.google_auth_key:
                 generate_2fa_key_qrcode(user)
-            response = redirect('verify_otp')
+            response = redirect("verify_otp")
             token = generate_token(user_id=user.id)
             response.set_cookie("jwt", token, httponly=True, secure=True)
             return response
@@ -79,7 +84,6 @@ def register_view(request):
     else:
         form = CustomUserCreationForm()
     return render(request, "users/register.html", {"form": form})
-
 
 
 @jwt_required

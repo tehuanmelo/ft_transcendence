@@ -8,7 +8,7 @@ def generate_token(**kwargs):
     expiration_time = datetime.datetime.now(utc) + datetime.timedelta(hours=1)
     payload = {}
     payload.update(kwargs)
-    payload['exp'] = expiration_time
+    payload["exp"] = expiration_time
     print(payload)
     token = encode_payload(payload)
     return token
@@ -16,7 +16,7 @@ def generate_token(**kwargs):
 
 def decode_token(token):
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
         return payload
     except jwt.ExpiredSignatureError:
         return None  # Token has expired
@@ -25,7 +25,7 @@ def decode_token(token):
 
 
 def encode_payload(payload):
-    token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+    token = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
     return token
 
 
@@ -38,6 +38,5 @@ def add_property_token(token, **kwargs):
 
 
 def get_token(request):
-    token = request.COOKIES.get('jwt')
+    token = request.COOKIES.get("jwt")
     return token
-
