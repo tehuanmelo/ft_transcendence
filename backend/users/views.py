@@ -61,7 +61,7 @@ def logout_view(request):
     if request.method == "POST":
         request.user.token_version += 1
         request.user.save()
-        response = redirect("index")
+        response = redirect("home")
         response.delete_cookie("jwt")
         return response
     else:
