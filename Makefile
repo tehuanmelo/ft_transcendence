@@ -48,9 +48,13 @@ nuke: check_docker
 
 clean: check_docker
 	@echo "$(RED)Initiating clean... 🧹$(RESET)";
-	@if [ -d ./backend/media/qr_codes/ ]; then \
+	@if [ -d ./backend/media/ ]; then \
 		echo "$(RED)Deleting media files in Django container...$(RESET)"; \
 		$(DOCKER_COMPOSE) exec django rm -rf ./backend/media/*; \
+	fi
+	@if [ -d ./backend/users/migrations/ ]; then \
+		echo "$(RED)Deleting migrations files in Django container...$(RESET)"; \
+		$(DOCKER_COMPOSE) exec django rm -rf ./backend/users/migrations; \
 	fi
 	@if [ -f ./backend/db.sqlite3 ]; then \
 		echo "$(RED)Deleting SQLite database...$(RESET)"; \

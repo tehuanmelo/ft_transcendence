@@ -633,7 +633,6 @@ class Tournament {
     }
 
     displayGameAnnouncement(gameType, firstPlayerName, secondPlayerName) {
-        // ! Press Start 2P is not being properly displayed on the first game
         ctx.fillStyle = 'black'; // Fill color
         ctx.fillRect(0, 0, canvas.width, canvas.height); // Draw a rectangle (x, y, width, height)
         ctx.fillStyle = 'red'; // Fill color
@@ -655,77 +654,63 @@ function nextGame() {
     game.tournament.nextMatch();
 }
 
+function gameInitialization() {
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    customConfigShow(false);
+
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function (event) {
+            event.preventDefault();
 
 
-function onPageLoad() {
-    document.addEventListener('DOMContentLoaded', function () {
+            // Get the text content and value of the selected item
+            const selectedText = this.textContent.trim();
+            const selectedValue = this.getAttribute('data-value');
 
+            // Log or use the selected item
+            console.log('Selected Text:', selectedText);
+            if (selectedText == "Easy") {
+                g_PADDLE_SPEED = 15;
+                g_BALL_SPEED = 7;
+            }
+            if (selectedText == "Medium") {
+                g_PADDLE_SPEED = 30;
+                g_BALL_SPEED = 15;
+            }
+            if (selectedText == "Hard") {
+                g_PADDLE_SPEED = 66;
+                g_BALL_SPEED = 33;
+            }
+            if (selectedText == "Visual Impaired") {
+                g_PADDLE_SPEED = 15;
+                g_BALL_SPEED = 10;
+            }
+            refreshConfig();
+            if (selectedText == "Custom") {
+                customConfigShow(true);
+            }
+            else {
+                customConfigShow(false);
+            }
 
+            const dropdownButton = document.getElementById('dropdownMenuButton');
+            dropdownButton.textContent = selectedText;
 
-
-        const dropdownItems = document.querySelectorAll('.dropdown-item');
-
-        dropdownItems.forEach(item => {
-            item.addEventListener('click', function (event) {
-                event.preventDefault();
-
-                // Get the text content and value of the selected item
-                const selectedText = this.textContent.trim();
-                const selectedValue = this.getAttribute('data-value');
-
-                // Log or use the selected item
-                console.log('Selected Text:', selectedText);
-                if (selectedText == "Easy") {
-                    g_PADDLE_SPEED = 15;
-                    g_BALL_SPEED = 7;
-                }
-                if (selectedText == "Medium") {
-                    g_PADDLE_SPEED = 30;
-                    g_BALL_SPEED = 15;
-                }
-                if (selectedText == "Hard") {
-                    g_PADDLE_SPEED = 66;
-                    g_BALL_SPEED = 33;
-                }
-                if (selectedText == "Visual Impaired") {
-                    g_PADDLE_SPEED = 15;
-                    g_BALL_SPEED = 10;
-                }
-                refreshConfig();
-                if (selectedText == "Custom") {
-                    customConfigShow(true);
-                }
-                else {
-                    customConfigShow(false);
-                }
-
-                // You can also update the button text with the selected item
-                const dropdownButton = document.getElementById('dropdownMenuButton');
-                dropdownButton.textContent = selectedText;
-
-                // Optionally, close the dropdown
-                const dropdownMenu = this.closest('.dropdown-menu');
-                const dropdown = new bootstrap.Dropdown(dropdownMenu.previousElementSibling);
-                dropdown.hide();
-            });
+            const dropdownMenu = this.closest('.dropdown-menu');
+            const dropdown = new bootstrap.Dropdown(dropdownMenu.previousElementSibling);
+            dropdown.hide();
         });
-
-
-
-
     });
 
 
-}
 
-
-function gameInitialization() {
     canvas = document.getElementById('ponggame');
     ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
     game = new Game(true, ["Tehuan", "Tanvir", "Paula", "Samih"]);
+    // ! Missing: get players names
     game.start();
 }
 

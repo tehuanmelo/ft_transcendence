@@ -11,8 +11,10 @@
     <form id="register-form" class="">
         {% csrf_token %}
         {{ form|crispy }}
-        <a class="btn btn-success spa-link mb-2" href="{% url 'register' %}" data-method="POST"
+        <div class="text-center">
+            <a class="btn btn-success spa-link mb-2" href="{% url 'register' %}" data-method="POST"
             data-form="#register-form">Register</a>
+        </div>
     </form>
     <p>Already have an account?</p>
     <a href="{% url 'login' %}" class="spa-link" data-method="GET">Login here</a>

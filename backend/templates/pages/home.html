@@ -1,13 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}
-{% if user.is_authenticated %}
-Home
-{% else %}
-Pong
-{% endif %}
-{% endblock %}
+{% block title %}Home{% endblock %}
 
 
 {% block content %}
