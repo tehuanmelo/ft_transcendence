@@ -8,11 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (target.matches('.spa-link')) {
             const method = target.getAttribute('data-method');
+            const jsInvocation = target.getAttribute('onSpaPageUpdate');
             const url = target.getAttribute('href');
             const formSelector = target.getAttribute('data-form');
 
             if (method === 'GET')
-                getPage(url);
+                getPage(url, jsInvocation);
             else if (method === 'POST' && formSelector)
                 postForm(formSelector, url);
         }
@@ -24,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-function updateContent(pageHtml, url) {
+function updateContent(pageHtml, url, jsInvocation = null) {
     const parser = new DOMParser();
     const page = parser.parseFromString(pageHtml, 'text/html');
 
@@ -38,16 +39,19 @@ function updateContent(pageHtml, url) {
     console.log(url)
     if (oldUrl !== url)
         history.pushState(null, newTitle, url);
+    if (jsInvocation != null) {
+        eval(jsInvocation);
+    }
 }
 
-function getPage(url) {
+function getPage(url, jsInvocation = null) {
     fetch(url)
         .then(response => {
             if (!response.ok)
                 throw new Error('Invalid response');
             return response.text();
         })
-        .then(pageHtml => updateContent(pageHtml, url))
+        .then(pageHtml => updateContent(pageHtml, url, jsInvocation))
         .catch(error => {
             console.error('Error when fetching the page:', error.message)
         });

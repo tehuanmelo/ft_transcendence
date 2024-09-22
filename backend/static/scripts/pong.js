@@ -1,7 +1,6 @@
-const canvas = document.getElementById('ponggame');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas = null;
+ctx = null;
+game = null;
 
 // Global variables for the game configuration
 var g_PADDLE_SPEED = 30;
@@ -33,7 +32,7 @@ class Ball {
         this.nbPlayers = nbPlayers;
         this.ballRadius = this.width / 100;
         this.score = score;
-        this.sound = new Sound("../sound/bounce.mp3");
+        this.sound = new Sound("../static/sound/bounce.mp3");
     }
 
     drawBall() {
@@ -386,7 +385,7 @@ class Score {
 
 
     drawScore() {
-        ctx.font = "72px Bungee Tint";
+        ctx.font = "72px Press Start 2P";
         ctx.fillText(this.scoreL, canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Left player score
         ctx.fillText(this.scoreR, 3 * canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Right player score
     }
@@ -436,7 +435,8 @@ class Countdown {
     }
     drawCountdown() {
         this.pong.render();
-        ctx.font = "180px Bungee Tint";
+        ctx.font = "280px Press Start 2P";
+        ctx.fillStyle = 'red';
         ctx.fillText(this.count, canvas.width / 2, canvas.height / 2);
     }
 }
@@ -633,7 +633,6 @@ class Tournament {
     }
 
     displayGameAnnouncement(gameType, firstPlayerName, secondPlayerName) {
-        // ! Press Start 2P is not being properly displayed on the first game
         ctx.fillStyle = 'black'; // Fill color
         ctx.fillRect(0, 0, canvas.width, canvas.height); // Draw a rectangle (x, y, width, height)
         ctx.fillStyle = 'red'; // Fill color
@@ -655,59 +654,64 @@ function nextGame() {
     game.tournament.nextMatch();
 }
 
+function gameInitialization() {
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    customConfigShow(false);
+
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function (event) {
+            event.preventDefault();
 
 
-function onPageLoad() {
-    document.addEventListener('DOMContentLoaded', function () {
-        const dropdownItems = document.querySelectorAll('.dropdown-item');
+            // Get the text content and value of the selected item
+            const selectedText = this.textContent.trim();
+            const selectedValue = this.getAttribute('data-value');
 
-        dropdownItems.forEach(item => {
-            item.addEventListener('click', function (event) {
-                event.preventDefault();
+            // Log or use the selected item
+            console.log('Selected Text:', selectedText);
+            if (selectedText == "Easy") {
+                g_PADDLE_SPEED = 15;
+                g_BALL_SPEED = 7;
+            }
+            if (selectedText == "Medium") {
+                g_PADDLE_SPEED = 30;
+                g_BALL_SPEED = 15;
+            }
+            if (selectedText == "Hard") {
+                g_PADDLE_SPEED = 66;
+                g_BALL_SPEED = 33;
+            }
+            if (selectedText == "Visual Impaired") {
+                g_PADDLE_SPEED = 15;
+                g_BALL_SPEED = 10;
+            }
+            refreshConfig();
+            if (selectedText == "Custom") {
+                customConfigShow(true);
+            }
+            else {
+                customConfigShow(false);
+            }
 
-                // Get the text content and value of the selected item
-                const selectedText = this.textContent.trim();
-                const selectedValue = this.getAttribute('data-value');
+            const dropdownButton = document.getElementById('dropdownMenuButton');
+            dropdownButton.textContent = selectedText;
 
-                // Log or use the selected item
-                console.log('Selected Text:', selectedText);
-                if (selectedText == "Easy") {
-                    g_PADDLE_SPEED = 15;
-                    g_BALL_SPEED = 7;
-                }
-                if (selectedText == "Medium") {
-                    g_PADDLE_SPEED = 30;
-                    g_BALL_SPEED = 15;
-                }
-                if (selectedText == "Hard") {
-                    g_PADDLE_SPEED = 66;
-                    g_BALL_SPEED = 33;
-                }
-                if (selectedText == "Visual Impaired") {
-                    g_PADDLE_SPEED = 15;
-                    g_BALL_SPEED = 10;
-                }
-                refreshConfig();
-                if (selectedText == "Custom") {
-                    customConfigShow(true);
-                }
-                else {
-                    customConfigShow(false);
-                }
-
-                // You can also update the button text with the selected item
-                const dropdownButton = document.getElementById('dropdownMenuButton');
-                dropdownButton.textContent = selectedText;
-
-                // Optionally, close the dropdown
-                const dropdownMenu = this.closest('.dropdown-menu');
-                const dropdown = new bootstrap.Dropdown(dropdownMenu.previousElementSibling);
-                dropdown.hide();
-            });
+            const dropdownMenu = this.closest('.dropdown-menu');
+            const dropdown = new bootstrap.Dropdown(dropdownMenu.previousElementSibling);
+            dropdown.hide();
         });
     });
 
 
+
+    canvas = document.getElementById('ponggame');
+    ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    game = new Game(true, ["Tehuan", "Tanvir", "Paula", "Samih"]);
+    // ! Missing: get players names
+    game.start();
 }
 
 function customConfigShow(show) {
@@ -721,8 +725,7 @@ function customConfigShow(show) {
 
 onPageLoad();
 
-var game = new Game(true, ["Tehuan", "Tanvir", "Paula", "Samih"]);
-game.start();
+
 
 // Add 2 balls?
 // Add different backgrounds/themes?
