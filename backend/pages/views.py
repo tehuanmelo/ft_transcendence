@@ -1,12 +1,17 @@
 from django.shortcuts import render
-from users.auth import jwt_required, fetch_user
+from users.auth import jwt_fetch_user, jwt_login_required
 
 
-@fetch_user
+@jwt_fetch_user
 def home(request):
     return render(request, "pages/home.html")
 
 
-@fetch_user
+@jwt_fetch_user
 def about(request):
     return render(request, "pages/about.html")
+
+
+@jwt_fetch_user
+def settings(request):
+    return render(request, "pages/settings.html")
