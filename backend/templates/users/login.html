@@ -8,15 +8,21 @@
 
 {% include "includes/back_to_home.html" %}
 
-    <form id="login-form" class="d-flex flex-column">
+<div class="d-flex align-items-center flex-column">
+    <h2 class="text-decoration-underline">Login</h2>
+
+    <form id="login-form" class="p-2 col-lg-5">
         {% csrf_token %}
         {{ form|crispy }}
-        <a class="btn btn-success spa-link mb-4" href="{% url 'login' %}" data-method="POST" data-form="#login-form">Log
-            In</a>
+        <div class="text-center mb-2">
+            <a class="btn btn-success spa-link w-50" href="{% url 'login' %}" data-method="POST"
+                data-form="#login-form">Log In</a>
+        </div>
     </form>
-
-    <p>Don't have an account?</p>
-    <a href="{% url 'register' %}" class="spa-link" data-method="GET">Register here</a>
+    <div class="form-prompt text-center">
+        <p>Don't have an account?</p>
+        <a href="{% url 'register' %}" class="spa-link" data-method="GET">Register here</a>
+    </div>
 </div>
 
 {% endblock content %}
