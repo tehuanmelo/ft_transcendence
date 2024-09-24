@@ -36,6 +36,7 @@ function updateContent(pageHtml, url, jsInvocation = null) {
     document.title = newTitle;
 
     const oldUrl = document.location.pathname;
+    console.log(url)
     if (oldUrl !== url)
         history.pushState(null, newTitle, url);
     if (jsInvocation != null) {
@@ -59,7 +60,7 @@ function getPage(url, jsInvocation = null) {
 function postForm(formSelector, url) {
     const form = document.querySelector(formSelector);
     const formData = new FormData(form);
-    const redirectUrl = form.getAttribute('data-redirect');
+    let redirectUrl = url
 
     fetch(url, {
         method: 'POST',
@@ -71,9 +72,13 @@ function postForm(formSelector, url) {
         .then(response => {
             if (!response.ok)
                 throw new Error('Invalid form post request');
+            else if (response.redirected)
+                redirectUrl = response.url
             return response.text();
         })
-        .then(pageHtml => updateContent(pageHtml, redirectUrl))
+        .then(pageHtml => {
+            updateContent(pageHtml, redirectUrl)
+}       )
         .catch(error => {
             console.error('Error when submitting the form:', error);
         });

@@ -5,3 +5,7 @@ pongdb/
 .DS_Store
 .venv
 db.sqlite3
+todo.md
+media/
+migrations/
+backend/static/admin
