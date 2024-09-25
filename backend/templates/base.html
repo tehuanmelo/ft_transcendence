@@ -25,9 +25,9 @@
 </head>
 
 <body>
-    {% include "includes/nav_menu.html" %}
 
-    <div id="content">
+    <div id="content" class="vh-100">
+        {% include "includes/nav_menu.html" %}
         {% block content %}
         <!-- Content goes here basically -->
         {% endblock content %}
