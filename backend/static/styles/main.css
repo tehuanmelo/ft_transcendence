@@ -7,10 +7,7 @@
 
 :root {
     --background-color: #1d1b15;
-
-    --form-field-color: #fbe1a8;
-    --form-primary-color: #6b4d23;
-    --form-button-hover-color: #88622d;
+    --navbar-color: #332701;
 }
 
 * {
@@ -23,6 +20,18 @@ body {
     color: white;
     font-family: 'Press Start 2P', sans-serif;
     background-color: var(--background-color);
+}
+
+/* --------------------------------- Navbar --------------------------------- */
+header {
+    background-color: var(--navbar-color);
+}
+
+.navbar-nav .nav-link,
+.navbar-brand,
+.navbar-nav .dropdown-toggle,
+.navbar-toggler-icon {
+    color: white ;
 }
 
 /* ---------------------------------- Home ---------------------------------- */
