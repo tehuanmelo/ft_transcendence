@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}2fa Setup{% endblock title %}
+
+
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center flex-column">
+    <h2>2fa Authenticator</h2>
+    <div style=" text-align: center; ">
+            <p>Scan this QR code with Google Authenticator to set up your two-factor authentication:</p>
+            <img src="{{ user.qrcode_img.url }}" alt="qrcode image for login authentication">
+            <p>After generates the code, insert it here to complete the process.</p>
+    </div>
+
+
+    {% if error_message %}
+    <div class="alert alert-block alert-danger">
+        <ul class="m-0">
+            <li>{{ error_message }}</li>
+        </ul>
+    </div>
+    {% endif %}
+
+    <form id="enable_2fa" class="entry-form">
+        {% csrf_token %}
+        <label for="otp">OTP Code:</label>
+        <input type="text" name="otp" id="otp" class="" required>
+        <a class="btn btn-primary spa-link" href="{% url 'enable_2fa' %}" data-method="POST" data-form="#enable_2fa">Enable</a>
+    </form>
+
+
+</div>
+
+{% endblock content %}

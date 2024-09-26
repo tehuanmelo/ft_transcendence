@@ -1,7 +1,9 @@
-import pyotp, qrcode, os
+import os
 
-from django.shortcuts import redirect
+import pyotp
+import qrcode
 from django.conf import settings
+from django.shortcuts import redirect
 
 from .models import CustomUser
 from .token import decode_token, get_token
@@ -25,34 +27,48 @@ def generate_2fa_key_qrcode(user):
     user.save()
 
 
-def jwt_required(func):
+def jwt_login_required(func):
     def wrapper(request, *args, **kwargs):
         try:
-            print("inside try")
             token = get_token(request)
+            if not token:
+                raise ValueError("Token not found in request cookies")
             payload = decode_token(token)
-            print(payload)
             user = CustomUser.objects.get(id=payload["user_id"])
             request.user = user
-            token_version = payload["version"]
-            print(f"this is the {token_version}")
+            request.user.is_authenticated = payload["is_authenticated"]
+            token_version = payload["token_version"]
             if token_version != user.token_version:
-                return redirect("login")
+                return redirect('login')
+            if user.is_2fa_set:
+                if not payload.get('is_2fa_validated'):
+                    return redirect('verify_otp')
+        except ValueError as err:
+            print(f"ValueError: {err}")
+            return redirect('login')
         except:
-            return redirect("login")
+            return redirect('login')
         return func(request, *args, **kwargs)
-
     return wrapper
 
 
-def fetch_user(func):
+def jwt_fetch_user(func):
     def wrapper(request, *args, **kwargs):
-        user = None
-        token = request.COOKIES.get("jwt")
-        if token:
+        try:
+            token = get_token(request)
+            if not token:
+                raise ValueError("Token not found in request cookies")
             payload = decode_token(token)
             user = CustomUser.objects.get(id=payload["user_id"])
-        request.user = user
+            token_version = payload["token_version"]
+            if token_version == user.token_version:
+                request.user = user
+                request.user.is_authenticated = payload["is_authenticated"]
+        except ValueError as err:
+            request.user = None
+            print(f"ValueError: {err}")
+        except:
+            request.user = None
         return func(request, *args, **kwargs)
-
     return wrapper
+
