@@ -1,5 +1,4 @@
 import pyotp
-from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render
 
@@ -8,10 +7,10 @@ from .forms import CustomUserCreationForm, UserProfileForm
 from .token import generate_token, set_property_token
 
 
-@jwt_fetch_user
+@jwt_login_required
 def reset_2fa_view(request):
     generate_2fa_key_qrcode(request.user)
-    return redirect("verify_otp")
+    return redirect("enable_2fa")
 
 
 @jwt_fetch_user
@@ -31,17 +30,23 @@ def verify_otp_view(request):
             error_message = "Invalid OTP"
     return render(request, "users/verify_otp.html", {"error_message": error_message})
    
+   
 @jwt_login_required
 def disable_2fa(request):
     user = request.user
-    response = redirect("settings")
+    if not user.is_2fa_set:
+        return redirect("settings")
     if request.method == "POST":
+        response = redirect("settings")
         user.is_2fa_set = False
         user.save()
         token = set_property_token(request, is_2fa_validated=True)
         response.set_cookie("jwt", token, httponly=True, secure=True)
         print("inside disable")
+    else:
+        response = render(request, "users/disable_2fa.html")
     return response
+    
     
 @jwt_login_required
 def enable_2fa(request):
@@ -62,14 +67,7 @@ def enable_2fa(request):
             return response
         else:
             error_message = "Invalid OTP"
-    return render(
-        request,
-        "users/enable_2fa.html",
-        {
-            "error_message": error_message,
-            "user": user,
-        },
-    )
+    return render(request, "users/enable_2fa.html", {"error_message": error_message, "user": user})
     
 
 def login_view(request):
