@@ -1,44 +1,62 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}2fa Setup{% endblock title %}
+{% block title %}2FA Setup{% endblock title %}
 
-{% block nav %}
-<a href="{% url 'home' %}" class="btn btn-secondary spa-link" data-method="GET">Back to home</a>
-{% endblock nav %}
 
 {% block content %}
 
-<p>{{user.username}}</p>
+<div class="container py-5 d-flex justify-content-center">
+    <div class="card shadow-sm w-100" style="max-width: 700px;">
+        <div class="card-body">
+            <h3 class="card-title mb-4 d-none d-sm-block text-center">Setup Two-Factor Authentication</h3>
+            <h3 class="card-title mb-4 d-block d-sm-none text-center">Setup 2FA</h3>
 
-<div class="container entry-form d-flex justify-content-center align-items-center flex-column">
+            <p>1. Scan the QR code below with an authenticator app to setup your 2FA.</p>
+            <p class="text-muted" style="font-size: 0.9rem;">We recommend Google Authenticator for
+                <a href="https://apps.apple.com/us/app/google-authenticator/id388497605" target="_blank"
+                    rel="noopener noreferrer">
+                    iPhone</a>
+                or
+                <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+                    target="_blank" rel="noopener noreferrer">
+                    Android</a>.
+            </p>
+            <div class="mb-5 text-center">
+                <img src="{{ user.qrcode_img.url }}" alt="QR code for 2FA setup" class="img-fluid border"
+                    style="max-width: 250px;">
+            </div>
 
-    <h2>2fa Authenticator</h2>
-    <div style=" text-align: center; ">
-            <p>Scan this QR code with Google Authenticator to set up your two-factor authentication:</p>
-            <img src="{{ user.qrcode_img.url }}" alt="qrcode image for login authentication">
-            <p>After generates the code, insert it here to complete the process.</p>
+            <!-- <p class="text-center text-muted" style="font-size: 0.9rem;">
+                Can't scan the QR code? Enter the code manually in the app:
+            </p>
+            <div class="mb-3 text-center">
+                <code class="border p-2 d-inline-block"></code>
+            </div> -->
+
+            <p>2. After scanning, enter the 6-digit code to enable 2FA.</p>
+
+            {% if error_message %}
+            <div class="alert alert-danger">
+                {{ error_message }}
+            </div>
+            {% endif %}
+
+            <form id="enable_2fa">
+                {% csrf_token %}
+                <div class="form-group row justify-content-center">
+                    <div class="col-auto">
+                        <input type="text" name="otp" id="otp" class="form-control" required
+                            placeholder="6-digit code" style="width: 250px;">
+                    </div>
+                    <div class="col-auto">
+                        <a class="btn btn-success spa-link" href="{% url 'enable_2fa' %}" data-method="POST"
+                            data-form="#enable_2fa">Enable 2FA</a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-    
-
-    {% if error_message %}
-    <div class="alert alert-block alert-danger"> 
-        <ul class="m-0"> 
-            <li>{{ error_message }}</li> 
-        </ul> 
-    </div>
-    {% endif %}
-    
-
-    <form id="enable_2fa" class="entry-form">
-        {% csrf_token %}
-        <label for="otp">OTP Code:</label>
-        <input type="text" name="otp" id="otp" class="" required>
-        <a class="btn btn-primary spa-link" href="{% url 'enable_2fa' %}" data-method="POST" data-form="#enable_2fa">Enable</a>
-    </form>
-
-
 </div>
-    
 
 {% endblock content %}

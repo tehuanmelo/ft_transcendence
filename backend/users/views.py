@@ -1,6 +1,7 @@
 import pyotp
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render
+from django.utils import timezone
 
 from .auth import generate_2fa_key_qrcode, jwt_fetch_user, jwt_login_required
 from .forms import CustomUserCreationForm, UserProfileForm
@@ -29,8 +30,8 @@ def verify_otp_view(request):
         else:
             error_message = "Invalid OTP"
     return render(request, "users/verify_otp.html", {"error_message": error_message})
-   
-   
+
+
 @jwt_login_required
 def disable_2fa(request):
     user = request.user
@@ -42,12 +43,11 @@ def disable_2fa(request):
         user.save()
         token = set_property_token(request, is_2fa_validated=True)
         response.set_cookie("jwt", token, httponly=True, secure=True)
-        print("inside disable")
     else:
-        response = render(request, "users/disable_2fa.html")
+        return HttpResponseNotAllowed(["POST"])
     return response
-    
-    
+
+
 @jwt_login_required
 def enable_2fa(request):
     user = request.user
@@ -67,17 +67,25 @@ def enable_2fa(request):
             return response
         else:
             error_message = "Invalid OTP"
-    return render(request, "users/enable_2fa.html", {"error_message": error_message, "user": user})
-    
+    return render(
+        request,
+        "users/enable_2fa.html",
+        {
+            "error_message": error_message,
+            "user": user,
+        },
+    )
+
 
 def login_view(request):
     if request.method == "POST":
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
+            user.last_login = timezone.now()
             user.save()
             if user.is_2fa_set:
-                response = redirect('verify_otp')
+                response = redirect("verify_otp")
             else:
                 response = redirect("home")
             token = generate_token(user)
@@ -91,14 +99,13 @@ def login_view(request):
 @jwt_login_required
 def logout_view(request):
     if request.method == "POST":
-        print("inside psot logout")
         request.user.token_version += 1
         request.user.save()
         response = redirect("home")
         response.delete_cookie("jwt")
         return response
     else:
-        return render(request, "users/logout.html")
+        return HttpResponseNotAllowed(["POST"])
 
 
 @jwt_fetch_user

@@ -16,9 +16,7 @@ def generate_2fa_key_qrcode(user):
         name=user.username, issuer_name="PONG"
     )
     file_name = f"{user.username}_qrcode_{uuid.uuid4().hex}.png"
-    file_path = os.path.join(
-        settings.MEDIA_ROOT, "qr_codes", file_name
-    )
+    file_path = os.path.join(settings.MEDIA_ROOT, "qr_codes", file_name)
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     qrcode.make(qrcode_url).save(file_path)
 
@@ -38,17 +36,18 @@ def jwt_login_required(func):
             request.user = user
             token_version = payload["token_version"]
             if token_version != user.token_version:
-                return redirect('login')
+                return redirect("login")
             if user.is_2fa_set:
-                if not payload.get('is_2fa_validated'):
-                    return redirect('verify_otp')
+                if not payload.get("is_2fa_validated"):
+                    return redirect("verify_otp")
             request.user.is_authenticated = payload["is_authenticated"]
         except ValueError as err:
             print(f"ValueError: {err}")
-            return redirect('login')
+            return redirect("login")
         except:
-            return redirect('login')
+            return redirect("login")
         return func(request, *args, **kwargs)
+
     return wrapper
 
 
@@ -70,5 +69,5 @@ def jwt_fetch_user(func):
         except:
             request.user = None
         return func(request, *args, **kwargs)
-    return wrapper
 
+    return wrapper

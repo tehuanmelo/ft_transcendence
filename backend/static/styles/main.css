@@ -5,17 +5,9 @@
     src: url('../fonts/PressStart2P-Regular.ttf');
 }
 
-@font-face {
-    font-family: '04B_19';
-    src: url('../fonts/04B_19__.TTF');
-}
-
 :root {
     --background-color: #1d1b15;
-
-    --form-field-color: #fbe1a8;
-    --form-primary-color: #6b4d23;
-    --form-button-hover-color: #88622d;
+    --navbar-color: #332701;
 }
 
 * {
@@ -25,20 +17,53 @@
 }
 
 body {
+    color: white;
     font-family: 'Press Start 2P', sans-serif;
     background-color: var(--background-color);
 }
 
-button {
-    border: none;
+ul li {
+    margin-bottom: 0.1rem;
 }
 
-#content {
-    min-height: 100dvh;
+ul li::marker {
+    content: "·";
+}
+
+kbd {
+    font-family: 'Press Start 2P', cursive;
+    background-color: #333;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #777;
+    display: inline-block;
+    margin: 0 3px;
+}
+
+strong {
+    font-family: 'Press Start 2P', cursive;
+    font-weight: bold;
+    color: #f39c12; /* A yellow/orange color to make it stand out */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --------------------------------- Navbar --------------------------------- */
+header {
+    background-color: var(--navbar-color);
+}
+
+.navbar-nav .nav-link,
+.navbar-brand,
+.navbar-nav .dropdown-toggle,
+.navbar-toggler-icon {
+    color: white ;
 }
 
 /* ---------------------------------- Home ---------------------------------- */
 .menu-btn {
+    padding: 0.5rem;
     color: white;
     background-color: transparent;
     transition: transform 0.2s ease;
@@ -59,89 +84,39 @@ button {
 .menu-btn:focus::before {
     opacity: 1;
     color: gold;
+    background-color: #555;
+    transform: translateY(-5px);
 }
 
 .menu-btn:active {
-    transform: translateY(10%);
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
 }
 
 /* --------------------------------- Forms ---------------------------------- */
-.entry-form {
-    color: white;
-    border: none;
-}
-
 .form-text {
     color: white;
+    font-size: 0.6rem;
 }
 
 .form-control,
 .form-control:focus {
     border-radius: 0;
-    box-shadow: none;
     background-color: rgb(112, 112, 112);
 }
 
-/* Label color when the input is focused or has a value */
-.form-floating>.form-control:focus~label,
-.form-floating>.form-control:not(:placeholder-shown)~label,
-.form-floating>.form-control:focus~label::after,
-.form-floating>.form-control:not(:placeholder-shown)~label::after {
-    background-color: transparent;
+.form-control:focus {
+    border-color: #f1c748;
+    box-shadow: 0 0 0 .25rem #f1c7484b;
+    outline: 0;
 }
 
-.entry-form-btn {
-    background-color: gray;
-    color: white;
-}
-
-.entry-form-btn:active {
-    transform: translateY(5%);
-}
-
-.entry-form-btn:hover {
-    background-color: rgb(85, 85, 85);
-}
-
-.password-opts {
-    font-size: 0.8em;
-    margin: 0;
-}
-
-#forgot-password {
-    color: white;
-    text-decoration: none;
-}
-
-#forgot-password:hover {
-    text-decoration: underline;
+.invalid-feedback {
+    color: #dc3545;
+    font-size: 0.6rem;
 }
 
 .form-prompt>p {
     font-size: 0.8rem;
     margin: 0;
-}
-
-.prompt-link {
-    cursor: pointer;
-}
-
-.prompt-link:hover {
-    text-decoration: underline;
-}
-
-.otp-inputs {
-    display: grid;
-    justify-content: center;
-}
-
-.otp-inputs input {
-    width: 3rem;
-    height: 2rem;
-}
-
-@media (max-width: 575.98px) {
-    form {
-        width: 100%;
-    }
 }

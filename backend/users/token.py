@@ -11,14 +11,15 @@ def generate_token(user):
     utc = pytz.UTC
     expiration_time = datetime.datetime.now(utc) + datetime.timedelta(hours=1)
     payload = {
-        'user_id': user.id,
-        'is_authenticated': True,
-        'token_version': user.token_version,
-        'is_2fa_validated': False,
-        'exp': expiration_time,
+        "user_id": user.id,
+        "is_authenticated": True,
+        "token_version": user.token_version,
+        "is_2fa_validated": False,
+        "exp": expiration_time,
     }
     token = encode_payload(payload)
     return token
+
 
 def set_property_token(request, **kwargs):
     token = get_token(request)

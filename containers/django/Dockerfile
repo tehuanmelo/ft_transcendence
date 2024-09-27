@@ -12,7 +12,6 @@ EXPOSE 8000
 
 RUN pip install --root-user-action=ignore -r requirements.txt --no-cache-dir && chmod +x ./entrypoint.sh
 
-
 ENTRYPOINT ["./entrypoint.sh"]
 
 CMD ["python3", "pong-backend/manage.py", "runserver", "0.0.0.0:8000"]
