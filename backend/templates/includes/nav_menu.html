@@ -6,7 +6,9 @@
 <header class="navbar navbar-expand-md">
     <nav class="container">
         <!-- TODO: change this to Pong.svg -->
-        <a class="navbar-brand m-0 spa-link" href="{% url 'home' %}" data-method="GET">PONG</a>
+        <a class="navbar-brand m-0 spa-link" href="{% url 'home' %}" data-method="GET">
+            <img src="{% static 'images/Pong.svg' %}" alt="PONG logo" class="img-fluid" style="max-width: 100px;">
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
             aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation"
             style="border: none; box-shadow: none;">
@@ -15,7 +17,7 @@
                     d="M 0 7.5 L 0 12.5 L 50 12.5 L 50 7.5 Z M 0 22.5 L 0 27.5 L 50 27.5 L 50 22.5 Z M 0 37.5 L 0 42.5 L 50 42.5 L 50 37.5 Z" />
             </svg>
         </button>
-        <div class="collapse navbar-collapse" id="navbarMenu">`
+        <div class="collapse navbar-collapse" id="navbarMenu">
             <div class="navbar-nav flex-grow-1 justify-content-center">
                 <a class="nav-link spa-link" href="{% url 'home' %}" data-method="GET">Home</a>
                 <a class="nav-link spa-link" href="{% url 'about' %}" data-method="GET">About</a>
