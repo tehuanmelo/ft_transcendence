@@ -30,7 +30,8 @@ def verify_otp_view(request):
         else:
             error_message = "Invalid OTP"
     return render(request, "users/verify_otp.html", {"error_message": error_message})
-   
+
+
 @jwt_login_required
 def disable_2fa(request):
     user = request.user
@@ -42,7 +43,8 @@ def disable_2fa(request):
         response.set_cookie("jwt", token, httponly=True, secure=True)
         print("inside disable")
     return response
-    
+
+
 @jwt_login_required
 def enable_2fa(request):
     user = request.user
@@ -70,7 +72,7 @@ def enable_2fa(request):
             "user": user,
         },
     )
-    
+
 
 def login_view(request):
     if request.method == "POST":
@@ -79,7 +81,7 @@ def login_view(request):
             user = form.get_user()
             user.save()
             if user.is_2fa_set:
-                response = redirect('verify_otp')
+                response = redirect("verify_otp")
             else:
                 response = redirect("home")
             token = generate_token(user)
