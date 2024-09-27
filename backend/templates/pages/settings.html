@@ -3,29 +3,23 @@
 
 {% block title %}Settings{% endblock title %}
 
-{% block nav %}
-    {% include "includes/nav_menu.html" %}
-{% endblock nav %}
-
 
 {% block content %}
 
-<div class="p-5 mb-4 bg-body-tertiary rounded-3 border border-dark">
-    <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold">Settings</h1>
-        <ul>
-            {% if not user.is_2fa_set %}
-            <li><a class="spa-link" href="{% url "enable_2fa" %}" data-method="GET">Enable 2fa</a></li>
-            {% else %}
-                <form id="disable_2fa">
-                    {% csrf_token %}
-                    <li><a class="spa-link" href="{% url "disable_2fa" %}" data-method="POST" data-form="#disable_2fa">Disable 2fa</a></li>
-                </form>
-            {% endif %}
-            <li><a href="#">Change Password</a></li>
+<div class="container py-5">
+    <h1 class="mb-4">Settings</h1>
 
-        </ul>
-
+    <div class="list-group">
+        {% if not user.is_2fa_set %}
+        <a class="list-group-item list-group-item-action spa-link" href="{% url 'enable_2fa' %}" data-method="GET">Enable 2fa</a>
+        {% else %}
+        <form id="disable_2fa">
+            {% csrf_token %}
+            <a class="list-group-item list-group-item-action spa-link" href="{% url 'disable_2fa' %}" data-method="POST" data-form="#disable_2fa">Disable
+                2fa</a>
+        </form>
+        {% endif %}
+        <a class="list-group-item list-group-item-action" href="#">Change Password</a>
     </div>
 </div>
 
