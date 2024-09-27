@@ -2,6 +2,7 @@ import pyotp
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render
+from django.utils import timezone
 
 from .auth import generate_2fa_key_qrcode, jwt_fetch_user, jwt_login_required
 from .forms import CustomUserCreationForm, UserProfileForm
@@ -79,6 +80,7 @@ def login_view(request):
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
+            user.last_login = timezone.now()
             user.save()
             if user.is_2fa_set:
                 response = redirect("verify_otp")
@@ -95,7 +97,6 @@ def login_view(request):
 @jwt_login_required
 def logout_view(request):
     if request.method == "POST":
-        print("inside psot logout")
         request.user.token_version += 1
         request.user.save()
         response = redirect("home")
