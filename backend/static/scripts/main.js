@@ -78,11 +78,14 @@ function postForm(formSelector, url) {
         .then(response => {
             if (!response.ok)
                 throw new Error('Invalid form post request');
-            else if (response.redirected)
+            if (response.redirected)
                 redirectUrl = response.url;
             return response.text();
         })
         .then(pageHtml => {
+            const logoutModal = bootstrap.Modal.getInstance(document.getElementById('logoutModal'));
+            if (logoutModal)
+                logoutModal.hide();
             updateContent(pageHtml, redirectUrl);
         })
         .catch(error => {
