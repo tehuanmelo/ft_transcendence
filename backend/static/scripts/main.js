@@ -83,9 +83,12 @@ function postForm(formSelector, url) {
             return response.text();
         })
         .then(pageHtml => {
-            const logoutModal = bootstrap.Modal.getInstance(document.getElementById('logoutModal'));
-            if (logoutModal)
-                logoutModal.hide();
+            const modalElement = form.closest('.modal');
+            if (modalElement) {
+                const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                if (modalInstance)
+                    modalInstance.hide();
+            }
             updateContent(pageHtml, redirectUrl);
         })
         .catch(error => {
