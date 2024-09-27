@@ -12,7 +12,7 @@
     <a class="menu-btn mb-3 spa-link" href="#" data-method="GET">Play Pong 1v1</a>
     <a class="menu-btn mb-3 spa-link" href="#" data-method="GET">Play Pong 2v2</a>
     <a class="menu-btn mb-3 spa-link" href="#" data-method="GET">Play Tournament</a>
-    <a class="menu-btn mb-3 spa-link" href="#" data-method="GET">Help</a>
+    <a class="menu-btn mb-3 spa-link" href="#" data-bs-toggle="modal" data-bs-target="#helpModal">Help</a>
 </div>
 
 {% else %}
@@ -27,11 +27,17 @@
             <a class="menu-btn mb-3 spa-link" href="{% url 'pong' %}" data-method="GET">Play as Guest</a>
         </div>
     </div>
-    <footer class="text-center mt-auto pb-5">
+    <footer class="text-center mt-auto pb-4">
+        <div class="mb-3">
+            <a class="spa-link" href="{% url 'about' %}" data-method="GET">About</a>
+            <a class="spa-link" href="#" data-bs-toggle="modal" data-bs-target="#helpModal">Help</a>
+        </div>
         <p>&copy; 2024 PONG.</p>
     </footer>
 </div>
 
 {% endif %}
+
+{% include "includes/help.html" %}
 
 {% endblock content %}
