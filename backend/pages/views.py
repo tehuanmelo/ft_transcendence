@@ -12,6 +12,6 @@ def about(request):
     return render(request, "pages/about.html")
 
 
-@jwt_fetch_user
+@jwt_login_required
 def settings(request):
     return render(request, "pages/settings.html")

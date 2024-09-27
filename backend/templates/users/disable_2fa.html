@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Disable 2fa{% endblock title %}
+
+{% block nav %}
+    {% include "includes/nav_menu.html" %}
+{% endblock nav %}
+
+
+{% block content %}
+
+<h1>Disable 2fa</h1>
+
+<p>Are you sure you want disable the 2fa?</p>
+<form id="disable_2fa" class="entry-form">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <a class="btn btn-danger spa-link" href="{% url 'disable_2fa' %}" data-method="POST" data-form="#disable_2fa">Disable 2fa</a>
+</form>
+
+{% endblock content %}

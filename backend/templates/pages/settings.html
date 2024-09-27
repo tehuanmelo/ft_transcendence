@@ -17,10 +17,8 @@
             {% if not user.is_2fa_set %}
             <li><a class="spa-link" href="{% url "enable_2fa" %}" data-method="GET">Enable 2fa</a></li>
             {% else %}
-                <form id="disable_2fa">
-                    {% csrf_token %}
-                    <li><a class="spa-link" href="{% url "disable_2fa" %}" data-method="POST" data-form="#disable_2fa">Disable 2fa</a></li>
-                </form>
+            <li><a class="spa-link" href="{% url "disable_2fa" %}" data-method="GET">Disable 2fa</a></li>
+            <li><a class="spa-link" href="{% url "reset_2fa" %}" data-method="GET">Reset 2fa</a></li>
             {% endif %}
             <li><a href="#">Change Password</a></li>
 
