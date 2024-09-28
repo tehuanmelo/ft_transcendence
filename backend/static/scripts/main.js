@@ -14,23 +14,38 @@ document.addEventListener('DOMContentLoaded', () => {
         const target = event.target;
         if (target.matches('.spa-link')) {
             event.preventDefault();
-
-            const method = target.getAttribute('data-method');
-            const url = target.getAttribute('href');
-            const formSelector = target.getAttribute('data-form');
-
-            if (method === 'GET')
-                getPage(url);
-            else if (method === 'POST' && formSelector)
-                postForm(formSelector, url);
+            handleSpaLinkEvent(target)
         }
     });
+
+    document.body.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            const target = event.target;
+            if (target.form) {
+                event.preventDefault();
+                const form = target.form
+                const spalink = form.querySelector('.spa-link');
+                handleSpaLinkEvent(spalink);
+            }
+        }
+    })
 
     window.addEventListener('popstate', () => {
         const url = document.location.pathname;
         getPage(url);
     });
 });
+
+function handleSpaLinkEvent(target) {
+    const method = target.getAttribute('data-method');
+    const url = target.getAttribute('href');
+    const formSelector = target.getAttribute('data-form');
+
+    if (method === 'GET')
+        getPage(url);
+    else if (method === 'POST' && formSelector)
+        postForm(formSelector, url);
+}
 
 function updateContent(pageHtml, url) {
     const parser = new DOMParser();

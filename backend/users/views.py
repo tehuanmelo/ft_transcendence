@@ -103,7 +103,7 @@ def logout_view(request):
         response.delete_cookie("jwt")
         return response
     else:
-        return HttpResponseNotAllowed(['POST'])
+        return HttpResponseNotAllowed(["POST"])
 
 
 @jwt_fetch_user
