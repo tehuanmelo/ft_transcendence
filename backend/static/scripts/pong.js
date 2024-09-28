@@ -239,7 +239,6 @@ class Ball {
     }
 
 
-
     //  Left Paddel ******************
     //               ***
     //   ###       *  |   *
@@ -263,7 +262,6 @@ class Ball {
         }
         return false;
     }
-
 
 
     ballCollisionLeftPaddelRightLine(paddle) {
@@ -296,7 +294,6 @@ class Ball {
         return false;
     }
 
-
     ballCollisionLeftPaddelBottomLine(paddle) {
         var ballPositionUp = [{ x: this.ballX, y: this.ballY }, { x: this.ballX, y: this.ballY + this.dy - this.ballRadius }];
         //BOTTOM line of the paddle
@@ -311,7 +308,6 @@ class Ball {
         }
         return false;
     }
-
 
     //Right paddle
     ballCollisionRightPaddelRightLine(paddle) {
@@ -440,8 +436,6 @@ class Paddle {
             this.y += g_PADDLE_SPEED;
         }
     }
-
-    // TO DO: Implement paddle collision when the ball hits the paddle on the top or bottom of the paddle
 
     drawPaddle() {
         ctx.fillStyle = 'white'; // Fill color players 1 and 2
@@ -736,7 +730,12 @@ class Game {
         else {
             this.pong = new Pong(players.length);
         }
+        if (isTournament === true || players.length == 2) {
+            document.getElementById('3rdplayer').style.display = 'none';
+            document.getElementById('4thplayer').style.display = 'none';
+        }
     }
+
 
     start() {
         if (this.isTournament == true) {
@@ -1013,5 +1012,5 @@ onPageLoad();
 
 
 
-// Add 2 balls?
-// Add different backgrounds/themes?
+
+
