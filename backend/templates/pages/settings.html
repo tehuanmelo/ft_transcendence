@@ -16,11 +16,10 @@
         {% else %}
         <a class="list-group-item list-group-item-action spa-link" href="#" data-bs-toggle="modal"
             data-bs-target="#disable2faModal">Disable 2FA</a>
-
         <a class="list-group-item list-group-item-action spa-link" href="{% url 'reset_2fa' %}" data-method="GET">Reset
             2FA</a>
         {% endif %}
-        <a class="list-group-item list-group-item-action" href="#">Change Password</a>
+        <a class="list-group-item list-group-item-action spa-link" href="{% url "change_password" %}" data-method="GET">Change Password</a>
     </div>
 </div>
 
@@ -30,13 +29,13 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body text-center">
-                Are you sure you want to disable 2FA?
+                Are you sure you want to disable Two-Factor Authentication?
             </div>
             <div class="modal-footer justify-content-center">
                 <form id="disable_2fa">
                     {% csrf_token %}
                     <a class="btn btn-danger spa-link" href="{% url 'disable_2fa' %}" data-method="POST"
-                        data-form="#disable_2fa">Disable 2FA</a>
+                        data-form="#disable_2fa-form">Disable 2FA</a>
                 </form>
             </div>
         </div>

@@ -2,10 +2,12 @@ import pyotp
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render
 from django.utils import timezone
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 from .auth import generate_2fa_key_qrcode, jwt_fetch_user, jwt_login_required
 from .forms import CustomUserCreationForm, UserProfileForm
-from .token import generate_token, set_property_token
+from .token import generate_token, set_token_property, set_request_token_property
 
 
 @jwt_login_required
@@ -17,6 +19,7 @@ def reset_2fa_view(request):
 @jwt_fetch_user
 def verify_otp_view(request):
     user = request.user
+    print(f"this is the user when login with 2fa: {user}")
     error_message = None
     if request.method == "POST":
         otp = request.POST["otp"]
@@ -24,7 +27,11 @@ def verify_otp_view(request):
         totp = pyotp.TOTP(key)
         if totp.verify(otp):
             response = redirect("home")
-            token = set_property_token(request, is_2fa_validated=True)
+            token = set_request_token_property(
+                request,
+                is_2fa_validated=True,
+                is_authenticated=True,
+            )
             response.set_cookie("jwt", token, httponly=True, secure=True)
             return response
         else:
@@ -41,7 +48,7 @@ def disable_2fa(request):
         response = redirect("settings")
         user.is_2fa_set = False
         user.save()
-        token = set_property_token(request, is_2fa_validated=True)
+        token = set_request_token_property(request, is_2fa_validated=False)
         response.set_cookie("jwt", token, httponly=True, secure=True)
     else:
         return HttpResponseNotAllowed(["POST"])
@@ -59,10 +66,10 @@ def enable_2fa(request):
         key = user.google_auth_key
         totp = pyotp.TOTP(key)
         if totp.verify(otp):
-            user.is_2fa_set = True  # set this variable for not showing the qrcode again
+            user.is_2fa_set = True
             user.save()
             response = redirect("settings")
-            token = set_property_token(request, is_2fa_validated=True)
+            token = set_request_token_property(request, is_2fa_validated=True)
             response.set_cookie("jwt", token, httponly=True, secure=True)
             return response
         else:
@@ -84,11 +91,12 @@ def login_view(request):
             user = form.get_user()
             user.last_login = timezone.now()
             user.save()
+            token = generate_token(user)
             if user.is_2fa_set:
                 response = redirect("verify_otp")
+                token = set_token_property(token, is_authenticated=False)
             else:
                 response = redirect("home")
-            token = generate_token(user)
             response.set_cookie("jwt", token, httponly=True, secure=True)
             return response
     else:
@@ -111,7 +119,7 @@ def logout_view(request):
 @jwt_fetch_user
 def register_view(request):
     if request.method == "POST":
-        form = CustomUserCreationForm(data=request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             form = AuthenticationForm()
@@ -136,3 +144,53 @@ def edit_profile_view(request):
     else:
         form = UserProfileForm(instance=request.user)
     return render(request, "users/edit_profile.html", {"form": form})
+
+
+@jwt_login_required
+def change_password_view(request):
+
+    user = request.user
+    if request.method == "POST":
+        old_password = request.POST.get("old_password")
+        new_password = request.POST.get("new_password")
+        confirm_password = request.POST.get("confirm_password")
+        error_message = None
+        if not old_password:
+            error_message = "Old password is required."
+            return render(
+                request, "users/change_password.html", {"error": error_message}
+            )
+        elif not new_password:
+            error_message = "New password is required."
+            return render(
+                request, "users/change_password.html", {"error": error_message}
+            )
+        elif not confirm_password:
+            error_message = "New password is required."
+            return render(
+                request, "users/change_password.html", {"error": error_message}
+            )
+        elif not user.check_password(old_password):
+            error_message = "Invalid old password."
+            return render(
+                request, "users/change_password.html", {"error": error_message}
+            )
+        elif new_password != confirm_password:
+            error_message = "Passwords do not match."
+            return render(
+                request, "users/change_password.html", {"error": error_message}
+            )
+        else:
+            try:
+                validate_password(new_password, user=user)
+            except ValidationError as e:
+                return render(
+                    request, "users/change_password.html", {"error": e.messages}
+                )
+
+        request.user.set_password(new_password)
+        request.user.save()
+
+        return redirect("settings")
+
+    return render(request, "users/change_password.html")
