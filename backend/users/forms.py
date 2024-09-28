@@ -37,7 +37,6 @@ class UserProfileForm(forms.ModelForm):
             "first_name",
             "last_name",
             "email",
-            "nick_name",
             "bio",
             "github",
             "twitter",

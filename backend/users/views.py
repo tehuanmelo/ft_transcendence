@@ -3,6 +3,8 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render
 from django.utils import timezone
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 from .auth import generate_2fa_key_qrcode, jwt_fetch_user, jwt_login_required
 from .forms import CustomUserCreationForm, UserProfileForm
@@ -114,7 +116,7 @@ def logout_view(request):
 @jwt_fetch_user
 def register_view(request):
     if request.method == "POST":
-        form = CustomUserCreationForm(data=request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             form = AuthenticationForm()
@@ -139,3 +141,53 @@ def edit_profile_view(request):
     else:
         form = UserProfileForm(instance=request.user)
     return render(request, "users/edit_profile.html", {"form": form})
+
+
+@jwt_login_required
+def change_password_view(request):
+
+    user = request.user
+    if request.method == "POST":
+        old_password = request.POST.get("old_password")
+        new_password = request.POST.get("new_password")
+        confirm_password = request.POST.get("confirm_password")
+        error_message = None
+        if not old_password:
+            error_message = "Old password is required."
+            return render(
+                request, "users/change_password.html", {"error": error_message}
+            )
+        elif not new_password:
+            error_message = "New password is required."
+            return render(
+                request, "users/change_password.html", {"error": error_message}
+            )
+        elif not confirm_password:
+            error_message = "New password is required."
+            return render(
+                request, "users/change_password.html", {"error": error_message}
+            )
+        elif not user.check_password(old_password):
+            error_message = "Invalid old password."
+            return render(
+                request, "users/change_password.html", {"error": error_message}
+            )
+        elif new_password != confirm_password:
+            error_message = "Passwords do not match."
+            return render(
+                request, "users/change_password.html", {"error": error_message}
+            )
+        else:
+            try:
+                validate_password(new_password, user=user)
+            except ValidationError as e:
+                return render(
+                    request, "users/change_password.html", {"error": e.messages}
+                )
+
+        request.user.set_password(new_password)
+        request.user.save()
+
+        return redirect("settings")
+
+    return render(request, "users/change_password.html")
