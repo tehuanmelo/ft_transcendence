@@ -1,5 +1,4 @@
 import pyotp
-from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render
 from django.utils import timezone
@@ -11,10 +10,10 @@ from .forms import CustomUserCreationForm, UserProfileForm
 from .token import generate_token, set_token_property, set_request_token_property
 
 
-@jwt_fetch_user
+@jwt_login_required
 def reset_2fa_view(request):
     generate_2fa_key_qrcode(request.user)
-    return redirect("verify_otp")
+    return redirect("enable_2fa")
 
 
 @jwt_fetch_user
@@ -43,12 +42,16 @@ def verify_otp_view(request):
 @jwt_login_required
 def disable_2fa(request):
     user = request.user
-    response = redirect("settings")
+    if not user.is_2fa_set:
+        return redirect("settings")
     if request.method == "POST":
+        response = redirect("settings")
         user.is_2fa_set = False
         user.save()
         token = set_request_token_property(request, is_2fa_validated=False)
         response.set_cookie("jwt", token, httponly=True, secure=True)
+    else:
+        return HttpResponseNotAllowed(["POST"])
     return response
 
 

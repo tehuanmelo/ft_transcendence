@@ -2,6 +2,7 @@ import os
 
 import pyotp
 import qrcode
+import uuid
 from django.conf import settings
 from django.shortcuts import redirect
 
@@ -14,16 +15,13 @@ def generate_2fa_key_qrcode(user):
     qrcode_url = pyotp.totp.TOTP(secret).provisioning_uri(
         name=user.username, issuer_name="PONG"
     )
-
-    file_path = os.path.join(
-        settings.MEDIA_ROOT, "qr_codes", f"{user.username}_qrcode.png"
-    )
+    file_name = f"{user.username}_qrcode_{uuid.uuid4().hex}.png"
+    file_path = os.path.join(settings.MEDIA_ROOT, "qr_codes", file_name)
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     qrcode.make(qrcode_url).save(file_path)
 
     user.google_auth_key = secret
-    user.qrcode_img.name = f"qr_codes/{user.username}_qrcode.png"
-    user.is_2fa_set = False
+    user.qrcode_img.name = f"qr_codes/{file_name}"
     user.save()
 
 
@@ -36,13 +34,13 @@ def jwt_login_required(func):
             payload = decode_token(token)
             user = CustomUser.objects.get(id=payload["user_id"])
             request.user = user
-            request.user.is_authenticated = payload["is_authenticated"]
             token_version = payload["token_version"]
             if token_version != user.token_version:
                 return redirect("login")
             if user.is_2fa_set:
                 if not payload.get("is_2fa_validated"):
                     return redirect("verify_otp")
+            request.user.is_authenticated = payload["is_authenticated"]
         except ValueError as err:
             print(f"ValueError: {err}")
             return redirect("login")

@@ -93,11 +93,17 @@ function postForm(formSelector, url) {
         .then(response => {
             if (!response.ok)
                 throw new Error('Invalid form post request');
-            else if (response.redirected)
+            if (response.redirected)
                 redirectUrl = response.url;
             return response.text();
         })
         .then(pageHtml => {
+            const modalElement = form.closest('.modal');
+            if (modalElement) {
+                const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                if (modalInstance)
+                    modalInstance.hide();
+            }
             updateContent(pageHtml, redirectUrl);
 
             const modal = form.closest('.modal');
