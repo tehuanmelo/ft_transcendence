@@ -9,7 +9,7 @@ from .models import CustomUser
 
 def generate_token(user):
     utc = pytz.UTC
-    expiration_time = datetime.datetime.now(utc) + datetime.timedelta(hours=1)
+    expiration_time = datetime.datetime.now(utc) + datetime.timedelta(minutes=30)
     payload = {
         "user_id": user.id,
         "is_authenticated": True,
@@ -48,6 +48,19 @@ def decode_token(token):
     except jwt.InvalidTokenError:
         print("Invalid Token")
         return None  # Token is invalid
+    except Exception as e:
+        print(f"Token error: {e}")
+        return None
+
+
+def extract_token(request):
+    token = get_token(request)
+    if not token:
+        raise ValueError("Token not found in request")
+    payload = decode_token(token)
+    if not payload:
+        raise ValueError("Invalid token couldn't extract payload")
+    return payload
 
 
 def encode_payload(payload):

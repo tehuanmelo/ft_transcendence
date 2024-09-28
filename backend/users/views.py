@@ -19,7 +19,6 @@ def reset_2fa_view(request):
 @jwt_fetch_user
 def verify_otp_view(request):
     user = request.user
-    print(f"this is the user when login with 2fa: {user}")
     error_message = None
     if request.method == "POST":
         otp = request.POST["otp"]

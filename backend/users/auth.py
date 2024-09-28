@@ -7,7 +7,7 @@ from django.conf import settings
 from django.shortcuts import redirect
 
 from .models import CustomUser
-from .token import decode_token, get_token
+from .token import decode_token, get_token, extract_token
 
 
 def generate_2fa_key_qrcode(user):
@@ -28,10 +28,7 @@ def generate_2fa_key_qrcode(user):
 def jwt_login_required(func):
     def wrapper(request, *args, **kwargs):
         try:
-            token = get_token(request)
-            if not token:
-                raise ValueError("Token not found in request cookies")
-            payload = decode_token(token)
+            payload = extract_token(request)
             user = CustomUser.objects.get(id=payload["user_id"])
             request.user = user
             token_version = payload["token_version"]
@@ -54,10 +51,7 @@ def jwt_login_required(func):
 def jwt_fetch_user(func):
     def wrapper(request, *args, **kwargs):
         try:
-            token = get_token(request)
-            if not token:
-                raise ValueError("Token not found in request cookies")
-            payload = decode_token(token)
+            payload = extract_token(request)
             user = CustomUser.objects.get(id=payload["user_id"])
             token_version = payload["token_version"]
             if token_version == user.token_version:
