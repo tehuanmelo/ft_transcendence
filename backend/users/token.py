@@ -21,8 +21,16 @@ def generate_token(user):
     return token
 
 
-def set_property_token(request, **kwargs):
+def set_request_token_property(request, **kwargs):
     token = get_token(request)
+    payload = decode_token(token)
+    for key, value in kwargs.items():
+        payload[key] = value
+    encoded_token = encode_payload(payload)
+    return encoded_token
+
+
+def set_token_property(token, **kwargs):
     payload = decode_token(token)
     for key, value in kwargs.items():
         payload[key] = value

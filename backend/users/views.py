@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from .auth import generate_2fa_key_qrcode, jwt_fetch_user, jwt_login_required
 from .forms import CustomUserCreationForm, UserProfileForm
-from .token import generate_token, set_property_token
+from .token import generate_token, set_token_property, set_request_token_property
 
 
 @jwt_fetch_user
@@ -18,6 +18,7 @@ def reset_2fa_view(request):
 @jwt_fetch_user
 def verify_otp_view(request):
     user = request.user
+    print(f"this is the user when login with 2fa: {user}")
     error_message = None
     if request.method == "POST":
         otp = request.POST["otp"]
@@ -25,7 +26,11 @@ def verify_otp_view(request):
         totp = pyotp.TOTP(key)
         if totp.verify(otp):
             response = redirect("home")
-            token = set_property_token(request, is_2fa_validated=True)
+            token = set_request_token_property(
+                request,
+                is_2fa_validated=True,
+                is_authenticated=True,
+            )
             response.set_cookie("jwt", token, httponly=True, secure=True)
             return response
         else:
@@ -40,7 +45,7 @@ def disable_2fa(request):
     if request.method == "POST":
         user.is_2fa_set = False
         user.save()
-        token = set_property_token(request, is_2fa_validated=True)
+        token = set_request_token_property(request, is_2fa_validated=False)
         response.set_cookie("jwt", token, httponly=True, secure=True)
         print("inside disable")
     return response
@@ -57,10 +62,10 @@ def enable_2fa(request):
         key = user.google_auth_key
         totp = pyotp.TOTP(key)
         if totp.verify(otp):
-            user.is_2fa_set = True  # set this variable for not showing the qrcode again
+            user.is_2fa_set = True
             user.save()
             response = redirect("settings")
-            token = set_property_token(request, is_2fa_validated=True)
+            token = set_request_token_property(request, is_2fa_validated=True)
             response.set_cookie("jwt", token, httponly=True, secure=True)
             return response
         else:
@@ -82,11 +87,12 @@ def login_view(request):
             user = form.get_user()
             user.last_login = timezone.now()
             user.save()
+            token = generate_token(user)
             if user.is_2fa_set:
                 response = redirect("verify_otp")
+                token = set_token_property(token, is_authenticated=False)
             else:
                 response = redirect("home")
-            token = generate_token(user)
             response.set_cookie("jwt", token, httponly=True, secure=True)
             return response
     else:
