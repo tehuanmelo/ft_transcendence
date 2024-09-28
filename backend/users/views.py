@@ -47,7 +47,6 @@ def disable_2fa(request):
         user.save()
         token = set_request_token_property(request, is_2fa_validated=False)
         response.set_cookie("jwt", token, httponly=True, secure=True)
-        print("inside disable")
     return response
 
 

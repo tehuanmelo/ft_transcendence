@@ -99,6 +99,14 @@ function postForm(formSelector, url) {
         })
         .then(pageHtml => {
             updateContent(pageHtml, redirectUrl);
+
+            const modal = form.closest('.modal');
+            if (modal) {
+                const modalInstance = bootstrap.Modal.getInstance(modal);
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+            }
         })
         .catch(error => {
             console.error('Error when submitting the form:', error);

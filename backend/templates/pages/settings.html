@@ -13,13 +13,29 @@
         {% if not user.is_2fa_set %}
         <a class="list-group-item list-group-item-action spa-link" href="{% url 'enable_2fa' %}" data-method="GET">Enable 2fa</a>
         {% else %}
-        <form id="disable_2fa">
-            {% csrf_token %}
-            <a class="list-group-item list-group-item-action spa-link" href="{% url 'disable_2fa' %}" data-method="POST" data-form="#disable_2fa">Disable
-                2fa</a>
-        </form>
+        <a class="list-group-item list-group-item-action spa-link" href="#" data-bs-toggle="modal"
+                            data-bs-target="#disable_2faModal">Disable 2fa</a>
         {% endif %}
         <a class="list-group-item list-group-item-action" href="#">Change Password</a>
+    </div>
+</div>
+
+<div class="modal fade" id="disable_2faModal" tabindex="-1" aria-labelledby="disable_2faModalLabel" aria-hidden="true"
+    data-bs-theme="dark">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                Are you sure you want to Disable 2fa authentication?
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="disable_2fa-form">
+                    {% csrf_token %}
+                    <a class="btn btn-danger spa-link" href="{% url 'disable_2fa' %}" data-method="POST"
+                        data-form="#disable_2fa-form">Disable</a>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
