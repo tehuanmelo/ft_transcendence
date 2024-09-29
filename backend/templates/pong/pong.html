@@ -17,7 +17,7 @@
             </div>
 
             <div class="row">
-                <a href="/" class="btn btn-light fa fa-home spa-link" data-method="GET"></a>
+                <a href="/" class="btn btn-light fa fa-home spa-link" data-method="GET" on-spa-navigate="game.reset();"></a>
             </div>
 
             <div class="row">
@@ -46,6 +46,13 @@
             <div class="row">
                 <button type="button" data-bs-toggle="modal" data-bs-target="#config" class="btn btn-light fa fa-gear"
                     onclick="loadConfiguration()"></button>
+            </div>
+
+            <div class="row">
+                <button type="button" data-bs-toggle="modal" data-bs-target="#helpModal" class="btn btn-light fa fa-question-circle" aria-hidden="true"
+                    onclick="game.pause()"></button>
+
+
             </div>
 
             <div class="row">
@@ -193,6 +200,9 @@
             </div>
         </div>
     </div>
-
 </div>
+
+{% include "includes/help.html" %}
+
+
 {% endblock content %}

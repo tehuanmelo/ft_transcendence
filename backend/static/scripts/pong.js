@@ -417,13 +417,23 @@ class Paddle {
         this.paddleWidth = this.width / 50;
         this.paddleHeight = this.height / 8;
         this.resetPosition();
+        this.ballRef = null;
     }
+
+    setBallRef(ballRef){
+        this.ballRef = ballRef;
+    }
+
     up() {
         if (this.y - g_PADDLE_SPEED - Pong.REC_HEIGHT_SIZE < 0) {
             this.y = Pong.REC_HEIGHT_SIZE; // pixels to move per key event
         }
         else if (this.y > Pong.REC_HEIGHT_SIZE) {
             this.y -= g_PADDLE_SPEED; // pixels to move per key event
+        }
+        if(this.ballRef.collision(this)){
+            console.log("PADLE COLISION GOING UP");
+            this.y += g_PADDLE_SPEED;
         }
     }
 
@@ -434,6 +444,10 @@ class Paddle {
         }
         else if (this.y < this.height - Pong.REC_HEIGHT_SIZE - this.paddleHeight - 5) {
             this.y += g_PADDLE_SPEED;
+        }
+        if(this.ballRef.collision(this)){
+            console.log("PADLE COLISION GOING DOWN");
+            this.y -= g_PADDLE_SPEED;
         }
     }
 
@@ -490,9 +504,15 @@ class Pong {
             this.paddle3 = new Paddle(PaddleTypes.LEFT2);
             this.paddle4 = new Paddle(PaddleTypes.RIGHT2);
             this.ball = new Ball(this.score, 4, this.paddle1, this.paddle2, this.paddle3, this.paddle4);
+            this.paddle1.setBallRef(this.ball);
+            this.paddle2.setBallRef(this.ball);
+            this.paddle3.setBallRef(this.ball);
+            this.paddle4.setBallRef(this.ball);
         }
         else {
             this.ball = new Ball(this.score, 2, this.paddle1, this.paddle2);
+            this.paddle1.setBallRef(this.ball);
+            this.paddle2.setBallRef(this.ball);
         }
         this.intervalId = 0;
     }
@@ -736,13 +756,21 @@ class Game {
         }
     }
 
-
     start() {
         if (this.isTournament == true) {
             this.tournament.startTournament();
         }
         else {
             this.pong.start();
+        }
+    }
+
+    reset(){
+        if (this.isTournament == true) {
+            this.tournament.resetTournament();
+        }
+        else {
+            this.pong.stop();
         }
     }
 
@@ -775,10 +803,6 @@ class Game {
         }
     }
 }
-
-
-
-
 
 
 
@@ -861,8 +885,6 @@ class Tournament {
             var myModal = new bootstrap.Modal(document.getElementById('winnerTpopup'));
             myModal.show();
         }
-
-
     }
 
     getUniqueRandomPlayers3() {
@@ -888,6 +910,11 @@ class Tournament {
         document.addEventListener('keydown', this.keyboardEventHandlerBind);
     }
 
+    resetTournament() {
+        document.removeEventListener('keydown', this.keyboardEventHandlerBind);
+        this.pong.stop();
+    }
+
     nextMatch() {
         if (this.players.length == 4) {
             if (this.semiFinalWinner1 == this.winner && this.semiFinalWinner2 == "") {
@@ -908,7 +935,6 @@ class Tournament {
         }
         document.addEventListener('keydown', this.keyboardEventHandlerBind);
     }
-
 
     handleKeyboardEvent(event) {
         if (event.key === 'Enter') {
@@ -931,7 +957,6 @@ class Tournament {
         ctx.font = "50px 'Press Start 2P'";
         textWidth = ctx.measureText("Press Enter to Start").width;
         ctx.fillText("Press Enter to Start", (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) + 100);
-
     }
 }
 
