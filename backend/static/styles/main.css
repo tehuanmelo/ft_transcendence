@@ -112,6 +112,15 @@ header {
         height: auto;
     }
 }
+
+/* ---------------------------------- Logo ---------------------------------- */
+.logo {
+    transition: filter 0.3s ease; /* Smooth transition */
+}
+
+.logo:hover {
+    filter: drop-shadow(0 0 5px rgba(243, 156, 18, 0.8))
+            drop-shadow(0 0 10px rgba(243, 156, 18, 0.5));
 }
 
 /* ---------------------------------- Home ---------------------------------- */
