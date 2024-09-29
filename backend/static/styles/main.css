@@ -95,7 +95,16 @@ header .nav-link:hover {
 
 .menu-btn:active {
     transform: scale(0.95);
-    transition: transform 0.1s ease;
+}
+
+.link-glow {
+    color: var(--accent);
+    transition: text-shadow 0.3s ease;
+}
+
+.link-glow:hover {
+    color: var(--accent);
+    text-shadow: 0 0 5px rgba(243, 156, 18, 0.8), 0 0 10px rgba(243, 156, 18, 0.5);
 }
 
 /* --------------------------------- Forms ---------------------------------- */
