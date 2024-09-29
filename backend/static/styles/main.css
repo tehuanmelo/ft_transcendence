@@ -126,17 +126,16 @@ header {
 /* ---------------------------------- Home ---------------------------------- */
 .menu-btn {
     padding: 0.5rem;
-    color: white;
+    color: var(--text);
     background-color: transparent;
-    transition: transform 0.2s ease;
+    transition: all 0.2s ease;
     text-decoration: none;
 }
 
 .menu-btn::before {
     content: '\25B6';
-    color: gold;
+    color: var(--accent);
     opacity: 0;
-    transition: opacity 0.1s ease;
     margin-right: 0.2rem;
 }
 
@@ -145,8 +144,8 @@ header {
 .menu-btn:focus,
 .menu-btn:focus::before {
     opacity: 1;
-    color: gold;
-    background-color: #555;
+    color: var(--accent);
+    background-color: var(--navbar);
     transform: translateY(-5px);
 }
 
