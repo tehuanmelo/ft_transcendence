@@ -6,11 +6,12 @@
 }
 
 :root {
-    --text: #ebeae4;
-    --background: #1d1b15;
-    --primary: #d6ca9c;
-    --secondary: #816d25;
-    --accent: #d9b533;
+    --text: white;
+    --background: #24211a;
+    --navbar: #1d1b15;
+    --primary: #d7ce97;
+    --secondary: #dabd89;
+    --accent: #f39c12;
 }
 
 * {
