@@ -5,9 +5,11 @@
 
 <header class="navbar navbar-expand-md">
     <nav class="container">
-        <!-- TODO: change this to Pong.svg -->
-        <a class="navbar-brand m-0 spa-link" href="{% url 'home' %}" data-method="GET">
-            <img src="{% static 'images/Pong.svg' %}" alt="PONG logo" class="img-fluid" style="max-width: 100px;">
+        <a class="spa-link" href="{% url 'home' %}" data-method="GET">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 75" width="150px" fill="#ebeae4">
+                <path
+                    d="M190 0.5H189.5V1V81V81.5H190H250H250.5V81V30.0909V29.5909H250H224.286H223.786V30.0909V58.6818H216.214V23.3182H250H250.5V22.8182V1V0.5H250H190ZM152.714 81.5H153.214V81V23.3182H160.786V81V81.5H161.286H187H187.5V81V1V0.5H187H127H126.5V1V81V81.5H127H152.714ZM64 0.5H63.5V1V81V81.5H64H124H124.5V81V1V0.5H124H64ZM1 0.5H0.5V1V81V81.5H1H26.7143H27.2143V81V66.9546H61H61.5V66.4546V1V0.5H61H1ZM90.2143 23.3182H97.7857V58.6818H90.2143V23.3182ZM27.2143 23.3182H34.7857V44.1364H27.2143V23.3182Z" />
+            </svg>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
             aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation"
@@ -17,7 +19,7 @@
                     d="M 0 7.5 L 0 12.5 L 50 12.5 L 50 7.5 Z M 0 22.5 L 0 27.5 L 50 27.5 L 50 22.5 Z M 0 37.5 L 0 42.5 L 50 42.5 L 50 37.5 Z" />
             </svg>
         </button>
-        <div class="collapse navbar-collapse" id="navbarMenu">
+        <div class="collapse navbar-collapse" id="navbarMenu" data-bs-theme="dark">
             <div class="navbar-nav flex-grow-1 justify-content-center">
                 <a class="nav-link spa-link" href="{% url 'home' %}" data-method="GET">Home</a>
                 <a class="nav-link spa-link" href="{% url 'about' %}" data-method="GET">About</a>
@@ -34,7 +36,6 @@
                         <img src="{% static 'images/default_user.jpg' %}" class="rounded-circle"
                             alt="Default User Image" style="max-width: 30px;">
                         {% endif %}
-                        {{ user.username }}
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item spa-link" href="{% url 'profile' %}" data-method="GET">Profile</a>

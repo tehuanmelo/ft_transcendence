@@ -6,8 +6,11 @@
 }
 
 :root {
-    --background-color: #1d1b15;
-    --navbar-color: #332701;
+    --text: #ebeae4;
+    --background: #1d1b15;
+    --primary: #d6ca9c;
+    --secondary: #816d25;
+    --accent: #d9b533;
 }
 
 * {
@@ -17,9 +20,9 @@
 }
 
 body {
-    color: white;
+    color: var(--text);
     font-family: 'Press Start 2P', sans-serif;
-    background-color: var(--background-color);
+    background-color: var(--background);
 }
 
 ul li {
@@ -44,21 +47,23 @@ kbd {
 strong {
     font-family: 'Press Start 2P', cursive;
     font-weight: bold;
-    color: #f39c12; /* A yellow/orange color to make it stand out */
+    color: var(--accent);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
 /* --------------------------------- Navbar --------------------------------- */
 header {
-    background-color: var(--navbar-color);
+    background-color: var(--secondary);
 }
 
-.navbar-nav .nav-link,
-.navbar-brand,
-.navbar-nav .dropdown-toggle,
-.navbar-toggler-icon {
-    color: white ;
+header .nav-link {
+    color: var(--text);
+}
+
+header .nav-link:hover {
+    color: var(--text);
+    text-decoration: underline;
 }
 
 /* ---------------------------------- Home ---------------------------------- */
