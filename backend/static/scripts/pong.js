@@ -33,6 +33,8 @@ class Ball {
         this.ballRadius = this.width / 100;
         this.score = score;
         this.sound = new Sound("../static/sound/bounce.mp3");
+        this.angleX = 0.0;
+        this.angleY = 0.0;
     }
 
     drawBall() {
@@ -62,9 +64,17 @@ class Ball {
     }
 
     startBallMovement() {
-        this.dx = this.ballStartAngle() * g_BALL_SPEED; // Initialize dx based on random angle
-        this.dy = this.ballStartAngle() * g_BALL_SPEED; // Initialize dy based on random angle
+        this.angleX = this.ballStartAngle();
+        this.angleY = this.ballStartAngle();
+        this.dx = this.angleX * g_BALL_SPEED; // Initialize dx based on random angle
+        this.dy = this.angleY * g_BALL_SPEED; // Initialize dy based on random angle
         this.ballMoving = true; // Set flag to true to start movement
+    }
+
+    resumeBallMovement() {
+        this.dx = this.angleX * g_BALL_SPEED; // Update the speed
+        this.dy = this.angleY * g_BALL_SPEED; // Update the speed
+        this.ballMoving = true;
     }
 
     doLinesIntersect(line1, line2) {
@@ -379,7 +389,8 @@ class Ball {
                 this.collision(this.paddle3);
                 this.collision(this.paddle4);
             }
-
+            console.log("dx = " + this.dx);
+            console.log("dy = " + this.dy);
             this.ballX += this.dx;
             this.ballY += this.dy;
 
@@ -545,7 +556,7 @@ class Pong {
     }
 
     resume() {
-        this.ball.startBallMovement();
+        this.ball.resumeBallMovement();
         this.intervalId = setInterval(this.pongRender.bind(this), 1000 / 60);
 
     }
@@ -1019,7 +1030,7 @@ function gameInitialization() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    game = new Game(true, ["Tehuan", "Tanvir", "Paula", "Samih"]);
+    game = new Game(false, ["Tehuan", "Tanvir", "Paula", "Samih"]);
     // ! Missing: get players names
     game.start();
 }
