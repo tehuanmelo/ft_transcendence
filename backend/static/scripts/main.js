@@ -100,23 +100,7 @@ function postForm(formSelector, url) {
                 redirectUrl = response.url;
             return response.text();
         })
-        .then(pageHtml => {
-            const modalElement = form.closest('.modal');
-            if (modalElement) {
-                const modalInstance = bootstrap.Modal.getInstance(modalElement);
-                if (modalInstance)
-                    modalInstance.hide();
-            }
-            updateContent(pageHtml, redirectUrl);
-
-            const modal = form.closest('.modal');
-            if (modal) {
-                const modalInstance = bootstrap.Modal.getInstance(modal);
-                if (modalInstance) {
-                    modalInstance.hide();
-                }
-            }
-        })
+        .then(pageHtml => updateContent(pageHtml, redirectUrl))
         .catch(error => {
             console.error('Error when submitting the form:', error);
         });
