@@ -193,3 +193,13 @@ header {
     font-size: 0.8rem;
     margin: 0;
 }
+
+.fixed-size-input {
+    width: 500px;
+}
+
+.error-message-input {
+    color: red;
+    max-width: 500px;
+    word-wrap: break-word;
+}

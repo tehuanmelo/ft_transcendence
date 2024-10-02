@@ -153,43 +153,36 @@ def change_password_view(request):
         old_password = request.POST.get("old_password")
         new_password = request.POST.get("new_password")
         confirm_password = request.POST.get("confirm_password")
-        error_message = None
+        error = {
+            "err_old_password": None,
+            "err_new_password": None,
+            "err_confirm_password": None,
+            "err_invalid_password": None,
+            "err_match_password": None,
+        }
         if not old_password:
-            error_message = "Old password is required."
-            return render(
-                request, "users/change_password.html", {"error": error_message}
-            )
+            error["err_old_password"] = "Old password is required."
         elif not new_password:
-            error_message = "New password is required."
-            return render(
-                request, "users/change_password.html", {"error": error_message}
-            )
+            error["err_new_password"] = "New password is required."
         elif not confirm_password:
-            error_message = "New password is required."
-            return render(
-                request, "users/change_password.html", {"error": error_message}
-            )
+            error["err_confirm_password"] = "Confirming password is required."
         elif not user.check_password(old_password):
-            error_message = "Invalid old password."
-            return render(
-                request, "users/change_password.html", {"error": error_message}
-            )
+            error["err_invalid_password"] = "Invalid old password."
         elif new_password != confirm_password:
-            error_message = "Passwords do not match."
-            return render(
-                request, "users/change_password.html", {"error": error_message}
-            )
+            error["err_match_password"] = "Passwords do not match."
         else:
             try:
                 validate_password(new_password, user=user)
+                user.set_password(new_password)
+                user.save()
+                return redirect("settings")
             except ValidationError as e:
                 return render(
-                    request, "users/change_password.html", {"error": e.messages}
+                    request,
+                    "users/change_password.html",
+                    {"validation_error": e.messages},
                 )
 
-        request.user.set_password(new_password)
-        request.user.save()
-
-        return redirect("settings")
+        return render(request, "users/change_password.html", {"error": error})
 
     return render(request, "users/change_password.html")
