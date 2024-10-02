@@ -43,7 +43,27 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     # to allow cross-origin requests
     "corsheaders",
+    # # all-auth 
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.oauth2',
 ]
+
+
+# SOCIALACCOUNT_PROVIDERS = {
+#     'oauth2': {
+#         'APP': {
+#             'client_id': 'u-s4t2ud-bc495b0a5937ba6e8a1fe11be70a9446a8f7411e2587cd57046a356bb0467d3a',
+#             'secret': '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',
+#             'key': ''
+#         },
+#         'SCOPE': ['public'],  # Add any necessary scopes here
+#         'AUTH_PARAMS': {'access_type': 'offline'},
+#     }
+# }
+
+# SITE_ID = 1 # NOTE what does this shit do ?
 
 AUTH_USER_MODEL = "users.CustomUser"
 
@@ -58,6 +78,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # allauth
+    # "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "admin.urls"
@@ -69,8 +91,10 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
+                "django.template.context_processors.debug", 
+                # NOTE this is added to provide the request object with every
+                # template, it is needed by allauth
+                # "django.template.context_processors.request", 
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
@@ -113,6 +137,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# # NOTE if authentication backends isn't defined by default it uses ModelBackend
+# AUTHENTICATION_BACKENDS = [
+#     # Needed to login by username in Django admin, regardless of `allauth`
+#     'django.contrib.auth.backends.ModelBackend',
+
+#     # `allauth` specific authentication methods, such as login by email
+#     'allauth.account.auth_backends.AuthenticationBackend',
+# ]
+
+# LOGIN_REDIRECT_URL = ''
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
