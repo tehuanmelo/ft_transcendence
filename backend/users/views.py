@@ -1,17 +1,45 @@
 import pyotp
+
+import requests # NOTE to exchange the code for an OAuth token
+
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render
 
 from .auth import generate_2fa_key_qrcode, jwt_fetch_user, jwt_login_required
 from .forms import CustomUserCreationForm, UserProfileForm
-from .token import generate_token, set_property_token
+from .token import generate_token, set_property_token, generate_api_token
 
+# REVIEW looks like all auth is not needed
+# from allauth.socialaccount.helpers import complete_social_login  # To handle social login completion
+# from django.urls import reverse
+# from allauth.socialaccount.providers.oauth2.views import OAuth2LoginView
 
 @jwt_fetch_user
 def reset_2fa_view(request):
     generate_2fa_key_qrcode(request.user)
     return redirect("verify_otp")
+
+
+# user sends login with 42
+def exchange_code(request):
+
+    code = request.GET.get("code")
+    print(f'Exchanging [code: {code}] for token')
+
+    # NOTE that this is not accessing the OAuth server
+    # as only the existence of a code, what ever it is
+    if code is not None:
+        print(f'User sucessfully authenticated')
+        token = generate_api_token(code) # NOTE we have a jwt now
+    else:
+        print(f'User bad')
+
+    response = redirect("home")
+    response.set_cookie("jwt", token, httponly=True, secure=True)
+
+    return response
+    
 
 
 @jwt_fetch_user

@@ -26,6 +26,8 @@ urlpatterns = [
     path("", include("pages.urls")),
     path("users/", include("users.urls")),
     path("pong/", include("pong.urls")),
+    #REVIEW - allauth might not be needed anymore
+    # path('accounts/', include( 'allauth.urls')),
 ]
 
 if settings.DEBUG:
