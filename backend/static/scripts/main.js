@@ -41,8 +41,8 @@ function handleSpaLinkEvent(target) {
     const url = target.getAttribute('href');
     const formSelector = target.getAttribute('data-form');
     const onNavigation = target.getAttribute('on-spa-navigate');
-    console.log("handleSpaLinkEvent");
-    if(onNavigation != null)
+
+    if (onNavigation != null)
         eval(onNavigation);
     if (method === 'GET')
         getPage(url);
