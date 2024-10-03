@@ -6,22 +6,23 @@
 
 {% block content %}
 
-<!-- ! if h-100 or vh-100 set to div below then the form causes overflow, need a better solution -->
+<div class="d-flex align-items-center flex-column h-100">
+    <div class="container my-auto" style="max-width: 900px;">
+        <h1 class="text-center">Login</h1>
 
-<div class="d-flex align-items-center flex-column">
-    <h2 class="text-decoration-underline">Login</h2>
-
-    <form id="login-form" class="p-2 col-lg-5">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <div class="text-center mb-2">
-            <a class="btn btn-success spa-link w-50" href="{% url 'login' %}" data-method="POST"
-                data-form="#login-form">Log In</a>
+        <form id="login-form" class="p-2">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="text-center my-3">
+                <a class="btn btn-orange spa-link w-50" href="{% url 'login' %}" data-method="POST"
+                    data-form="#login-form">Log In</a>
+            </div>
+        </form>
+        <div class="form-prompt text-center my-2">
+            <p>Don't have an account?</p>
+            <a href="{% url 'register' %}" class="spa-link link-effect" data-method="GET">Register here</a>
         </div>
-    </form>
-    <div class="form-prompt text-center">
-        <p>Don't have an account?</p>
-        <a href="{% url 'register' %}" class="spa-link link-glow" data-method="GET">Register here</a>
+        {% include "includes/back_to_home.html" %}
     </div>
 </div>
 
