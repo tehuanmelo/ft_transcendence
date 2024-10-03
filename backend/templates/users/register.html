@@ -3,26 +3,27 @@
 
 {% block title %}Register{% endblock title %}
 
-{% block nav %}
-    <a href="{% url 'home' %}" class="btn btn-secondary spa-link" data-method="GET">Back to home</a>
-{% endblock nav %}
-
 
 {% block content %}
 
-<div class="container entry-form d-flex justify-content-center align-items-center flex-column">
-    <h2>Register</h2>
+<div class="d-flex align-items-center flex-column h-100">
+    <div class="container my-auto" style="max-width: 1000px;">
+        <h1 class="text-center">Register</h1>
 
-    <form id="register-form" class="">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <div class="text-center">
-            <a class="btn btn-success mb-2 spa-link" href="{% url 'register' %}" data-method="POST"
-            data-form="#register-form">Register</a>
+        <form id="register-form" class="p-2">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="text-center my-3">
+                <a class="btn btn-orange spa-link w-50" href="{% url 'register' %}" data-method="POST"
+                    data-form="#register-form">Register</a>
+            </div>
+        </form>
+        <div class="form-prompt text-center my-2">
+            <p>Already have an account?</p>
+            <a href="{% url 'login' %}" class="spa-link link-effect" data-method="GET">Login here</a>
         </div>
-    </form>
-    <p>Already have an account? <a href="{% url 'login' %}" class="spa-link" data-method="GET">Login here</a></p>
+        {% include "includes/back_to_home.html" %}
+    </div>
 </div>
-
 
 {% endblock content %}

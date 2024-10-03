@@ -10,83 +10,93 @@ var g_SCORE_TO_WIN = 5;
 var g_CURRENT_LEVEL = "Medium";
 
 const PaddleTypes = Object.freeze({
-    LEFT1: 1,
-    RIGHT1: 2,
-    LEFT2: 3,
-    RIGHT2: 4,
+	LEFT1:	1,
+	RIGHT1:	2,
+	LEFT2:	3,
+	RIGHT2:	4,
 });
 
 class Ball {
-    constructor(score, nbPlayers, paddle1, paddle2, paddle3, paddle4) {
-        this.width = canvas.width;
-        this.height = canvas.height;
-        this.ballMoving = false;
-        this.ballX = this.width / 2; // X position of the ball
-        this.ballY = this.height / 2; // Y position of the ball
-        this.dx = 0; // Change in x direction
-        this.dy = 0; // Change in y direction
-        this.paddle1 = paddle1;
-        this.paddle2 = paddle2;
-        this.paddle3 = paddle3;
-        this.paddle4 = paddle4;
-        this.nbPlayers = nbPlayers;
-        this.ballRadius = this.width / 100;
-        this.score = score;
-        this.sound = new Sound("../static/sound/bounce.mp3");
-    }
+	constructor(score, nbPlayers, paddle1, paddle2, paddle3, paddle4) {
+		this.width = canvas.width;
+		this.height = canvas.height;
+		this.ballMoving = false;
+		this.ballX = this.width / 2; // X position of the ball
+		this.ballY = this.height / 2; // Y position of the ball
+		this.dx = 0; // Change in x direction
+		this.dy = 0; // Change in y direction
+		this.paddle1 = paddle1;
+		this.paddle2 = paddle2;
+		this.paddle3 = paddle3;
+		this.paddle4 = paddle4;
+		this.nbPlayers = nbPlayers;
+		this.ballRadius = this.width / 100;
+		this.score = score;
+		this.sound = new Sound("../static/sound/bounce.mp3");
+		this.angleX = 0.0;
+		this.angleY = 0.0;
+	}
 
-    drawBall() {
-        ctx.fillStyle = 'white'; // Fill color
+	drawBall() {
+		ctx.fillStyle = 'white'; // Fill color
 
-        //this.ballMoving = false; // Track if the ball is moving
-        ctx.beginPath(); // Start a new path
-        ctx.arc(this.ballX, this.ballY, this.ballRadius, 0, Math.PI * 2, false); // Draw a circle
-        ctx.fillStyle = 'white'; // Fill color
-        ctx.fill(); // Fill the circle with color
-        ctx.closePath(); // Close the path
-    }
+		//this.ballMoving = false; // Track if the ball is moving
+		ctx.beginPath(); // Start a new path
+		ctx.arc(this.ballX, this.ballY, this.ballRadius, 0, Math.PI * 2, false); // Draw a circle
+		ctx.fillStyle = 'white'; // Fill color
+		ctx.fill(); // Fill the circle with color
+		ctx.closePath(); // Close the path
+	}
 
-    ballStartAngle() {
-        var min = -0.5;
-        var max = 0.5;
-        var angle = Math.random() * (max - min) + min;
-        if (angle < 0.15 && angle > -0.15) {
-            angle = 0.15;
-        }
-        return angle;
-    }
+	ballStartAngle() {
+		var min = -0.5;
+		var max = 0.5;
+		var angle = Math.random() * (max - min) + min;
+		if (angle < 0.15 && angle > -0.15) {
+			angle = 0.15;
+		}
+		return angle;
+	}
 
-    ballResetPosition() {
-        this.ballX = this.width / 2;
-        this.ballY = this.height / 2;
-    }
+	ballResetPosition() {
+		this.ballX = this.width / 2;
+		this.ballY = this.height / 2;
+	}
 
-    startBallMovement() {
-        this.dx = this.ballStartAngle() * g_BALL_SPEED; // Initialize dx based on random angle
-        this.dy = this.ballStartAngle() * g_BALL_SPEED; // Initialize dy based on random angle
-        this.ballMoving = true; // Set flag to true to start movement
-    }
+	startBallMovement() {
+		this.angleX = this.ballStartAngle();
+		this.angleY = this.ballStartAngle();
+		this.dx = this.angleX * g_BALL_SPEED; // Initialize dx based on random angle
+		this.dy = this.angleY * g_BALL_SPEED; // Initialize dy based on random angle
+		this.ballMoving = true; // Set flag to true to start movement
+	}
 
-    doLinesIntersect(line1, line2) {
-    // Unpack the lines into points
-    const [p1, p2] = line1;
-    const [p3, p4] = line2;
+	resumeBallMovement() {
+		this.dx = this.angleX * g_BALL_SPEED; // Update the speed
+		this.dy = this.angleY * g_BALL_SPEED; // Update the speed
+		this.ballMoving = true;
+	}
 
-    // Calculate the determinant
-    const det = (p2.x - p1.x) * (p4.y - p3.y) - (p2.y - p1.y) * (p4.x - p3.x);
+	doLinesIntersect(line1, line2) {
+		// Unpack the lines into points
+		const [p1, p2] = line1;
+		const [p3, p4] = line2;
 
-    if (det === 0) {
-        // The lines are parallel
-        return false;
-    }
+		// Calculate the determinant
+		const det = (p2.x - p1.x) * (p4.y - p3.y) - (p2.y - p1.y) * (p4.x - p3.x);
 
-    // Calculate the parameters
-    const lambda = ((p4.y - p3.y) * (p4.x - p1.x) + (p3.x - p4.x) * (p4.y - p1.y)) / det;
-    const gamma = ((p1.y - p2.y) * (p4.x - p1.x) + (p2.x - p1.x) * (p4.y - p1.y)) / det;
+		if (det === 0) {
+			// The lines are parallel
+			return false;
+		}
 
-    // Check if the intersection point lies on both line segments
-    return (0 < lambda && lambda < 1) && (0 < gamma && gamma < 1);
-}
+		// Calculate the parameters
+		const lambda = ((p4.y - p3.y) * (p4.x - p1.x) + (p3.x - p4.x) * (p4.y - p1.y)) / det;
+		const gamma = ((p1.y - p2.y) * (p4.x - p1.x) + (p2.x - p1.x) * (p4.y - p1.y)) / det;
+
+		// Check if the intersection point lies on both line segments
+		return (0 < lambda && lambda < 1) && (0 < gamma && gamma < 1);
+	}
 
     //  Left Paddel
     //               ***
@@ -97,22 +107,21 @@ class Ball {
     //   * *
     //   ***
     //      Top line of the paddel
-    ballColisionLeftPaddelTopLine(paddle) {
-                 var ballPositionDown = [{x: this.ballX, y: this.ballY}, {x: this.ballX, y: this.ballY + this.dy + this.ballRadius}];
-                //TOP line of the paddle
-                var line1 = [{x: paddle.x, y: paddle.y}, {x: paddle.x + paddle.paddleWidth, y: paddle.y}];
-				//this.drawLine(line1[0].x, line1[0].y,line1[1].x, line1[1].y)
-				//this.drawLine('red',ballPositionDown[0].x, ballPositionDown[0].y,ballPositionDown[1].x, ballPositionDown[1].y)
-				//this.drawLine('red',line1[0].x, line1[0].y,line1[1].x, line1[1].y)
-				if(this.doLinesIntersect(ballPositionDown,line1)){
-				    console.log("intercept paddel1 TOP line");
-				    this.dy = -this.dy;
-				    this.sound.play();
-				    return true;
-				}
-				return false;
-    }
-
+	ballColisionLeftPaddelTopLine(paddle) {
+		var ballPositionDown = [{ x: this.ballX, y: this.ballY }, { x: this.ballX, y: this.ballY + this.dy + this.ballRadius }];
+		//TOP line of the paddle
+		var line1 = [{ x: paddle.x, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y }];
+		//this.drawLine(line1[0].x, line1[0].y,line1[1].x, line1[1].y)
+		//this.drawLine('red',ballPositionDown[0].x, ballPositionDown[0].y,ballPositionDown[1].x, ballPositionDown[1].y)
+		//this.drawLine('red',line1[0].x, line1[0].y,line1[1].x, line1[1].y)
+		if (this.doLinesIntersect(ballPositionDown, line1)) {
+			console.log("intercept paddel1 TOP line");
+			this.dy = -this.dy;
+			this.sound.play();
+			return true;
+		}
+		return false;
+	}
 
     //  Left Paddel
     //               ***
@@ -123,20 +132,20 @@ class Ball {
     //   * #
     //   **#
     //      Right line of the paddel
-    ballColisionLeftPaddelRightLineInDownLeftPartOfBall(paddle) {
-        var ballPosition = [{x: this.ballX, y: this.ballY}, {x: this.ballX - Math.sin(45)*this.ballRadius +  this.dx, y:  this.ballY + Math.cos(45)*this.ballRadius + this.dy}];
-        var linePaddelRight = [{x: paddle.x + paddle.paddleWidth, y: paddle.y}, {x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight}];
+	ballColisionLeftPaddelRightLineInDownLeftPartOfBall(paddle) {
+		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX - Math.sin(45) * this.ballRadius + this.dx, y: this.ballY + Math.cos(45) * this.ballRadius + this.dy }];
+		var linePaddelRight = [{ x: paddle.x + paddle.paddleWidth, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
 		//this.drawLine('gray',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 		//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
-				if(this.doLinesIntersect(ballPosition,linePaddelRight)){
-				     console.log("intercept paddel1 RIGHT line DL dx " + this.dx + " dy " + this.dy);
-				     this.dx = -this.dx;
-				     this.dy = -this.dy;
-				     this.sound.play();
-				     return true;
-				}
+		if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
+			console.log("intercept paddel1 RIGHT line DL dx " + this.dx + " dy " + this.dy);
+			this.dx = -this.dx;
+			this.dy = -this.dy;
+			this.sound.play();
+			return true;
+		}
 		return false;
-    }
+	}
 
     //  Left Paddel
     //               ***
@@ -147,21 +156,20 @@ class Ball {
     //   * #
     //   **#
     //      Right line of the paddel
-    ballColisionLeftPaddelRightLineInUpLeftPartOfBall(paddle) {
-        var ballPosition = [{x: this.ballX, y: this.ballY}, {x: this.ballX - Math.sin(45)*this.ballRadius +  this.dx, y:  this.ballY - Math.cos(45)*this.ballRadius + this.dy}];
-        var linePaddelRight = [{x: paddle.x + paddle.paddleWidth, y: paddle.y}, {x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight}];
+	ballColisionLeftPaddelRightLineInUpLeftPartOfBall(paddle) {
+		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX - Math.sin(45) * this.ballRadius + this.dx, y: this.ballY - Math.cos(45) * this.ballRadius + this.dy }];
+		var linePaddelRight = [{ x: paddle.x + paddle.paddleWidth, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
 		//this.drawLine('green',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 		//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
-				if(this.doLinesIntersect(ballPosition,linePaddelRight)){
-				     console.log("intercept paddel1 RIGHT line UL dx " + this.dx + " dy " + this.dy);
-				     this.dx = -this.dx;
-				     this.dy = -this.dy;
-				     this.sound.play();
-				     return true;
-				}
+		if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
+			console.log("intercept paddel1 RIGHT line UL dx " + this.dx + " dy " + this.dy);
+			this.dx = -this.dx;
+			this.dy = -this.dy;
+			this.sound.play();
+			return true;
+		}
 		return false;
-    }
-
+	}
 
     //  Left Paddel
     //               ***  /
@@ -172,23 +180,22 @@ class Ball {
     //   # *
     //   #**
     //      Left line of the paddel
-    ballColisionLeftPaddelLeftLineInUpRightPartOfBall(paddle) {
-        var ballPosition = [{x: this.ballX, y: this.ballY}, {x: this.ballX + Math.sin(45)*this.ballRadius +  this.dx, y:  this.ballY - Math.cos(45)*this.ballRadius + this.dy}];
-        var linePaddelRight = [{x: paddle.x + paddle.paddleWidth, y: paddle.y}, {x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight}];
+	ballColisionLeftPaddelLeftLineInUpRightPartOfBall(paddle) {
+		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX + Math.sin(45) * this.ballRadius + this.dx, y: this.ballY - Math.cos(45) * this.ballRadius + this.dy }];
+		var linePaddelRight = [{ x: paddle.x + paddle.paddleWidth, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
 		//this.drawLine('brown',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 		//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
-				if(this.doLinesIntersect(ballPosition,linePaddelRight)){
-				     console.log("intercept paddel1 RIGHT line UL dx " + this.dx + " dy " + this.dy);
-				     this.dx = -this.dx;
-				     this.dy = -this.dy;
-				     this.sound.play();
-				     return true;
-				}
+		if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
+			console.log("intercept paddel1 RIGHT line UL dx " + this.dx + " dy " + this.dy);
+			this.dx = -this.dx;
+			this.dy = -this.dy;
+			this.sound.play();
+			return true;
+		}
 		return false;
-    }
+	}
 
-
-      //  Left Paddel
+    //  Left Paddel
     //               ***  /
     //   ***       *  |UR*
     //   * *      *______ *
@@ -197,21 +204,20 @@ class Ball {
     //   * *
     //   ###
     //      Bottom line of the paddel
-    ballColisionLeftPaddelBottomLineInUpRightPartOfBall(paddle) {
-        var ballPosition = [{x: this.ballX, y: this.ballY}, {x: this.ballX + Math.sin(45)*this.ballRadius +  this.dx, y:  this.ballY - Math.cos(45)*this.ballRadius + this.dy}];
-        var linePaddelBottom = [{x: paddle.x, y: paddle.y + paddle.paddleHeight}, {x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight}];
+	ballColisionLeftPaddelBottomLineInUpRightPartOfBall(paddle) {
+		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX + Math.sin(45) * this.ballRadius + this.dx, y: this.ballY - Math.cos(45) * this.ballRadius + this.dy }];
+		var linePaddelBottom = [{ x: paddle.x, y: paddle.y + paddle.paddleHeight }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
 		//this.drawLine('brown',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 		//this.drawLine('gray', linePaddelBottom[0].x, linePaddelBottom[0].y, linePaddelBottom[1].x, linePaddelBottom[1].y)
-				if(this.doLinesIntersect(ballPosition,linePaddelBottom)){
-				     console.log("intercept paddel1 BOTTOM line UR dx " + this.dx + " dy " + this.dy);
-				     this.dx = -this.dx;
-				     this.dy = -this.dy;
-				     this.sound.play();
-				     return true;
-				}
+		if (this.doLinesIntersect(ballPosition, linePaddelBottom)) {
+			console.log("intercept paddel1 BOTTOM line UR dx " + this.dx + " dy " + this.dy);
+			this.dx = -this.dx;
+			this.dy = -this.dy;
+			this.sound.play();
+			return true;
+		}
 		return false;
-    }
-
+	}
 
 
     //  Left Paddel ******************
@@ -223,21 +229,20 @@ class Ball {
     //   # *
     //   #**
     //      Right line of the paddel
-    ballColisionLeftPaddelLeftLineInDownRightPartOfBall(paddle) {
-        var ballPosition = [{x: this.ballX, y: this.ballY}, {x: this.ballX + Math.sin(45)*this.ballRadius +  this.dx, y:  this.ballY + Math.cos(45)*this.ballRadius + this.dy}];
-        var linePaddelRight = [{x: paddle.x , y: paddle.y}, {x: paddle.x, y: paddle.y + paddle.paddleHeight}];
+	ballColisionLeftPaddelLeftLineInDownRightPartOfBall(paddle) {
+		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX + Math.sin(45) * this.ballRadius + this.dx, y: this.ballY + Math.cos(45) * this.ballRadius + this.dy }];
+		var linePaddelRight = [{ x: paddle.x, y: paddle.y }, { x: paddle.x, y: paddle.y + paddle.paddleHeight }];
 		//this.drawLine('red',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 		//this.drawLine('green', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
-				if(this.doLinesIntersect(ballPosition,linePaddelRight)){
-				     console.log("intercept paddel1 LEFT line DR dx " + this.dx + " dy " + this.dy);
-				     this.dx = -this.dx;
-				    // this.dy = -this.dy;
-				     this.sound.play();
-				     return true;
-				}
+		if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
+			console.log("intercept paddel1 LEFT line DR dx " + this.dx + " dy " + this.dy);
+			this.dx = -this.dx;
+			// this.dy = -this.dy;
+			this.sound.play();
+			return true;
+		}
 		return false;
-    }
-
+	}
 
 
     //  Left Paddel ******************
@@ -249,126 +254,123 @@ class Ball {
     //   * *
     //   ***
     //      Top line of the paddel
-    ballColisionLeftPaddelTopLineInDownRightPartOfBall(paddle) {
-        var ballPosition = [{x: this.ballX, y: this.ballY}, {x: this.ballX + Math.sin(45)*this.ballRadius +  this.dx, y:  this.ballY + Math.cos(45)*this.ballRadius + this.dy}];
-        var linePaddelTop = [{x: paddle.x , y: paddle.y}, {x: paddle.x, y: paddle.y + paddle.paddleHeight}];
+	ballColisionLeftPaddelTopLineInDownRightPartOfBall(paddle) {
+		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX + Math.sin(45) * this.ballRadius + this.dx, y: this.ballY + Math.cos(45) * this.ballRadius + this.dy }];
+		var linePaddelTop = [{ x: paddle.x, y: paddle.y }, { x: paddle.x, y: paddle.y + paddle.paddleHeight }];
 		//this.drawLine('red',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 		//this.drawLine('green', linePaddelTop[0].x, linePaddelTop[0].y, linePaddelTop[1].x, linePaddelTop[1].y)
-				if(this.doLinesIntersect(ballPosition,linePaddelTop)){
-				     console.log("intercept paddel1 TOP line DR dx " + this.dx + " dy " + this.dy);
-				     this.dx = -this.dx;
-				     this.dy = -this.dy;
-				     this.sound.play();
-				     return true;
-				}
+		if (this.doLinesIntersect(ballPosition, linePaddelTop)) {
+			console.log("intercept paddel1 TOP line DR dx " + this.dx + " dy " + this.dy);
+			this.dx = -this.dx;
+			this.dy = -this.dy;
+			this.sound.play();
+			return true;
+		}
 		return false;
-    }
+	}
 
 
+	ballCollisionLeftPaddelRightLine(paddle) {
+		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX + this.dx - this.ballRadius, y: this.ballY + this.dy - this.ballRadius }];
+		//Right line of the paddle
+		var linePaddelRight = [{ x: paddle.x + paddle.paddleWidth, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
+		//this.drawLine('yellow',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
+		//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
+		if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
+			console.log("intercept paddel1 RIGHT line");
+			this.dx = -this.dx;
+			this.sound.play();
+			return true;
+		}
+		return false;
+	}
 
-    ballCollisionLeftPaddelRightLine(paddle) {
-                var ballPosition = [{x: this.ballX, y: this.ballY}, {x: this.ballX + this.dx - this.ballRadius, y: this.ballY + this.dy - this.ballRadius}];
-                //Right line of the paddle
-				var linePaddelRight = [{x: paddle.x + paddle.paddleWidth, y: paddle.y}, {x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight}];
-				//this.drawLine('yellow',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
-				//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
-				if(this.doLinesIntersect(ballPosition,linePaddelRight)){
-				     console.log("intercept paddel1 RIGHT line");
-				     this.dx = -this.dx;
-				     this.sound.play();
-				     return true;
+	ballCollisionLeftPaddelLeftLine(paddle) {
+		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX + this.dx - this.ballRadius, y: this.ballY + this.dy - this.ballRadius }];
+		//Right line of the paddle
+		var linePaddelLeft = [{ x: paddle.x, y: paddle.y }, { x: paddle.x, y: paddle.y + paddle.paddleHeight }];
+		// this.drawLine('pink',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
+		//this.drawLine('gray', linePaddelLeft[0].x, linePaddelLeft[0].y, linePaddelLeft[1].x, linePaddelLeft[1].y)
+		if (this.doLinesIntersect(ballPosition, linePaddelLeft)) {
+			console.log("intercept paddel1 RIGHT line");
+			this.dx = -this.dx;
+			this.sound.play();
+			return true;
+		}
+		return false;
+	}
+
+	ballCollisionLeftPaddelBottomLine(paddle) {
+		var ballPositionUp = [{ x: this.ballX, y: this.ballY }, { x: this.ballX, y: this.ballY + this.dy - this.ballRadius }];
+		//BOTTOM line of the paddle
+		var lineBottom = [{ x: paddle.x, y: paddle.y + paddle.paddleHeight }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
+		//this.drawLine('blue',ballPositionUp[0].x, ballPositionUp[0].y,ballPositionUp[1].x, ballPositionUp[1].y)
+		//this.drawLine('gray', lineBottom[0].x, lineBottom[0].y, lineBottom[1].x, lineBottom[1].y)
+		if (this.doLinesIntersect(ballPositionUp, lineBottom)) {
+			console.log("intercept paddel1 TOP line");
+			this.dy = -this.dy;
+			this.sound.play();
+			return true;
+		}
+		return false;
+	}
+
+	//Right paddle
+	ballCollisionRightPaddelRightLine(paddle) {
+		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX + this.dx - this.ballRadius, y: this.ballY + this.dy + this.ballRadius }];
+		//Right line of the paddle
+		var linePaddelRight = [{ x: paddle.x + paddle.paddleWidth, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
+		//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
+		if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
+			console.log("intercept paddel1 RIGHT line");
+			this.dx = -this.dx;
+			this.sound.play();
+			return true;
+		}
+		return false;
+	}
+
+	ballCollisionRightPaddelLeftLine(paddle) {
+		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX + this.dx - this.ballRadius, y: this.ballY + this.dy + this.ballRadius }];
+		//Right line of the paddle
+
+		var linePaddelLeft = [{ x: paddle.x, y: paddle.y }, { x: paddle.x, y: paddle.y + paddle.paddleHeight }];
+		//this.drawLine('gray', linePaddelLeft[0].x, linePaddelLeft[0].y, linePaddelLeft[1].x, linePaddelLeft[1].y)
+		if (this.doLinesIntersect(ballPosition, linePaddelLeft)) {
+			console.log("intercept paddel1 RIGHT line");
+			this.dx = -this.dx;
+			this.sound.play();
+			return true;
+		}
+		return false;
+	}
+
+	collision(paddle) {
+		if (!this.ballColisionLeftPaddelTopLine(paddle)) {
+			if (!this.ballCollisionLeftPaddelRightLine(paddle)) {
+				if (!this.ballCollisionLeftPaddelBottomLine(paddle)) {
+					if (!this.ballCollisionLeftPaddelLeftLine(paddle)) {
+						if (!this.ballColisionLeftPaddelRightLineInDownLeftPartOfBall(paddle)) {
+							if (!this.ballColisionLeftPaddelRightLineInUpLeftPartOfBall(paddle)) {
+								if (!this.ballColisionLeftPaddelLeftLineInUpRightPartOfBall(paddle)) {
+									if (!this.ballColisionLeftPaddelLeftLineInDownRightPartOfBall(paddle)) {
+										if (!this.ballColisionLeftPaddelBottomLineInUpRightPartOfBall(paddle)) {
+											if (!this.ballColisionLeftPaddelTopLineInDownRightPartOfBall(paddle)) {
+												return false;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
 				}
-				return false;
-    }
+			}
+		}
+		return true;
+	}
 
-    ballCollisionLeftPaddelLeftLine(paddle) {
-                var ballPosition = [{x: this.ballX, y: this.ballY}, {x: this.ballX + this.dx - this.ballRadius, y: this.ballY + this.dy - this.ballRadius}];
-                //Right line of the paddle
-				var linePaddelLeft = [{x: paddle.x, y: paddle.y}, {x: paddle.x , y: paddle.y + paddle.paddleHeight}];
-				// this.drawLine('pink',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
-				//this.drawLine('gray', linePaddelLeft[0].x, linePaddelLeft[0].y, linePaddelLeft[1].x, linePaddelLeft[1].y)
-				if(this.doLinesIntersect(ballPosition,linePaddelLeft)){
-				     console.log("intercept paddel1 RIGHT line");
-				     this.dx = -this.dx;
-				     this.sound.play();
-				     return true;
-				}
-				return false;
-    }
-
-
-    ballCollisionLeftPaddelBottomLine(paddle) {
-                 var ballPositionUp = [{x: this.ballX, y: this.ballY}, {x: this.ballX, y: this.ballY + this.dy - this.ballRadius}];
-				//BOTTOM line of the paddle
-                var lineBottom = [{x: paddle.x, y: paddle.y + paddle.paddleHeight}, {x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight}];
-                //this.drawLine('blue',ballPositionUp[0].x, ballPositionUp[0].y,ballPositionUp[1].x, ballPositionUp[1].y)
-                //this.drawLine('gray', lineBottom[0].x, lineBottom[0].y, lineBottom[1].x, lineBottom[1].y)
-				if(this.doLinesIntersect(ballPositionUp,lineBottom)){
-				    console.log("intercept paddel1 TOP line");
-				    this.dy = -this.dy;
-				    this.sound.play();
-				    return true;
-				}
-				return false;
-    }
-
-
-    //Right paddle
-     ballCollisionRightPaddelRightLine(paddle) {
-                var ballPosition = [{x: this.ballX, y: this.ballY}, {x: this.ballX + this.dx - this.ballRadius, y: this.ballY + this.dy + this.ballRadius}];
-                //Right line of the paddle
-				var linePaddelRight = [{x: paddle.x + paddle.paddleWidth, y: paddle.y}, {x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight}];
-				//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
-				if(this.doLinesIntersect(ballPosition,linePaddelRight)){
-				     console.log("intercept paddel1 RIGHT line");
-				     this.dx = -this.dx;
-				     this.sound.play();
-				     return true;
-				}
-				return false;
-    }
-
-    ballCollisionRightPaddelLeftLine(paddle) {
-                var ballPosition = [{x: this.ballX, y: this.ballY}, {x: this.ballX + this.dx - this.ballRadius, y: this.ballY + this.dy + this.ballRadius}];
-                //Right line of the paddle
-
-				var linePaddelLeft = [{x: paddle.x, y: paddle.y}, {x: paddle.x , y: paddle.y + paddle.paddleHeight}];
-				//this.drawLine('gray', linePaddelLeft[0].x, linePaddelLeft[0].y, linePaddelLeft[1].x, linePaddelLeft[1].y)
-				if(this.doLinesIntersect(ballPosition,linePaddelLeft)){
-				     console.log("intercept paddel1 RIGHT line");
-				     this.dx = -this.dx;
-				     this.sound.play();
-				     return true;
-				}
-				return false;
-    }
-
-    collision(paddle) {
-     if(!this.ballColisionLeftPaddelTopLine(paddle)){
-                    if(!this.ballCollisionLeftPaddelRightLine(paddle)){
-                        if(!this.ballCollisionLeftPaddelBottomLine(paddle)){
-                            if(!this.ballCollisionLeftPaddelLeftLine(paddle)) {
-                                if(!this.ballColisionLeftPaddelRightLineInDownLeftPartOfBall(paddle)){
-                                    if(!this.ballColisionLeftPaddelRightLineInUpLeftPartOfBall(paddle)){
-                                        if(!this.ballColisionLeftPaddelLeftLineInUpRightPartOfBall(paddle)){
-                                            if(!this. ballColisionLeftPaddelLeftLineInDownRightPartOfBall(paddle)) {
-                                                if(!this.ballColisionLeftPaddelBottomLineInUpRightPartOfBall(paddle)) {
-                                                    if(!this.ballColisionLeftPaddelTopLineInDownRightPartOfBall(paddle)){
-                                                        return false;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-               }
-                   return true;
-    }
-
-    ballMove() {
+	ballMove() {
 		if (this.ballMoving) {
 			// top and bottom walls
 			if (this.ballY + this.dy + this.ballRadius > canvas.height - Pong.REC_HEIGHT_SIZE || this.ballY + this.dy - this.ballRadius < Pong.REC_HEIGHT_SIZE) {
@@ -377,13 +379,14 @@ class Ball {
 				this.sound.play();
 			}
 
-            this.collision(this.paddle1);
-            this.collision(this.paddle2);
-            if (this.nbPlayers == 4) {
-                this.collision(this.paddle3);
-                this.collision(this.paddle4);
-            }
-
+			this.collision(this.paddle1);
+			this.collision(this.paddle2);
+			if (this.nbPlayers == 4) {
+				this.collision(this.paddle3);
+				this.collision(this.paddle4);
+			}
+			console.log("dx = " + this.dx);
+			console.log("dy = " + this.dy);
 			this.ballX += this.dx;
 			this.ballY += this.dy;
 
@@ -391,627 +394,652 @@ class Ball {
 		}
 	}
 
-    updateScore() {
-        if (this.ballX < 0) {
-            this.score.incrementScoreR();
-            this.ballMoving = false;
-            if (this.score.checkGameOver() === false) {
-                this.ballResetPosition();
-                this.startBallMovement();
-            }
+	updateScore() {
+		if (this.ballX < 0) {
+			this.score.incrementScoreR();
+			this.ballMoving = false;
+			if (this.score.checkGameOver() === false) {
+				this.ballResetPosition();
+				this.startBallMovement();
+			}
 
-        }
-        if (this.ballX > canvas.width) {
-            this.score.incrementScoreL();
-            this.ballMoving = false;
-            if (this.score.checkGameOver() === false) {
-                this.ballResetPosition();
-                this.startBallMovement();
-            }
-        }
-    }
-
+		}
+		if (this.ballX > canvas.width) {
+			this.score.incrementScoreL();
+			this.ballMoving = false;
+			if (this.score.checkGameOver() === false) {
+				this.ballResetPosition();
+				this.startBallMovement();
+			}
+		}
+	}
 }
 
 class Paddle {
-    constructor(paddleType) {
-        this.paddleType = paddleType;
-        this.width = canvas.width; // Canvas width in pixels
-        this.height = canvas.height; // Canvas height in pixels
-        this.paddleWidth = this.width / 50;
-        this.paddleHeight = this.height / 8;
-        this.resetPosition();
-    }
-    up() {
-        if (this.y - g_PADDLE_SPEED - Pong.REC_HEIGHT_SIZE < 0) {
-            this.y = Pong.REC_HEIGHT_SIZE; // pixels to move per key event
-        }
-        else if (this.y > Pong.REC_HEIGHT_SIZE) {
-            this.y -= g_PADDLE_SPEED; // pixels to move per key event
-        }
-    }
+	constructor(paddleType) {
+		this.paddleType = paddleType;
+		this.width = canvas.width; // Canvas width in pixels
+		this.height = canvas.height; // Canvas height in pixels
+		this.paddleWidth = this.width / 50;
+		this.paddleHeight = this.height / 8;
+		this.resetPosition();
+		this.ballRef = null;
+	}
 
-    // Check if the paddle is not at the bottom of the canvas
-    down() {
-        if (this.y + Pong.REC_HEIGHT_SIZE + this.paddleHeight + 5 > this.height) {
-            this.y = this.height - Pong.REC_HEIGHT_SIZE - this.paddleHeight - 5;
-        }
-        else if (this.y < this.height - Pong.REC_HEIGHT_SIZE - this.paddleHeight - 5) {
-            this.y += g_PADDLE_SPEED;
-        }
-    }
+	setBallRef(ballRef) {
+		this.ballRef = ballRef;
+	}
 
-    // TO DO: Implement paddle collision when the ball hits the paddle on the top or bottom of the paddle
+	up() {
+		if (this.y - g_PADDLE_SPEED - Pong.REC_HEIGHT_SIZE < 0) {
+			this.y = Pong.REC_HEIGHT_SIZE; // pixels to move per key event
+		}
+		else if (this.y > Pong.REC_HEIGHT_SIZE) {
+			this.y -= g_PADDLE_SPEED; // pixels to move per key event
+		}
+		if (this.ballRef.collision(this)) {
+			console.log("PADLE COLISION GOING UP");
+			this.y += g_PADDLE_SPEED;
+		}
+	}
 
-    drawPaddle() {
-        ctx.fillStyle = 'white'; // Fill color players 1 and 2
-        if (this.paddleType == PaddleTypes.LEFT1) {
-            ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight); // Draw a rectangle (x, y, width, height)
-        }
+	// Check if the paddle is not at the bottom of the canvas
+	down() {
+		if (this.y + Pong.REC_HEIGHT_SIZE + this.paddleHeight + 5 > this.height) {
+			this.y = this.height - Pong.REC_HEIGHT_SIZE - this.paddleHeight - 5;
+		}
+		else if (this.y < this.height - Pong.REC_HEIGHT_SIZE - this.paddleHeight - 5) {
+			this.y += g_PADDLE_SPEED;
+		}
+		if (this.ballRef.collision(this)) {
+			console.log("PADLE COLISION GOING DOWN");
+			this.y -= g_PADDLE_SPEED;
+		}
+	}
 
-        if (this.paddleType == PaddleTypes.RIGHT1)
-            ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight);
-        ctx.fillStyle = '#dc3545'; // Fill color players 3 and 4
-        if (this.paddleType == PaddleTypes.LEFT2)
-            ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight);
-        if (this.paddleType == PaddleTypes.RIGHT2)
-            ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight);
-    }
-    resetPosition() {
-        if (this.paddleType == PaddleTypes.LEFT1) {
-            this.x = 2;
-            this.y = this.height / 2.5;
-        }
-        if (this.paddleType == PaddleTypes.RIGHT1) {
-            this.x = this.width - 2 - this.paddleWidth;
-            this.y = this.height / 2.5;
-        }
-        if (this.paddleType == PaddleTypes.LEFT2) {
-            this.x = this.paddleWidth + 2 + 3;
-            this.y = this.height / 2.5;
-        }
-        if (this.paddleType == PaddleTypes.RIGHT2) {
-            this.x = this.width - 5 - this.paddleWidth - this.paddleWidth;
-            this.y = this.height / 2.5;
-        }
-    }
+	drawPaddle() {
+		ctx.fillStyle = 'white'; // Fill color players 1 and 2
+		if (this.paddleType == PaddleTypes.LEFT1) {
+			ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight); // Draw a rectangle (x, y, width, height)
+		}
+
+		if (this.paddleType == PaddleTypes.RIGHT1)
+			ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight);
+		ctx.fillStyle = '#dc3545'; // Fill color players 3 and 4
+		if (this.paddleType == PaddleTypes.LEFT2)
+			ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight);
+		if (this.paddleType == PaddleTypes.RIGHT2)
+			ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight);
+	}
+	resetPosition() {
+		if (this.paddleType == PaddleTypes.LEFT1) {
+			this.x = 2;
+			this.y = this.height / 2.5;
+		}
+		if (this.paddleType == PaddleTypes.RIGHT1) {
+			this.x = this.width - 2 - this.paddleWidth;
+			this.y = this.height / 2.5;
+		}
+		if (this.paddleType == PaddleTypes.LEFT2) {
+			this.x = this.paddleWidth + 2 + 3;
+			this.y = this.height / 2.5;
+		}
+		if (this.paddleType == PaddleTypes.RIGHT2) {
+			this.x = this.width - 5 - this.paddleWidth - this.paddleWidth;
+			this.y = this.height / 2.5;
+		}
+	}
 }
 
 class Pong {
-    static REC_HEIGHT_SIZE = 20;
+	static REC_HEIGHT_SIZE = 20;
+	constructor(nbPlayers, isTournament = false, notifyWinner = null) {
+		// Get canvas attributes
+		this.width = canvas.width; // Canvas width in pixels
+		this.height = canvas.height; // Canvas height in pixels
+		this.nbPlayers = nbPlayers;
+		this.paddle1 = new Paddle(PaddleTypes.LEFT1);
+		this.paddle2 = new Paddle(PaddleTypes.RIGHT1);
+		this.score = new Score();
+		this.countdown = new Countdown(this);
+		this.notifyWinner = notifyWinner;
+		this.isGameRunning = false;
 
-    constructor(nbPlayers, isTournament = false, notifyWinner = null) {
-        // Get canvas attributes
-        this.width = canvas.width; // Canvas width in pixels
-        this.height = canvas.height; // Canvas height in pixels
-        this.nbPlayers = nbPlayers;
-        this.paddle1 = new Paddle(PaddleTypes.LEFT1);
-        this.paddle2 = new Paddle(PaddleTypes.RIGHT1);
-        this.score = new Score();
-        this.countdown = new Countdown(this);
-        this.notifyWinner = notifyWinner;
-        this.isGameRunning = false;
+		if (this.nbPlayers == 4) {
+			this.paddle3 = new Paddle(PaddleTypes.LEFT2);
+			this.paddle4 = new Paddle(PaddleTypes.RIGHT2);
+			this.ball = new Ball(this.score, 4, this.paddle1, this.paddle2, this.paddle3, this.paddle4);
+			this.paddle1.setBallRef(this.ball);
+			this.paddle2.setBallRef(this.ball);
+			this.paddle3.setBallRef(this.ball);
+			this.paddle4.setBallRef(this.ball);
+		}
+		else {
+			this.ball = new Ball(this.score, 2, this.paddle1, this.paddle2);
+			this.paddle1.setBallRef(this.ball);
+			this.paddle2.setBallRef(this.ball);
+		}
+		this.intervalId = 0;
+	}
+	start() {
+		this.paddle1.resetPosition();
+		this.paddle2.resetPosition();
+		if (this.nbPlayers == 4) {
+			this.paddle3.resetPosition();
+			this.paddle4.resetPosition();
+		}
+		this.render();
+		this.isGameRunning = true;
+		this.countdown.start();
+	}
 
-        if (this.nbPlayers == 4) {
-            this.paddle3 = new Paddle(PaddleTypes.LEFT2);
-            this.paddle4 = new Paddle(PaddleTypes.RIGHT2);
-            this.ball = new Ball(this.score, 4, this.paddle1, this.paddle2, this.paddle3, this.paddle4);
-        }
-        else {
-            this.ball = new Ball(this.score, 2, this.paddle1, this.paddle2);
-        }
-        this.intervalId = 0;
-    }
-    start() {
-        this.paddle1.resetPosition();
-        this.paddle2.resetPosition();
-        if (this.nbPlayers == 4) {
-            this.paddle3.resetPosition();
-            this.paddle4.resetPosition();
-        }
-        this.render();
-        this.isGameRunning = true;
-        this.countdown.start();
-    }
+	startGame() {
+		this.score.resetScore();
+		this.ball.ballResetPosition();
+		this.intervalId = setInterval(this.pongRender.bind(this), 1000 / 60); // 60 FPS (frames per second)
+		document.addEventListener('keydown', this.handleKeyboardEvent.bind(this)); // addEventListener is a system function
+		document.addEventListener('keydown', (event) => {
+			if (event.key === 'Enter') {
+				this.ball.startBallMovement(); // Start ball movement on Enter key press
+			}
+		});
+	}
 
-    startGame() {
-        this.score.resetScore();
-        this.ball.ballResetPosition();
-        this.intervalId = setInterval(this.pongRender.bind(this), 1000 / 60); // 60 FPS (frames per second)
-        document.addEventListener('keydown', this.handleKeyboardEvent.bind(this)); // addEventListener is a system function
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                this.ball.startBallMovement(); // Start ball movement on Enter key press
-            }
-        });
-    }
+	pause() {
+		clearInterval(this.intervalId);
+	}
 
-    pause() {
-        clearInterval(this.intervalId);
-    }
+	resume() {
+		this.ball.resumeBallMovement();
+		this.intervalId = setInterval(this.pongRender.bind(this), 1000 / 60);
 
-    resume() {
-        this.ball.startBallMovement();
-        this.intervalId = setInterval(this.pongRender.bind(this), 1000 / 60);
+	}
 
-    }
+	stop() {
+		clearInterval(this.intervalId);
+		document.removeEventListener('keydown', this.handleKeyboardEvent.bind(this));
+		this.isGameRunning = false;
+	}
 
-    stop() {
-        clearInterval(this.intervalId);
-        document.removeEventListener('keydown', this.handleKeyboardEvent.bind(this));
-        this.isGameRunning = false;
-    }
+	drawSquare() {
+		ctx.fillStyle = 'black'; // Fill color
+		ctx.fillRect(0, 0, this.width, this.height); // Draw a rectangle (x, y, width, height)
 
-    drawSquare() {
-        ctx.fillStyle = 'black'; // Fill color
-        ctx.fillRect(0, 0, this.width, this.height); // Draw a rectangle (x, y, width, height)
+		// Set properties for the rectangle
+		ctx.fillStyle = 'white'; // Fill color
+		ctx.fillRect(0, 0, this.width, Pong.REC_HEIGHT_SIZE); // Draw a rectangle (x, y, width, height)
+		ctx.fillRect(0, this.height - Pong.REC_HEIGHT_SIZE, this.width, Pong.REC_HEIGHT_SIZE); // Draw a rectangle (x, y, width, height)
+		ctx.strokeStyle = 'white'; // Line color
+		ctx.lineWidth = 2; // line Width
+		ctx.setLineDash([6, 3]); // LineDash: 6px and 3px space
+		ctx.beginPath();
+		ctx.moveTo(this.width / 2, 0); // Line initial point
+		ctx.lineTo(this.width / 2, this.height); //  Line final point
+		ctx.stroke(); // Apply line stile and draw
+	}
+	drawControlText(line) {
+		// Set text style
+		ctx.textAlign = 'center';
+		ctx.textBaseline = 'middle';
+		ctx.fillStyle = 'white';
 
-        // Set properties for the rectangle
-        ctx.fillStyle = 'white'; // Fill color
-        ctx.fillRect(0, 0, this.width, Pong.REC_HEIGHT_SIZE); // Draw a rectangle (x, y, width, height)
-        ctx.fillRect(0, this.height - Pong.REC_HEIGHT_SIZE, this.width, Pong.REC_HEIGHT_SIZE); // Draw a rectangle (x, y, width, height)
-        ctx.strokeStyle = 'white'; // Line color
-        ctx.lineWidth = 2; // line Width
-        ctx.setLineDash([6, 3]); // LineDash: 6px and 3px space
-        ctx.beginPath();
-        ctx.moveTo(this.width / 2, 0); // Line initial point
-        ctx.lineTo(this.width / 2, this.height); //  Line final point
-        ctx.stroke(); // Apply line stile and draw
-    }
-    drawControlText(line) {
-        // Set text style
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillStyle = 'white';
+		// Define the starting y position for the first line of text
+		lineHeight = fontSize * 0.8; // Space between lines
+		let startY = canvasHeight / 2 - (lineHeight * (textLines.length - 0.8)) / 2;
+		ctx.fillText(line, canvasWidth / 2, startY);
 
-        // Define the starting y position for the first line of text
-        lineHeight = fontSize * 0.8; // Space between lines
-        let startY = canvasHeight / 2 - (lineHeight * (textLines.length - 0.8)) / 2;
-        ctx.fillText(line, canvasWidth / 2, startY);
+	}
 
-    }
+	displayWinner() {
+		var element = document.getElementById('winner');
 
-    displayWinner() {
-        var element = document.getElementById('winner');
+		if (this.score.scoreL == g_SCORE_TO_WIN) {
+			element.innerText = "Left Player wins!";
+		}
+		else {
+			element.innerText = "Right Player wins!";
+		}
+		var myModal = new bootstrap.Modal(document.getElementById('winnerpopup'));
+		myModal.show();
+	}
 
-        if (this.score.scoreL == g_SCORE_TO_WIN) {
-            element.innerText = "Left Player wins!";
-        }
-        else {
-            element.innerText = "Right Player wins!";
-        }
-        var myModal = new bootstrap.Modal(document.getElementById('winnerpopup'));
-        myModal.show();
-    }
+	render() {
+		this.drawSquare();
+		this.paddle1.drawPaddle();
+		this.paddle2.drawPaddle();
+		if (this.nbPlayers == 4) {
+			this.paddle3.drawPaddle();
+			this.paddle4.drawPaddle();
+		}
+		this.score.drawScore();
+		this.ball.drawBall(); // Draw the ball
+	}
 
-    render() {
-        this.drawSquare();
-        this.paddle1.drawPaddle();
-        this.paddle2.drawPaddle();
-        if (this.nbPlayers == 4) {
-            this.paddle3.drawPaddle();
-            this.paddle4.drawPaddle();
-        }
-        this.score.drawScore();
-        this.ball.drawBall(); // Draw the ball
-    }
+	getWinner() {
+		if (this.score.scoreL == g_SCORE_TO_WIN) {
+			return ("left");
+		}
+		else {
+			return ("right");
+		}
+	}
 
-    getWinner() {
-        if (this.score.scoreL == g_SCORE_TO_WIN) {
-            return ("left");
-        }
-        else {
-            return ("right");
-        }
-    }
+	pongRender() {
+		this.render();
+		this.ball.ballMove(); // Move the ball
+		if (this.score.checkGameOver() == true) {
+			if (this.isTournament == false)
+				this.displayWinner();
+			else
+				this.notifyWinner(this.getWinner());
+			this.stop();
+			this.render();
+		}
+	}
 
-    pongRender() {
-        this.render();
-        this.ball.ballMove(); // Move the ball
-        if (this.score.checkGameOver() == true) {
-            if (this.isTournament == false)
-                this.displayWinner();
-            else
-                this.notifyWinner(this.getWinner());
-            this.stop();
-            this.render();
-        }
-    }
-
-    handleKeyboardEvent(event) {
-        // Check if the key is a letter or control key
-        if (event.key === 'q') {
-            this.paddle1.up();
-        } else if (event.key === 'a') {
-            this.paddle1.down();
-        }
-        if (event.key === 'p') {
-            this.paddle2.up();
-        }
-        else if (event.key === 'l') {
-            this.paddle2.down();
-        }
-        if (this.nbPlayers == 4) {
-            if (event.key === 'd') {
-                this.paddle3.up();
-            } else if (event.key === 'c') {
-                this.paddle3.down();
-            }
-            if (event.key === 'j') {
-                this.paddle4.up();
-            }
-            else if (event.key === 'n') {
-                this.paddle4.down();
-            }
-        }
-    }
+	handleKeyboardEvent(event) {
+		// Check if the key is a letter or control key
+		if (event.key === 'q') {
+			this.paddle1.up();
+		} else if (event.key === 'a') {
+			this.paddle1.down();
+		}
+		if (event.key === 'p') {
+			this.paddle2.up();
+		}
+		else if (event.key === 'l') {
+			this.paddle2.down();
+		}
+		if (this.nbPlayers == 4) {
+			if (event.key === 'd') {
+				this.paddle3.up();
+			} else if (event.key === 'c') {
+				this.paddle3.down();
+			}
+			if (event.key === 'j') {
+				this.paddle4.up();
+			}
+			else if (event.key === 'n') {
+				this.paddle4.down();
+			}
+		}
+	}
 }
 
-
 class Score {
-    constructor() {
-        this.scoreL = 0;
-        this.scoreR = 0;
-    }
+	constructor() {
+		this.scoreL = 0;
+		this.scoreR = 0;
+	}
 
-    incrementScoreR() {
-        this.scoreR++;
-    }
+	incrementScoreR() {
+		this.scoreR++;
+	}
 
-    incrementScoreL() {
-        this.scoreL++;
-    }
+	incrementScoreL() {
+		this.scoreL++;
+	}
 
-    checkGameOver() {
-        if (this.scoreL === g_SCORE_TO_WIN || this.scoreR === g_SCORE_TO_WIN) {
-            return true;
-        }
-        return false;
-    }
+	checkGameOver() {
+		if (this.scoreL === g_SCORE_TO_WIN || this.scoreR === g_SCORE_TO_WIN) {
+			return true;
+		}
+		return false;
+	}
 
 
-    drawScore() {
-        ctx.font = "72px Press Start 2P";
-        ctx.fillText(this.scoreL, canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Left player score
-        ctx.fillText(this.scoreR, 3 * canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Right player score
-    }
+	drawScore() {
+		ctx.font = "72px Press Start 2P";
+		ctx.fillText(this.scoreL, canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Left player score
+		ctx.fillText(this.scoreR, 3 * canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Right player score
+	}
 
-    resetScore() {
-        this.scoreL = 0;
-        this.scoreR = 0;
-    }
+	resetScore() {
+		this.scoreL = 0;
+		this.scoreR = 0;
+	}
 }
 
 class Sound {
-    constructor(src) {
-        this.sound = document.createElement("audio");
-        this.sound.src = src;
-        this.sound.setAttribute("preload", "auto");
-        this.sound.setAttribute("controls", "none");
-        this.sound.style.display = "none";
-        document.body.appendChild(this.sound);
-    }
-    play() {
-        if (g_SOUND) {
-            this.sound.play();
-        }
-    }
+	constructor(src) {
+		this.sound = document.createElement("audio");
+		this.sound.src = src;
+		this.sound.setAttribute("preload", "auto");
+		this.sound.setAttribute("controls", "none");
+		this.sound.style.display = "none";
+		document.body.appendChild(this.sound);
+	}
+	play() {
+		if (g_SOUND) {
+			this.sound.play();
+		}
+	}
 }
 
 class Countdown {
-    constructor(pong) {
-        this.pong = pong;
-        this.count = 3;
-        this.intervalId = 0;
-    }
+	constructor(pong) {
+		this.pong = pong;
+		this.count = 3;
+		this.intervalId = 0;
+	}
 
-    start() {
-        this.intervalId = setInterval(this.countdown.bind(this), 1000);
-    }
+	start() {
+		this.intervalId = setInterval(this.countdown.bind(this), 1000);
+	}
 
-    countdown() {
-        if (this.count === 0) {
-            clearInterval(this.intervalId);
-            this.pong.startGame();
-        }
-        else {
-            this.drawCountdown();
-            this.count--;
-        }
-    }
-    drawCountdown() {
-        this.pong.render();
-        ctx.font = "280px Press Start 2P";
-        ctx.fillStyle = 'red';
-        ctx.fillText(this.count, canvas.width / 2, canvas.height / 2);
-    }
+	countdown() {
+		if (this.count === 0) {
+			clearInterval(this.intervalId);
+			this.pong.startGame();
+		}
+		else {
+			this.drawCountdown();
+			this.count--;
+		}
+	}
+	drawCountdown() {
+		this.pong.render();
+		ctx.font = "280px Press Start 2P";
+		ctx.fillStyle = 'red';
+		ctx.fillText(this.count, canvas.width / 2, canvas.height / 2);
+	}
 }
 
 class Game {
-    constructor(isTournament, players) {
-        this.isTournament = isTournament;
-        if (this.isTournament == true) {
-            this.tournament = new Tournament(players);
-        }
-        else {
-            this.pong = new Pong(players.length);
-        }
-    }
+	constructor(isTournament, players) {
+		this.isTournament = isTournament;
+		if (this.isTournament == true) {
+			this.tournament = new Tournament(players);
+		}
+		else {
+			this.pong = new Pong(players.length);
+		}
+		if (isTournament === true || players.length == 2) {
+			document.getElementById('3rdplayer').style.display = 'none';
+			document.getElementById('4thplayer').style.display = 'none';
+		}
+	}
 
-    start() {
-        if (this.isTournament == true) {
-            this.tournament.startTournament();
-        }
-        else {
-            this.pong.start();
-        }
-    }
+	start() {
+		if (this.isTournament == true) {
+			this.tournament.startTournament();
+		}
+		else {
+			this.pong.start();
+		}
+	}
 
-    isGameRunning() {
-        if (this.isTournament == true) {
-            return (this.tournament.pong.isGameRunning);
-        }
-        else {
-            return (this.pong.isGameRunning);
-        }
-    }
+	reset() {
+		if (this.isTournament == true) {
+			this.tournament.resetTournament();
+		}
+		else {
+			this.pong.stop();
+		}
+	}
 
-    pause() {
-        if (this.isTournament == true) {
-            this.tournament.pong.pause();
-        }
-        else {
-            this.pong.pause();
-        }
-    }
+	isGameRunning() {
+		if (this.isTournament == true) {
+			return (this.tournament.pong.isGameRunning);
+		}
+		else {
+			return (this.pong.isGameRunning);
+		}
+	}
 
-    resume() {
-        if (this.isGameRunning() == true) {
-            if (this.isTournament == true) {
-                this.tournament.pong.resume();
-            }
-            else {
-                this.pong.resume();
-            }
-        }
-    }
+	pause() {
+		if (this.isTournament == true) {
+			this.tournament.pong.pause();
+		}
+		else {
+			this.pong.pause();
+		}
+	}
+
+	resume() {
+		if (this.isGameRunning() == true) {
+			if (this.isTournament == true) {
+				this.tournament.pong.resume();
+			}
+			else {
+				this.pong.resume();
+			}
+		}
+	}
 }
-
-
-
-
 
 
 
 function playAgain() {
-    pong.start();
+	pong.start();
 }
 function refreshConfig() {
-    document.getElementById('playerspeed').value = g_PADDLE_SPEED;
-    document.getElementById('ballspeed').value = g_BALL_SPEED;
-    document.getElementById('score').value = g_SCORE_TO_WIN;
-    document.getElementById('customSwitch').checked = g_SOUND;
-    document.getElementById('currentScore').innerText = "Score - " + g_SCORE_TO_WIN;
+	document.getElementById('playerspeed').value = g_PADDLE_SPEED;
+	document.getElementById('ballspeed').value = g_BALL_SPEED;
+	document.getElementById('score').value = g_SCORE_TO_WIN;
+	document.getElementById('customSwitch').checked = g_SOUND;
+	document.getElementById('currentScore').innerText = "Score - " + g_SCORE_TO_WIN;
 }
 
 function loadConfiguration() {
-    if (game.isGameRunning() == true) {
-        document.getElementById('score').disabled = true;
-    }
-    else
-        document.getElementById('score').disabled = false;
-    game.pause();
-    refreshConfig();
+	if (game.isGameRunning() == true) {
+		document.getElementById('score').disabled = true;
+	}
+	else
+		document.getElementById('score').disabled = false;
+	game.pause();
+	refreshConfig();
 }
 
 function applyConfiguration() {
-    g_PADDLE_SPEED = parseInt(document.getElementById('playerspeed').value, 10);
-    g_BALL_SPEED = parseInt(document.getElementById('ballspeed').value, 10);
-    g_SCORE_TO_WIN = parseInt(document.getElementById('score').value, 10);
-    g_SOUND = document.getElementById('customSwitch').checked;
-    game.resume();
+	g_PADDLE_SPEED = parseInt(document.getElementById('playerspeed').value, 10);
+	g_BALL_SPEED = parseInt(document.getElementById('ballspeed').value, 10);
+	g_SCORE_TO_WIN = parseInt(document.getElementById('score').value, 10);
+	g_SOUND = document.getElementById('customSwitch').checked;
+	game.resume();
 }
 
 class Tournament {
-    // player1 will be the logged user
-    constructor(players) {
-        this.players = players;
-        this.pong = new Pong(2, true, this.winnerCallback);
-        if (this.players.length == 3) {
-            this.playerArray = this.getUniqueRandomPlayers3();
-        }
-        else {
-            this.playerArray = this.getUniqueRandomPlayers4();
-        }
-        this.keyboardEventHandlerBind = this.handleKeyboardEvent.bind(this);
-        this.currentPlayer1 = this.players[this.playerArray[0]];
-        this.currentPlayer2 = this.players[this.playerArray[1]];
-        this.winner = "";
-        this.isFinalGame = false;
-        this.semiFinalWinner1 = "";
-        this.semiFinalWinner2 = "";
-    }
+	// player1 will be the logged user
+	constructor(players) {
+		this.players = players;
+		this.pong = new Pong(2, true, this.winnerCallback);
+		if (this.players.length == 3) {
+			this.playerArray = this.getUniqueRandomPlayers3();
+		}
+		else {
+			this.playerArray = this.getUniqueRandomPlayers4();
+		}
+		this.keyboardEventHandlerBind = this.handleKeyboardEvent.bind(this);
+		this.currentPlayer1 = this.players[this.playerArray[0]];
+		this.currentPlayer2 = this.players[this.playerArray[1]];
+		this.winner = "";
+		this.isFinalGame = false;
+		this.semiFinalWinner1 = "";
+		this.semiFinalWinner2 = "";
+	}
 
-    // lambda =>
-    winnerCallback = (winner) => {
-        var element = document.getElementById('winnerT');
-        var elementFinal = document.getElementById('winnerF');
-        if (winner == 'left') {
-            element.innerText = this.currentPlayer1 + " Player wins!";
-            elementFinal.innerText = this.currentPlayer1 + " won the Tournament!";
-            this.winner = this.currentPlayer1;
-        }
-        else {
-            element.innerText = this.currentPlayer2 + " Player wins!";
-            elementFinal.innerText = this.currentPlayer2 + " won the Tournament!";
-            this.winner = this.currentPlayer2;
-        }
-        if (this.players.length == 4) {
-            if (this.semiFinalWinner1 == "") {
-                this.semiFinalWinner1 = this.winner;
-            }
-            else {
-                this.semiFinalWinner2 = this.winner;
-            }
-        }
-        if (this.isFinalGame == true) {
-            var myModal = new bootstrap.Modal(document.getElementById('winnerFinalpopup'));
-            myModal.show();
-        }
-        else {
-            var myModal = new bootstrap.Modal(document.getElementById('winnerTpopup'));
-            myModal.show();
-        }
+	// lambda =>
+	winnerCallback = (winner) => {
+		var element = document.getElementById('winnerT');
+		var elementFinal = document.getElementById('winnerF');
+		if (winner == 'left') {
+			element.innerText = this.currentPlayer1 + " Player wins!";
+			elementFinal.innerText = this.currentPlayer1 + " won the Tournament!";
+			this.winner = this.currentPlayer1;
+		}
+		else {
+			element.innerText = this.currentPlayer2 + " Player wins!";
+			elementFinal.innerText = this.currentPlayer2 + " won the Tournament!";
+			this.winner = this.currentPlayer2;
+		}
+		if (this.players.length == 4) {
+			if (this.semiFinalWinner1 == "") {
+				this.semiFinalWinner1 = this.winner;
+			}
+			else {
+				this.semiFinalWinner2 = this.winner;
+			}
+		}
+		if (this.isFinalGame == true) {
+			var myModal = new bootstrap.Modal(document.getElementById('winnerFinalpopup'));
+			myModal.show();
+		}
+		else {
+			var myModal = new bootstrap.Modal(document.getElementById('winnerTpopup'));
+			myModal.show();
+		}
+	}
 
+	getUniqueRandomPlayers3() {
+		const numbers = [0, 1, 2];
+		return this.shuffleArray(numbers);
+	}
 
-    }
+	getUniqueRandomPlayers4() {
+		const numbers = [0, 1, 2, 3];
+		return this.shuffleArray(numbers);
+	}
 
-    getUniqueRandomPlayers3() {
-        const numbers = [0, 1, 2];
-        return this.shuffleArray(numbers);
-    }
+	shuffleArray(array) {
+		for (let i = array.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[array[i], array[j]] = [array[j], array[i]];
+		}
+		return (array);
+	}
 
-    getUniqueRandomPlayers4() {
-        const numbers = [0, 1, 2, 3];
-        return this.shuffleArray(numbers);
-    }
+	startTournament() {
+		this.displayGameAnnouncement("Semi Final", this.players[this.playerArray[0]], this.players[this.playerArray[1]]);
+		document.addEventListener('keydown', this.keyboardEventHandlerBind);
+	}
 
-    shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return (array);
-    }
+	resetTournament() {
+		document.removeEventListener('keydown', this.keyboardEventHandlerBind);
+		this.pong.stop();
+	}
 
-    startTournament() {
-        this.displayGameAnnouncement("Semi Final", this.players[this.playerArray[0]], this.players[this.playerArray[1]]);
-        document.addEventListener('keydown', this.keyboardEventHandlerBind);
-    }
+	nextMatch() {
+		if (this.players.length == 4) {
+			if (this.semiFinalWinner1 == this.winner && this.semiFinalWinner2 == "") {
+				this.currentPlayer1 = this.players[this.playerArray[2]];
+				this.currentPlayer2 = this.players[this.playerArray[3]];
+				this.displayGameAnnouncement("Semi Final", this.players[this.playerArray[2]], this.players[this.playerArray[3]]);
+			}
+			if (this.semiFinalWinner2 == this.winner) {
+				this.displayGameAnnouncement("Final", this.semiFinalWinner1, this.semiFinalWinner2);
+				this.currentPlayer1 = this.semiFinalWinner1;
+				this.currentPlayer2 = this.semiFinalWinner2;
+				this.isFinalGame = true;
+			}
+		}
+		else {
+			this.displayGameAnnouncement("Final", this.winner, this.players[this.playerArray[2]]);
+			this.isFinalGame = true;
+		}
+		document.addEventListener('keydown', this.keyboardEventHandlerBind);
+	}
 
-    nextMatch() {
-        if (this.players.length == 4) {
-            if (this.semiFinalWinner1 == this.winner && this.semiFinalWinner2 == "") {
-                this.currentPlayer1 = this.players[this.playerArray[2]];
-                this.currentPlayer2 = this.players[this.playerArray[3]];
-                this.displayGameAnnouncement("Semi Final", this.players[this.playerArray[2]], this.players[this.playerArray[3]]);
-            }
-            if (this.semiFinalWinner2 == this.winner) {
-                this.displayGameAnnouncement("Final", this.semiFinalWinner1, this.semiFinalWinner2);
-                this.currentPlayer1 = this.semiFinalWinner1;
-                this.currentPlayer2 = this.semiFinalWinner2;
-                this.isFinalGame = true;
-            }
-        }
-        else {
-            this.displayGameAnnouncement("Final", this.winner, this.players[this.playerArray[2]]);
-            this.isFinalGame = true;
-        }
-        document.addEventListener('keydown', this.keyboardEventHandlerBind);
-    }
+	handleKeyboardEvent(event) {
+		if (event.key === 'Enter') {
+			document.removeEventListener('keydown', this.keyboardEventHandlerBind);
+			this.pong.start();
+		}
+	}
 
+	displayGameAnnouncement(gameType, firstPlayerName, secondPlayerName) {
+		ctx.fillStyle = 'black'; // Fill color
+		ctx.fillRect(0, 0, canvas.width, canvas.height); // Draw a rectangle (x, y, width, height)
+		ctx.fillStyle = 'red'; // Fill color
+		ctx.font = "50px 'Press Start 2P'";
 
-    handleKeyboardEvent(event) {
-        if (event.key === 'Enter') {
-            document.removeEventListener('keydown', this.keyboardEventHandlerBind);
-            this.pong.start();
-        }
-    }
-
-    displayGameAnnouncement(gameType, firstPlayerName, secondPlayerName) {
-        ctx.fillStyle = 'black'; // Fill color
-        ctx.fillRect(0, 0, canvas.width, canvas.height); // Draw a rectangle (x, y, width, height)
-        ctx.fillStyle = 'red'; // Fill color
-        ctx.font = "50px 'Press Start 2P'";
-
-        var textWidth = ctx.measureText(gameType).width;
-        ctx.fillText(gameType, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 200);
-        ctx.font = "50px 'Press Start 2P'";
-        textWidth = ctx.measureText(firstPlayerName + " X " + secondPlayerName).width;
-        ctx.fillText(firstPlayerName + " X " + secondPlayerName, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 50);
-        ctx.font = "50px 'Press Start 2P'";
-        textWidth = ctx.measureText("Press Enter to Start").width;
-        ctx.fillText("Press Enter to Start", (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) + 100);
-
-    }
+		var textWidth = ctx.measureText(gameType).width;
+		ctx.fillText(gameType, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 200);
+		ctx.font = "50px 'Press Start 2P'";
+		textWidth = ctx.measureText(firstPlayerName + " X " + secondPlayerName).width;
+		ctx.fillText(firstPlayerName + " X " + secondPlayerName, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 50);
+		ctx.font = "50px 'Press Start 2P'";
+		textWidth = ctx.measureText("Press Enter to Start").width;
+		ctx.fillText("Press Enter to Start", (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) + 100);
+	}
 }
 
 function nextGame() {
-    game.tournament.nextMatch();
+	game.tournament.nextMatch();
 }
 
 function gameInitialization() {
-    const dropdownItems = document.querySelectorAll('.dropdown-item');
-    customConfigShow(false);
+	const dropdownItems = document.querySelectorAll('.dropdown-item');
+	customConfigShow(false);
 
-    dropdownItems.forEach(item => {
-        item.addEventListener('click', function (event) {
-            event.preventDefault();
-
-
-            // Get the text content and value of the selected item
-            const selectedText = this.textContent.trim();
-            const selectedValue = this.getAttribute('data-value');
-
-            // Log or use the selected item
-            console.log('Selected Text:', selectedText);
-            if (selectedText == "Easy") {
-                g_PADDLE_SPEED = 15;
-                g_BALL_SPEED = 7;
-            }
-            if (selectedText == "Medium") {
-                g_PADDLE_SPEED = 30;
-                g_BALL_SPEED = 15;
-            }
-            if (selectedText == "Hard") {
-                g_PADDLE_SPEED = 66;
-                g_BALL_SPEED = 33;
-            }
-            if (selectedText == "Visual Impaired") {
-                g_PADDLE_SPEED = 15;
-                g_BALL_SPEED = 10;
-            }
-            refreshConfig();
-            if (selectedText == "Custom") {
-                customConfigShow(true);
-            }
-            else {
-                customConfigShow(false);
-            }
-
-            const dropdownButton = document.getElementById('dropdownMenuButton');
-            dropdownButton.textContent = selectedText;
-
-            const dropdownMenu = this.closest('.dropdown-menu');
-            const dropdown = new bootstrap.Dropdown(dropdownMenu.previousElementSibling);
-            dropdown.hide();
-        });
-    });
+	dropdownItems.forEach(item => {
+		item.addEventListener('click', function (event) {
+			event.preventDefault();
 
 
+			// Get the text content and value of the selected item
+			const selectedText = this.textContent.trim();
+			const selectedValue = this.getAttribute('data-value');
 
-    canvas = document.getElementById('ponggame');
-    ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+			// Log or use the selected item
+			console.log('Selected Text:', selectedText);
+			if (selectedText == "Easy") {
+				g_PADDLE_SPEED = 15;
+				g_BALL_SPEED = 7;
+			}
+			if (selectedText == "Medium") {
+				g_PADDLE_SPEED = 30;
+				g_BALL_SPEED = 15;
+			}
+			if (selectedText == "Hard") {
+				g_PADDLE_SPEED = 66;
+				g_BALL_SPEED = 33;
+			}
+			if (selectedText == "Visual Impaired") {
+				g_PADDLE_SPEED = 15;
+				g_BALL_SPEED = 10;
+			}
+			refreshConfig();
+			if (selectedText == "Custom") {
+				customConfigShow(true);
+			}
+			else {
+				customConfigShow(false);
+			}
 
-    game = new Game(true, ["Tehuan", "Tanvir", "Paula", "Samih"]);
-    // ! Missing: get players names
-    game.start();
+			const dropdownButton = document.getElementById('dropdownMenuButton');
+			dropdownButton.textContent = selectedText;
+
+			const dropdownMenu = this.closest('.dropdown-menu');
+			const dropdown = new bootstrap.Dropdown(dropdownMenu.previousElementSibling);
+			dropdown.hide();
+		});
+	});
+
+
+
+	canvas = document.getElementById('ponggame');
+	ctx = canvas.getContext('2d');
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+
+	game = new Game(false, ["Tehuan", "Tanvir", "Paula", "Samih"]);
+	// ! Missing: get players names
+	game.start();
 }
 
 function customConfigShow(show) {
-    var x = document.getElementById("customConfig");
-    if (show == true) {
-        x.style.display = "block";
-    } else {
-        x.style.display = "none";
-    }
+	var x = document.getElementById("customConfig");
+	if (show == true) {
+		x.style.display = "block";
+	} else {
+		x.style.display = "none";
+	}
 }
 
 onPageLoad();
 
 
 
-// Add 2 balls?
-// Add different backgrounds/themes?
+
+

@@ -3,21 +3,18 @@
 
 {% block title %}Edit Profile{% endblock title %}
 
-{% block nav %}
-{% include "includes/nav_menu.html" %}
-{% endblock nav %}
 
 {% block content %}
-<div class="p-5 mb-4 bg-body-tertiary rounded-3 border border-dark">
-    <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold">Edit Profile</h1>
 
-        <form id="edit-profile-form" >
-            {% csrf_token %}
-            {{ form|crispy }}
-            <a class="btn btn-primary spa-link" href="{% url 'edit_profile' %}" data-method="POST"
-                data-form="#edit-profile-form">Save changes</a>
-        </form>
-    </div>
+<div class="container py-5">
+    <h1 class="mb-4">Edit Profile</h1>
+
+    <form id="edit-profile-form">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <a class="btn btn-primary spa-link" href="{% url 'edit_profile' %}" data-method="POST"
+            data-form="#edit-profile-form">Save changes</a>
+    </form>
 </div>
+
 {% endblock content %}

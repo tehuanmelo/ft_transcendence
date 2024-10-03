@@ -14,6 +14,8 @@ RESET=\033[0m
 #                                    TARGETS                                   #
 # ---------------------------------------------------------------------------- #
 
+include .env
+
 all: up
 
 check_docker:
@@ -30,12 +32,14 @@ check_docker:
 		echo "$(BOLD_BLUE)Docker is running successfully! 🐳$(RESET)"; \
 	fi
 
-up: check_docker
+check_env:
 	@if [ ! -f .env ]; then \
 		echo "$(RED).env file is missing! Cannot proceed without it. 😵$(RESET)"; \
 		echo "Please create the $(BOLD_BLUE).env$(RESET) file with the necessary environment variables."; \
 		exit 1; \
 	fi
+
+up: check_docker check_env
 	$(DOCKER_COMPOSE) up --build --detach
 	@echo "Access the website at https://localhost:443"
 
@@ -48,10 +52,23 @@ nuke: check_docker
 
 clean: check_docker
 	@echo "$(RED)Initiating clean... 🧹$(RESET)";
+	@if [ -d ./backend/media/ ]; then \
+		if $(DOCKER_COMPOSE) ps | grep django > /dev/null; then \
+			echo "$(RED)Deleting media files in Django container...$(RESET)"; \
+			$(DOCKER_COMPOSE) exec django rm -rf ./backend/media/*; \
+		fi \
+	fi
+	@if [ -d ./backend/users/migrations/ ]; then \
+		if $(DOCKER_COMPOSE) ps | grep django > /dev/null; then \
+			echo "$(RED)Deleting migrations files in Django container...$(RESET)"; \
+			$(DOCKER_COMPOSE) exec django rm -rf ./backend/users/migrations; \
+		fi \
+	fi
+	@if [ -f ./backend/db.sqlite3 ]; then \
+		echo "$(RED)Deleting SQLite database...$(RESET)"; \
+		rm -rf ./backend/db.sqlite3; \
+	fi
 	$(DOCKER_COMPOSE) down --rmi all --volumes
-	rm -rf ./backend/users/migrations/
-	rm -rf ./backend/media/
-	rm -rf ./backend/db.sqlite3
 
 fclean: clean nuke
 	@echo "$(RED)Clean complete 🧼$(RESET)";
@@ -61,5 +78,11 @@ re: fclean up
 # run container in shell
 exec-%:
 	$(DOCKER_COMPOSE) exec -it $* /bin/sh
+
+run-database: check_env
+	$(DOCKER_COMPOSE) exec -it postgres psql -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+
+show-users: check_env
+	$(DOCKER_COMPOSE) exec postgres psql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "SELECT * FROM users_customuser;"
 
 .PHONY: all check_docker up down re nuke clean fclean exec-%

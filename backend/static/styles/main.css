@@ -5,17 +5,13 @@
     src: url('../fonts/PressStart2P-Regular.ttf');
 }
 
-@font-face {
-    font-family: '04B_19';
-    src: url('../fonts/04B_19__.TTF');
-}
-
 :root {
-    --background-color: #1d1b15;
-
-    --form-field-color: #fbe1a8;
-    --form-primary-color: #6b4d23;
-    --form-button-hover-color: #88622d;
+    --text: white;
+    --background: #24211a;
+    --navbar: #1d1b15;
+    --primary: #d7ce97;
+    --secondary: #dabd89;
+    --accent: #f39c12;
 }
 
 * {
@@ -25,31 +21,129 @@
 }
 
 body {
+    color: var(--text);
     font-family: 'Press Start 2P', sans-serif;
-    background-color: var(--background-color);
+    background-color: var(--background);
 }
 
-button {
-    border: none;
+h1 {
+    color: var(--accent);
 }
 
-#content {
-    min-height: 100dvh;
+ul li {
+    margin-bottom: 0.1rem;
+}
+
+ul li::marker {
+    content: "·";
+}
+
+kbd {
+    border-radius: 10px;
+}
+
+#helpModal kbd {
+    padding: 5px 10px;
+    margin: 0 3px;
+    display: inline-block;
+    background-color: #333;
+    color: white;
+    border: 1px solid #777;
+}
+
+strong {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#helpModal strong {
+    color: var(--accent);
+}
+
+/* --------------------------------- Navbar --------------------------------- */
+header {
+    background-color: var(--navbar);
+}
+
+.nav-link {
+    color: var(--text);
+}
+
+.nav-link:hover,
+.nav-link:focus {
+    background-color: var(--background);
+    color: var(--accent);
+}
+
+.navbar-nav .dropdown-menu {
+    background-color: var(--background);
+    border-color: var(--navbar);
+    border-radius: 0px;
+    right: 0;
+}
+
+.navbar-nav .dropdown-item {
+    color: var(--text);
+}
+
+.navbar-nav .dropdown-item:hover,
+.navbar-nav .dropdown-item:focus {
+    background-color: var(--navbar);
+    color: var(--accent);
+}
+
+.navbar-nav .dropdown-divider {
+    border-color: var(--text);
+}
+
+.navbar-nav .dropdown-toggle::after {
+    border-top-color: var(--accent);
+    border-left-color: transparent;
+    border-right-color: transparent;
+    margin-left: -0.5rem;
+}
+
+@media (max-width: 991.98px) {
+    #navbarMenu {
+        transition: height 0.3s ease-in-out, opacity 0.1s ease-in-out;
+    }
+
+    .navbar-collapse {
+        /* opacity: 0; */
+        height: 0;
+        overflow: hidden;
+    }
+
+    .navbar-collapse.show {
+        /* opacity: 1; */
+        height: auto;
+    }
+}
+
+/* ---------------------------------- Logo ---------------------------------- */
+.logo {
+    transition: all 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 5px rgba(243, 156, 18, 0.8)) drop-shadow(0 0 10px rgba(243, 156, 18, 0.5));
 }
 
 /* ---------------------------------- Home ---------------------------------- */
 .menu-btn {
-    color: white;
+    padding: 0.5rem;
+    color: var(--text);
     background-color: transparent;
-    transition: transform 0.2s ease;
+    transition: all 0.2s ease;
     text-decoration: none;
 }
 
 .menu-btn::before {
     content: '\25B6';
-    color: gold;
+    color: var(--accent);
     opacity: 0;
-    transition: opacity 0.1s ease;
     margin-right: 0.2rem;
 }
 
@@ -58,63 +152,70 @@ button {
 .menu-btn:focus,
 .menu-btn:focus::before {
     opacity: 1;
-    color: gold;
+    color: var(--accent);
+    background-color: var(--navbar);
+    transform: translateY(-5px);
 }
 
 .menu-btn:active {
-    transform: translateY(10%);
+    transform: scale(0.95);
+}
+
+.link-effect {
+    position: relative;
+    color: var(--accent);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.link-effect::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: var(--accent);
+    left: 0;
+    bottom: -5px;
+    transform: scaleX(0);
+    transition: all 0.3s ease;
+}
+
+.link-effect:hover {
+    font-size: 1.2rem;
+}
+
+.link-effect:hover::after {
+    transform: scaleX(1);
 }
 
 /* --------------------------------- Forms ---------------------------------- */
-.entry-form {
-    color: white;
-    border: none;
-}
-
 .form-text {
-    color: white;
+    color: var(--text);
+    font-size: 0.6rem;
 }
 
-.form-control,
-.form-control:focus {
+.form-control {
     border-radius: 0;
-    box-shadow: none;
-    background-color: rgb(112, 112, 112);
+    background-color: #c6c6c6c4;
+    padding: 10px;
+    transition: all 0.3s ease;
 }
 
-/* Label color when the input is focused or has a value */
-.form-floating>.form-control:focus~label,
-.form-floating>.form-control:not(:placeholder-shown)~label,
-.form-floating>.form-control:focus~label::after,
-.form-floating>.form-control:not(:placeholder-shown)~label::after {
-    background-color: transparent;
+.form-control:focus,
+.form-control:hover {
+    border-color: var(--primary);
+    background-color: #f0f0f0;
 }
 
-.entry-form-btn {
-    background-color: gray;
-    color: white;
+.form-control:focus {
+    border-color: none;
+    box-shadow: 0 0 8px rgba(215, 215, 215, 0.6);
+    outline: 0;
 }
 
-.entry-form-btn:active {
-    transform: translateY(5%);
-}
-
-.entry-form-btn:hover {
-    background-color: rgb(85, 85, 85);
-}
-
-.password-opts {
-    font-size: 0.8em;
-    margin: 0;
-}
-
-#forgot-password {
-    color: white;
-    text-decoration: none;
-}
-
-#forgot-password:hover {
-    text-decoration: underline;
+.invalid-feedback {
+    color: #dc3545;
+    font-size: 0.6rem;
 }
 
 .form-prompt>p {
@@ -122,26 +223,35 @@ button {
     margin: 0;
 }
 
-.prompt-link {
-    cursor: pointer;
+.fixed-size-input {
+    width: 500px;
 }
 
-.prompt-link:hover {
-    text-decoration: underline;
+.error-message-input {
+    color: red;
+    max-width: 500px;
+    word-wrap: break-word;
 }
 
-.otp-inputs {
-    display: grid;
-    justify-content: center;
+.btn-orange {
+    color: var(--text);
+    background-color: var(--accent);
+    border: 2px solid var(--accent);
+    padding: 0.5rem 1rem;
+    border-radius: 0px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
 }
 
-.otp-inputs input {
-    width: 3rem;
-    height: 2rem;
+.btn-orange:hover,
+.btn-orange:focus {
+    background-color: var(--accent);
+    box-shadow: 0 0 10px rgba(243, 156, 18, 0.7);
 }
 
-@media (max-width: 575.98px) {
-    form {
-        width: 100%;
-    }
+.btn.btn-orange:active {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    transform: scale(0.95);
+    box-shadow: none;
 }

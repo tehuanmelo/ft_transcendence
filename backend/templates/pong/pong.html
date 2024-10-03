@@ -1,18 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}
-Game
-{% endblock %}
+{% block title %}Game{% endblock %}
 
-{% block nav %}
-{% include "includes/nav_menu.html" %}
-{% endblock nav %}
 
-<!-- PONG Game Grid -->
 {% block content %}
 
-<div class="container-fluid">
+<div class="container-fluid" style="margin-top: 80px;">
     <div class="row">
         <div class="col-1 d-flex d-md-flex button-alignment">
             <div class="row">
@@ -23,13 +17,12 @@ Game
             </div>
 
             <div class="row">
-                <button type="button" class="btn btn-light fa fa-home"></button>
+                <a href="/" class="btn btn-light fa fa-home spa-link" data-method="GET" on-spa-navigate="game.reset();"></a>
             </div>
 
-
             <div class="row">
-                <div class="btn-group-vertical " role="group" aria-label="Vertical button group">
-                    <button type="button" class="btn btn-danger fa fa-arrow-up"> D</button>
+                <div id="3rdplayer" class="btn-group-vertical " role="group" aria-label="Vertical button group">
+                    <button type="button" class="btn btn-danger fa fa-arrow-up" > D</button>
                     <button type="button" class="btn btn-danger fa fa-arrow-down"> C</button>
                 </div>
             </div>
@@ -56,7 +49,14 @@ Game
             </div>
 
             <div class="row">
-                <div class="btn-group-vertical " role="group" aria-label="Vertical button group">
+                <button type="button" data-bs-toggle="modal" data-bs-target="#helpModal" class="btn btn-light fa fa-question-circle" aria-hidden="true"
+                    onclick="game.pause()"></button>
+
+
+            </div>
+
+            <div class="row">
+                <div id="4thplayer" class="btn-group-vertical " role="group" aria-label="Vertical button group">
                     <button type="button" class="btn btn-danger fa fa-arrow-up"> J</button>
                     <button type="button" class="btn btn-danger fa fa-arrow-down"> N</button>
                 </div>
@@ -200,6 +200,9 @@ Game
             </div>
         </div>
     </div>
-
 </div>
+
+{% include "includes/help.html" %}
+
+
 {% endblock content %}
