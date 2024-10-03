@@ -9,7 +9,7 @@
 <div class="container py-5">
     <h1 class="mb-4">Settings</h1>
 
-    <div class="list-group">
+    <div class="list-group" data-bs-theme="dark">
         {% if not user.is_2fa_set %}
         <a class="list-group-item list-group-item-action spa-link" href="{% url 'enable_2fa' %}"
             data-method="GET">Enable 2FA</a>

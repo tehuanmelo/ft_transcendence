@@ -9,35 +9,33 @@
 {% if user.is_authenticated %}
 
 <div class="container d-flex flex-column py-5 text-center">
-    <a class="menu-btn mb-3 spa-link" href="#" data-method="GET">Play Pong 1v1</a>
-    <a class="menu-btn mb-3 spa-link" href="#" data-method="GET">Play Pong 2v2</a>
-    <a class="menu-btn mb-3 spa-link" href="#" data-method="GET">Play Tournament</a>
-    <a class="menu-btn mb-3 spa-link" href="#" data-bs-toggle="modal" data-bs-target="#helpModal">Help</a>
+    <h1 class="mb-5">Welcome back, {{ user.username }}!</h1>
+
+    <a class="menu-btn py-3 spa-link" href="#" data-method="GET">Play Pong 1v1</a>
+    <a class="menu-btn py-3 spa-link" href="#" data-method="GET">Play Pong 2v2</a>
+    <a class="menu-btn py-3 spa-link" href="#" data-method="GET">Play Tournament</a>
 </div>
 
 {% else %}
 
-<div class="d-flex flex-column h-100">
-    <div class="d-flex justify-content-center align-items-center flex-grow-1">
-        <div class="d-flex flex-column text-center mb-5">
-            <img src="{% static 'images/Pong.svg' %}" alt="PONG logo" class="img-fluid mb-5">
-            <a class="menu-btn mb-3 spa-link" href="{% url 'login' %}" data-method="GET">Log In</a>
-            <a class="menu-btn mb-3 spa-link" href="{% url 'register' %}" data-method="GET">Register</a>
-            <a class="menu-btn mb-3" href="#">42 Log In</a>
-            <a class="menu-btn mb-3 spa-link" href="{% url 'pong' %}" data-method="GET">Play as Guest</a>
-        </div>
+<div class="container d-flex flex-column align-items-center h-100">
+    <div class="text-center py-5 mb-4 mt-auto">
+        <img src="{% static 'images/Pong.svg' %}" alt="PONG logo" class="img-fluid logo" style="max-width: 400px;">
     </div>
-    <footer class="text-center mt-auto pb-4">
+    <div class="d-flex flex-column text-center">
+        <a class="menu-btn p-3 spa-link" href="{% url 'login' %}" data-method="GET">Log In</a>
+        <a class="menu-btn p-3 spa-link" href="{% url 'register' %}" data-method="GET">Register</a>
+        <a class="menu-btn p-3" href="#">42 Log In</a>
+        <a class="menu-btn p-3 spa-link" href="{% url 'pong' %}" data-method="GET">Play as Guest</a>
+    </div>
+    <footer class="text-center pb-4 mt-auto">
         <div class="mb-3">
-            <a class="spa-link" href="{% url 'about' %}" data-method="GET">About</a>
-            <a class="spa-link" href="#" data-bs-toggle="modal" data-bs-target="#helpModal">Help</a>
+            <a class="spa-link link-effect" href="{% url 'about' %}" data-method="GET">About Us</a>
         </div>
         <p>&copy; 2024 PONG.</p>
     </footer>
 </div>
 
 {% endif %}
-
-{% include "includes/help.html" %}
 
 {% endblock content %}
