@@ -1,7 +1,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% if user.is_authenticated %}
+{% if user.is_authenticated and request.path != '/pong/' %}
 
 <header class="navbar navbar-expand-lg py-4">
     <nav class="container">
