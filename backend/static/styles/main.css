@@ -39,6 +39,7 @@ ul li::marker {
 }
 
 kbd {
+    font-family: 'Press Start 2P', sans-serif;
     border-radius: 10px;
 }
 
