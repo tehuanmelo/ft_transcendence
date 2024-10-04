@@ -1016,8 +1016,6 @@ function gameInitialization() {
 		});
 	});
 
-
-
 	canvas = document.getElementById('ponggame');
 	ctx = canvas.getContext('2d');
 	canvas.width = window.innerWidth;
@@ -1038,8 +1036,4 @@ function customConfigShow(show) {
 }
 
 onPageLoad();
-
-
-
-
 

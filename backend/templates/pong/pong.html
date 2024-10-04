@@ -17,7 +17,14 @@
             </div>
 
             <div class="row">
-                <a href="/" class="btn btn-light fa fa-home spa-link" data-method="GET" on-spa-navigate="game.reset();"></a>
+                <a href="/" class="btn btn-light fa fa-home spa-link" data-toggle="tooltip" data-placement="top" title="Back to Home Page"
+                data-method="GET" on-spa-navigate="game.reset();"></a>
+            </div>
+
+            <div class="row">
+                <button type="button" data-bs-toggle="modal" data-bs-target="#helpModal" class="btn btn-light fa fa-eye-slash" aria-hidden="true"
+                data-toggle="tooltip" data-placement="top" title="Visual Impaired Mode"
+                onclick="game.pause()"></button>
             </div>
 
             <div class="row">
@@ -45,14 +52,14 @@
 
             <div class="row">
                 <button type="button" data-bs-toggle="modal" data-bs-target="#config" class="btn btn-light fa fa-gear"
+                data-toggle="tooltip" data-placement="top" title="Settings"
                     onclick="loadConfiguration()"></button>
             </div>
 
             <div class="row">
                 <button type="button" data-bs-toggle="modal" data-bs-target="#helpModal" class="btn btn-light fa fa-question-circle" aria-hidden="true"
-                    onclick="game.pause()"></button>
-
-
+                data-toggle="tooltip" data-placement="top" title="Help!"
+                onclick="game.pause()"></button>
             </div>
 
             <div class="row">
@@ -126,7 +133,7 @@
         </div>
     </div>
 
-    <!-- Modal Config-->
+    <!-- Modal Config (level and sound)-->
     <div class="modal fade" id="config" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog" style="max-height: 90vh;">
@@ -147,9 +154,9 @@
                                     </div>
                             </div>
                         </div>
-
                         <div class="mb-3 mt-4">
-                        <!-- Large button groups (default and split) -->
+
+                        <!-- Mode (level) button -->
                         <div class="btn-group">
                             <button class="btn btn-secondary btn-dark-orange btn-lg dropdown-toggle" type="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">Mode
@@ -158,15 +165,8 @@
                                 <li><a class="dropdown-item" href="#">Easy</a></li>
                                 <li><a class="dropdown-item active" href="#">Medium</a></li>
                                 <li><a class="dropdown-item" href="#">Hard</a></li>
-                                <li>
                                     <hr class="dropdown-divider">
-                                </li>
                                 <li><a class="dropdown-item" href="#">Custom</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Visual Impaired</a></li>
-
                             </ul>
                         </div>
                     </div>
