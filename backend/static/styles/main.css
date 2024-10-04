@@ -12,6 +12,7 @@
     --primary: #d7ce97;
     --secondary: #dabd89;
     --accent: #f39c12;
+    --light-accent: #ffb641;
 }
 
 * {
@@ -68,11 +69,13 @@ header {
 }
 
 .nav-link {
+    outline: none;
     color: var(--text);
 }
 
 .nav-link:hover,
 .nav-link:focus {
+    box-shadow: none;
     background-color: var(--background);
     color: var(--accent);
 }
@@ -90,6 +93,7 @@ header {
 
 .navbar-nav .dropdown-item:hover,
 .navbar-nav .dropdown-item:focus {
+    outline: none;
     background-color: var(--navbar);
     color: var(--accent);
 }
@@ -158,11 +162,16 @@ header {
     transform: translateY(-5px);
 }
 
+.menu-btn:focus {
+    outline: solid var(--accent);
+}
+
 .menu-btn:active {
     transform: scale(0.95);
 }
 
 .link-effect {
+    outline: none;
     position: relative;
     color: var(--accent);
     text-decoration: none;
@@ -181,11 +190,15 @@ header {
     transition: all 0.3s ease;
 }
 
-.link-effect:hover {
+.link-effect:hover,
+.link-effect:focus {
+    outline: none;
     font-size: 1.2rem;
 }
 
-.link-effect:hover::after {
+.link-effect:hover::after,
+.link-effect:focus::after {
+    outline: none;
     transform: scaleX(1);
 }
 
@@ -246,7 +259,8 @@ header {
 
 .btn-orange:hover,
 .btn-orange:focus {
-    background-color: var(--accent);
+    background-color: var(--light-accent);
+    color: var(--background);
     box-shadow: 0 0 10px rgba(243, 156, 18, 0.7);
 }
 

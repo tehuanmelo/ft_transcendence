@@ -13,7 +13,7 @@
         <form id="register-form" class="p-2">
             {% csrf_token %}
             {{ form|crispy }}
-            <div class="text-center my-3">
+            <div class="text-center mt-5 mb-3">
                 <a class="btn btn-orange spa-link w-50" href="{% url 'register' %}" data-method="POST"
                     data-form="#register-form">Register</a>
             </div>
