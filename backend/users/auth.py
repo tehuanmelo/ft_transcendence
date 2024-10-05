@@ -65,3 +65,18 @@ def jwt_fetch_user(func):
         return func(request, *args, **kwargs)
 
     return wrapper
+
+
+def check_if_logged(func):
+    def wrapper(request, *args, **kwargs):
+        try:
+            payload = extract_token(request)
+            if payload["is_authenticated"]:
+                print("I was redirected by the decorator")
+                return redirect("home")
+        except:
+            pass
+
+        return func(request, *args, **kwargs)
+
+    return wrapper
