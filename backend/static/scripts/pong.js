@@ -8,6 +8,11 @@ var g_BALL_SPEED = 15;
 var g_SOUND = true;
 var g_SCORE_TO_WIN = 5;
 var g_CURRENT_LEVEL = "Medium";
+var g_fillColor = 'black';
+var g_ballRadius;
+var g_ballColor = 'white';
+var g_paddleWidth;
+var g_paddleHeigh;
 
 const PaddleTypes = Object.freeze({
 	LEFT1:	1,
@@ -30,7 +35,8 @@ class Ball {
 		this.paddle3 = paddle3;
 		this.paddle4 = paddle4;
 		this.nbPlayers = nbPlayers;
-		this.ballRadius = this.width / 100;
+		this.ballRadius = canvas.width / 100;
+		g_ballRadius = this.ballRadius;
 		this.score = score;
 		this.sound = new Sound("../static/sound/bounce.mp3");
 		this.angleX = 0.0;
@@ -38,12 +44,9 @@ class Ball {
 	}
 
 	drawBall() {
-		ctx.fillStyle = 'white'; // Fill color
-
-		//this.ballMoving = false; // Track if the ball is moving
+		ctx.fillStyle = g_ballColor; // Fill color
 		ctx.beginPath(); // Start a new path
-		ctx.arc(this.ballX, this.ballY, this.ballRadius, 0, Math.PI * 2, false); // Draw a circle
-		ctx.fillStyle = 'white'; // Fill color
+		ctx.arc(this.ballX, this.ballY, g_ballRadius, 0, Math.PI * 2, false); // Draw a circle
 		ctx.fill(); // Fill the circle with color
 		ctx.closePath(); // Close the path
 	}
@@ -371,6 +374,7 @@ class Ball {
 	}
 
 	ballMove() {
+		this.ballRadius = g_ballRadius;
 		if (this.ballMoving) {
 			// top and bottom walls
 			if (this.ballY + this.dy + this.ballRadius > canvas.height - Pong.REC_HEIGHT_SIZE || this.ballY + this.dy - this.ballRadius < Pong.REC_HEIGHT_SIZE) {
@@ -385,8 +389,6 @@ class Ball {
 				this.collision(this.paddle3);
 				this.collision(this.paddle4);
 			}
-			console.log("dx = " + this.dx);
-			console.log("dy = " + this.dy);
 			this.ballX += this.dx;
 			this.ballY += this.dy;
 
@@ -422,6 +424,8 @@ class Paddle {
 		this.height = canvas.height; // Canvas height in pixels
 		this.paddleWidth = this.width / 50;
 		this.paddleHeight = this.height / 8;
+		g_paddleHeigh = this.height / 8;
+		g_paddleWidth = this.width / 50;
 		this.resetPosition();
 		this.ballRef = null;
 	}
@@ -458,6 +462,11 @@ class Paddle {
 	}
 
 	drawPaddle() {
+		if (this.paddleHeight != g_paddleHeigh) {
+			this.paddleHeight = g_paddleHeigh;
+			this.paddleWidth = g_paddleWidth;
+			this.resetPosition();
+		}
 		ctx.fillStyle = 'white'; // Fill color players 1 and 2
 		if (this.paddleType == PaddleTypes.LEFT1) {
 			ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight); // Draw a rectangle (x, y, width, height)
@@ -471,6 +480,7 @@ class Paddle {
 		if (this.paddleType == PaddleTypes.RIGHT2)
 			ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight);
 	}
+
 	resetPosition() {
 		if (this.paddleType == PaddleTypes.LEFT1) {
 			this.x = 2;
@@ -552,7 +562,6 @@ class Pong {
 	resume() {
 		this.ball.resumeBallMovement();
 		this.intervalId = setInterval(this.pongRender.bind(this), 1000 / 60);
-
 	}
 
 	stop() {
@@ -562,7 +571,8 @@ class Pong {
 	}
 
 	drawSquare() {
-		ctx.fillStyle = 'black'; // Fill color
+
+		ctx.fillStyle = g_fillColor; // Original fill color is black
 		ctx.fillRect(0, 0, this.width, this.height); // Draw a rectangle (x, y, width, height)
 
 		// Set properties for the rectangle
@@ -612,7 +622,7 @@ class Pong {
 			this.paddle4.drawPaddle();
 		}
 		this.score.drawScore();
-		this.ball.drawBall(); // Draw the ball
+		this.ball.drawBall();
 	}
 
 	getWinner() {
@@ -686,7 +696,6 @@ class Score {
 		}
 		return false;
 	}
-
 
 	drawScore() {
 		ctx.font = "72px Press Start 2P";
@@ -807,8 +816,6 @@ class Game {
 		}
 	}
 }
-
-
 
 function playAgain() {
 	pong.start();
@@ -976,7 +983,6 @@ function gameInitialization() {
 		item.addEventListener('click', function (event) {
 			event.preventDefault();
 
-
 			// Get the text content and value of the selected item
 			const selectedText = this.textContent.trim();
 			const selectedValue = this.getAttribute('data-value');
@@ -1033,6 +1039,29 @@ function customConfigShow(show) {
 	} else {
 		x.style.display = "none";
 	}
+}
+
+function visual() {
+
+if (g_fillColor === 'black') {
+	g_fillColor = 'blue';
+	g_ballRadius = canvas.width / 40;
+	g_ballColor = 'yellow';
+	g_paddleHeigh = canvas.height / 4;
+	g_paddleWidth = canvas.width / 25;
+
+}
+else {
+	g_fillColor = 'black'
+	g_ballRadius = canvas.width / 100;
+	g_ballColor = 'white';
+	g_paddleHeigh = canvas.height / 8;
+	g_paddleWidth = canvas.width / 50;
+}
+
+
+
+
 }
 
 onPageLoad();
