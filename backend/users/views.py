@@ -110,6 +110,16 @@ def login_view(request):
 
 
 @jwt_login_required
+def delete_account_view(request):
+    if request.method == "POST":
+        user = request.user
+        user.delete()
+        response = redirect("home")
+        response.delete_cookie("jwt")
+        return response
+
+
+@jwt_login_required
 def logout_view(request):
     if request.method == "POST":
         request.user.token_version += 1
