@@ -28,6 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     window.addEventListener('popstate', () => {
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop)
+            backdrop.remove();
+
         const url = document.location.pathname;
         getPage(url);
     });
