@@ -513,6 +513,7 @@ class Pong {
 		this.score = new Score();
 		this.countdown = new Countdown(this);
 		this.notifyWinner = notifyWinner;
+		this.isTournament = isTournament;
 		this.isGameRunning = false;
 
 		if (this.nbPlayers == 4) {
@@ -1101,8 +1102,6 @@ function visual() {
 	}
 
 	game.forceRefresh();
-
-
 
 }
 
