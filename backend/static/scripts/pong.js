@@ -1106,5 +1106,4 @@ function visual() {
 
 }
 
-onPageLoad();
 
