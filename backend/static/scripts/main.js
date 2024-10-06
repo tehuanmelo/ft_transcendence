@@ -1,16 +1,11 @@
-// TODO remove this if its not being used
-const initFunctions = {
-    '/pong': gameInit,
-}
-
 const data = document.currentScript.dataset;
 const loggedInUsername = data.username;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Handling case of page reloading to invoke required js
     const currentPath = document.location.pathname;
-    if (initFunctions[currentPath])
-        initFunctions[currentPath]();
+    if (currentPath === '/pong')
+        gameInit(loggedInUsername);
 
     document.body.addEventListener('click', (event) => {
         const target = event.target;
@@ -67,8 +62,8 @@ function updateContent(pageHtml, url) {
         history.pushState(null, '', url);
 
     const urlWithoutParam = url.split('?')[0];
-    if (initFunctions[urlWithoutParam])
-        initFunctions[urlWithoutParam]();
+    if (urlWithoutParam === '/pong')
+        gameInit(loggedInUsername);
 }
 
 function getPage(url) {

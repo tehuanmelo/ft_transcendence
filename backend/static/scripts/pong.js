@@ -1009,7 +1009,7 @@ function handleDropdownSelection(selectedItem) {
     dropdown.hide();
 }
 
-function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUserName = '') {
+function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
     let playerNames = [];
     const playerNameModal = new bootstrap.Modal(document.getElementById('playerNameModal'));
 
@@ -1024,8 +1024,8 @@ function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUserName = '') {
     });
 
     if (isLoggedIn) {
-        playerNames.push(loggedInUserName);
-        document.getElementById('player1').value = loggedInUserName;
+        playerNames.push(loggedInUsername);
+        document.getElementById('player1').value = loggedInUsername;
     }
 
     playerNameModal.show();
@@ -1060,7 +1060,7 @@ function startGame(isTournament = false, playerNames) {
     game.start();
 }
 
-function gameInit() {
+function gameInit(loggedInUsername) {
     // initializing canvas
     canvas = document.getElementById('ponggame');
     ctx = canvas.getContext('2d');
@@ -1071,10 +1071,10 @@ function gameInit() {
     const mode = urlParams.get('mode');
     switch (mode) {
         case '1v1':
-            askForPlayerNames(2, true, loggedInUserName);
+            askForPlayerNames(2, true, loggedInUsername);
             break;
         case '2v2':
-            askForPlayerNames(4, true, loggedInUserName);
+            askForPlayerNames(4, true, loggedInUsername);
             break;
         case 'guest':
             askForPlayerNames(2, false);
