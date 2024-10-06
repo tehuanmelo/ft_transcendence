@@ -45,6 +45,6 @@ class UserProfileForm(forms.ModelForm):
         widgets = {
             "bio": forms.Textarea(attrs={"rows": 3, "cols": 40}),
             "profile_image": forms.ClearableFileInput(
-                attrs={"class": "form-control allow-click"}
+                attrs={"class": "form-control"}
             ),
         }

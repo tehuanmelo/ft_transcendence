@@ -27,15 +27,15 @@
 
             <p class="social-links">
                 {% if user.github %}
-                <a href="{{user.github}}" target="_blank" class="allow-click">Github</a>
+                <a href="{{user.github}}" target="_blank">Github</a>
                 {% endif %}
                 {% if user.twitter %}
-                <a href="{{user.twitter}}" target="_blank" class="allow-click">Twiter</a>
+                <a href="{{user.twitter}}" target="_blank">Twiter</a>
                 {% endif %}
             </p>
 
             {% if user.email %}
-            <p class="card-text">Email: <a href="mailto:{{user.email}}" class="allow-click">{{user.email}}</a></p>
+            <p class="card-text">Email: <a href="mailto:{{user.email}}">{{user.email}}</a></p>
             {% endif %}
 
             <p><small>Last login: {{ user.last_login|date:"F j, Y, g:i a" }}</small></p>
