@@ -531,6 +531,18 @@ class Pong {
 		}
 		this.intervalId = 0;
 	}
+
+	initialDisplay() {
+		ctx.font = "72px customFont"
+		var textWidth = ctx.measureText("PONG").width;
+		ctx.fillText("PONG", (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 100);
+		ctx.font = "32px customFont"
+		var textWidth1 = ctx.measureText("Press Enter to Start or").width;
+		var textWidth2 = ctx.measureText("Select Visual Impairment Mode").width;
+		ctx.fillText("Press Enter to Start or", (canvas.width / 2) - (textWidth1 / 2), (canvas.height / 2) + 100);
+		ctx.fillText("Select Visual Impairment Mode", (canvas.width / 2) - (textWidth2 / 2), (canvas.height / 2 + 100) + 100);
+	}
+
 	start() {
 		this.paddle1.resetPosition();
 		this.paddle2.resetPosition();
@@ -539,8 +551,15 @@ class Pong {
 			this.paddle4.resetPosition();
 		}
 		this.render();
-		this.isGameRunning = true;
-		this.countdown.start();
+		this.initialDisplay();
+		const handleEnter = (event) => {
+			if (event.key === 'Enter') {
+				this.countdown.start();
+				this.isGameRunning = true;
+				document.removeEventListener('keydown', handleEnter);
+			}
+		};
+		document.addEventListener('keydown', handleEnter);
 	}
 
 	startGame() {
@@ -548,11 +567,7 @@ class Pong {
 		this.ball.ballResetPosition();
 		this.intervalId = setInterval(this.pongRender.bind(this), 1000 / 60); // 60 FPS (frames per second)
 		document.addEventListener('keydown', this.handleKeyboardEvent.bind(this)); // addEventListener is a system function
-		document.addEventListener('keydown', (event) => {
-			if (event.key === 'Enter') {
-				this.ball.startBallMovement(); // Start ball movement on Enter key press
-			}
-		});
+		this.ball.startBallMovement();
 	}
 
 	pause() {
@@ -698,7 +713,7 @@ class Score {
 	}
 
 	drawScore() {
-		ctx.font = "72px Press Start 2P";
+		ctx.font = "72px customFont";
 		ctx.fillText(this.scoreL, canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Left player score
 		ctx.fillText(this.scoreR, 3 * canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Right player score
 	}
@@ -748,9 +763,10 @@ class Countdown {
 	}
 	drawCountdown() {
 		this.pong.render();
-		ctx.font = "280px Press Start 2P";
+		ctx.font = "280px customFont";
 		ctx.fillStyle = 'red';
-		ctx.fillText(this.count, canvas.width / 2, canvas.height / 2);
+		var textWidth = ctx.measureText(this.count).width;
+		ctx.fillText(this.count, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2 + 70));
 	}
 }
 
@@ -793,6 +809,15 @@ class Game {
 		}
 		else {
 			return (this.pong.isGameRunning);
+		}
+	}
+
+	forceRefresh() {
+		if (this.isTournament == true) {
+			this.tournament.pong.render();
+		}
+		else {
+			this.pong.render();
 		}
 	}
 
@@ -955,17 +980,17 @@ class Tournament {
 	}
 
 	displayGameAnnouncement(gameType, firstPlayerName, secondPlayerName) {
-		ctx.fillStyle = 'black'; // Fill color
+		ctx.fillStyle = 'black';
 		ctx.fillRect(0, 0, canvas.width, canvas.height); // Draw a rectangle (x, y, width, height)
-		ctx.fillStyle = 'red'; // Fill color
-		ctx.font = "50px 'Press Start 2P'";
+		ctx.fillStyle = 'red';
+		ctx.font = "50px 'customFont'";
 
 		var textWidth = ctx.measureText(gameType).width;
 		ctx.fillText(gameType, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 200);
-		ctx.font = "50px 'Press Start 2P'";
+		ctx.font = "50px 'customFont'";
 		textWidth = ctx.measureText(firstPlayerName + " X " + secondPlayerName).width;
 		ctx.fillText(firstPlayerName + " X " + secondPlayerName, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 50);
-		ctx.font = "50px 'Press Start 2P'";
+		ctx.font = "50px 'customFont'";
 		textWidth = ctx.measureText("Press Enter to Start").width;
 		ctx.fillText("Press Enter to Start", (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) + 100);
 	}
@@ -1027,9 +1052,20 @@ function gameInitialization() {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 
-	game = new Game(false, ["Tehuan", "Tanvir", "Paula", "Samih"]);
-	// ! Missing: get players names
-	game.start();
+	var customFont = new FontFace('customFont', 'url(../static/fonts/PressStart2P-Regular.ttf)');
+	console.log('Loading fonts...');
+	customFont.load().then(function(font){
+		document.fonts.add(font);
+		console.log('Font loaded');
+		game = new Game(false, ["Tehuan", "Tanvir", "Paula", "Samih"]);
+		// ! Missing: get players names
+		game.start();
+	});
+
+
+
+
+
 }
 
 function customConfigShow(show) {
@@ -1042,23 +1078,29 @@ function customConfigShow(show) {
 }
 
 function visual() {
+	if (game.isGameRunning() == true) {
+		var myModal = new bootstrap.Modal(document.getElementById('visualmodal'));
+		myModal.show();
+		return;
+	}
 
-if (g_fillColor === 'black') {
-	g_fillColor = 'blue';
-	g_ballRadius = canvas.width / 40;
-	g_ballColor = 'yellow';
-	g_paddleHeigh = canvas.height / 4;
-	g_paddleWidth = canvas.width / 25;
+	if (g_fillColor === 'black') {
+		g_fillColor = 'blue';
+		g_ballRadius = canvas.width / 40;
+		g_ballColor = 'yellow';
+		g_paddleHeigh = canvas.height / 4;
+		g_paddleWidth = canvas.width / 25;
 
-}
-else {
-	g_fillColor = 'black'
-	g_ballRadius = canvas.width / 100;
-	g_ballColor = 'white';
-	g_paddleHeigh = canvas.height / 8;
-	g_paddleWidth = canvas.width / 50;
-}
+	}
+	else {
+		g_fillColor = 'black'
+		g_ballRadius = canvas.width / 100;
+		g_ballColor = 'white';
+		g_paddleHeigh = canvas.height / 8;
+		g_paddleWidth = canvas.width / 50;
+	}
 
+	game.forceRefresh();
 
 
 
