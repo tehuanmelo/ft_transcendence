@@ -10,15 +10,27 @@ from .models import CustomUser
 from .token import decode_token, get_token, extract_token
 
 
-def generate_2fa_key_qrcode(user):
+def generate_2fa_key():
     secret = pyotp.random_base32()
+    return secret
+
+
+def generate_2fa_qrcode(user, secret):
     qrcode_url = pyotp.totp.TOTP(secret).provisioning_uri(
         name=user.username, issuer_name="PONG"
     )
     file_name = f"{user.username}_qrcode_{uuid.uuid4().hex}.png"
     file_path = os.path.join(settings.MEDIA_ROOT, "qr_codes", file_name)
+    print(file_path)
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     qrcode.make(qrcode_url).save(file_path)
+
+    return file_name
+
+
+def generate_2fa_key_qrcode(user):
+    secret = generate_2fa_key()
+    file_name = generate_2fa_qrcode(user, secret)
 
     user.google_auth_key = secret
     user.qrcode_img.name = f"qr_codes/{file_name}"
