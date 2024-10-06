@@ -5,7 +5,12 @@ from django.utils import timezone
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
-from .auth import generate_2fa_key_qrcode, jwt_fetch_user, jwt_login_required
+from .auth import (
+    generate_2fa_key_qrcode,
+    jwt_fetch_user,
+    jwt_login_required,
+    check_if_logged,
+)
 from .forms import CustomUserCreationForm, UserProfileForm
 from .token import generate_token, set_token_property, set_request_token_property
 
@@ -83,6 +88,7 @@ def enable_2fa(request):
     )
 
 
+@check_if_logged
 def login_view(request):
     if request.method == "POST":
         form = AuthenticationForm(data=request.POST)
@@ -104,6 +110,16 @@ def login_view(request):
 
 
 @jwt_login_required
+def delete_account_view(request):
+    if request.method == "POST":
+        user = request.user
+        user.delete()
+        response = redirect("home")
+        response.delete_cookie("jwt")
+        return response
+
+
+@jwt_login_required
 def logout_view(request):
     if request.method == "POST":
         request.user.token_version += 1
@@ -115,7 +131,7 @@ def logout_view(request):
         return HttpResponseNotAllowed(["POST"])
 
 
-@jwt_fetch_user
+@check_if_logged
 def register_view(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
