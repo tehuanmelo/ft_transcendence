@@ -1,13 +1,20 @@
-canvas = null;
-ctx = null;
-game = null;
+let canvas = null;
+let ctx = null;
+let game = null;
 
 // Global variables for the game configuration
-var g_PADDLE_SPEED = 30;
-var g_BALL_SPEED = 15;
-var g_SOUND = true;
-var g_SCORE_TO_WIN = 5;
-var g_CURRENT_LEVEL = "Medium";
+let g_PADDLE_SPEED = 30;
+let g_BALL_SPEED = 15;
+let g_SOUND = true;
+let g_SCORE_TO_WIN = 5;
+let g_CURRENT_LEVEL = "Medium";
+
+const gameConfig = {
+    "Easy": { paddleSpeed: 15, ballSpeed: 7 },
+    "Medium": { paddleSpeed: 30, ballSpeed: 15 },
+    "Hard": { paddleSpeed: 66, ballSpeed: 33 },
+    "Visual Impaired": { paddleSpeed: 15, ballSpeed: 10 }
+};
 
 const PaddleTypes = Object.freeze({
 	LEFT1:	1,
@@ -809,10 +816,10 @@ class Game {
 }
 
 
-
 function playAgain() {
 	pong.start();
 }
+
 function refreshConfig() {
 	document.getElementById('playerspeed').value = g_PADDLE_SPEED;
 	document.getElementById('ballspeed').value = g_BALL_SPEED;
@@ -968,78 +975,118 @@ function nextGame() {
 	game.tournament.nextMatch();
 }
 
-function gameInitialization() {
-	const dropdownItems = document.querySelectorAll('.dropdown-item');
-	customConfigShow(false);
+function setupDropdownListeners() {
+    const modal = document.getElementById('config');
+    const dropdownMenu = modal.querySelector('.dropdown-menu');
+    const customConfig = document.querySelector("#customConfig");
+    customConfig.style.display = "none";
 
-	dropdownItems.forEach(item => {
-		item.addEventListener('click', function (event) {
-			event.preventDefault();
-
-
-			// Get the text content and value of the selected item
-			const selectedText = this.textContent.trim();
-			const selectedValue = this.getAttribute('data-value');
-
-			// Log or use the selected item
-			console.log('Selected Text:', selectedText);
-			if (selectedText == "Easy") {
-				g_PADDLE_SPEED = 15;
-				g_BALL_SPEED = 7;
-			}
-			if (selectedText == "Medium") {
-				g_PADDLE_SPEED = 30;
-				g_BALL_SPEED = 15;
-			}
-			if (selectedText == "Hard") {
-				g_PADDLE_SPEED = 66;
-				g_BALL_SPEED = 33;
-			}
-			if (selectedText == "Visual Impaired") {
-				g_PADDLE_SPEED = 15;
-				g_BALL_SPEED = 10;
-			}
-			refreshConfig();
-			if (selectedText == "Custom") {
-				customConfigShow(true);
-			}
-			else {
-				customConfigShow(false);
-			}
-
-			const dropdownButton = document.getElementById('dropdownMenuButton');
-			dropdownButton.textContent = selectedText;
-
-			const dropdownMenu = this.closest('.dropdown-menu');
-			const dropdown = new bootstrap.Dropdown(dropdownMenu.previousElementSibling);
-			dropdown.hide();
-		});
-	});
-
-
-
-	canvas = document.getElementById('ponggame');
-	ctx = canvas.getContext('2d');
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-
-	game = new Game(false, ["Tehuan", "Tanvir", "Paula", "Samih"]);
-	// ! Missing: get players names
-	game.start();
+    dropdownMenu.addEventListener('click', (event) => {
+        const selectedItem = event.target.closest('.dropdown-item');
+        if (selectedItem) {
+            event.preventDefault();
+            handleDropdownSelection(selectedItem);
+        }
+    });
 }
 
-function customConfigShow(show) {
-	var x = document.getElementById("customConfig");
-	if (show == true) {
-		x.style.display = "block";
-	} else {
-		x.style.display = "none";
-	}
+function handleDropdownSelection(selectedItem) {
+    const selectedText = selectedItem.textContent.trim();
+    const dropdownButton = modal.querySelector('.dropdown-toggle');
+    dropdownButton.textContent = selectedText;
+
+    if (selectedText in gameConfig) {
+        g_PADDLE_SPEED = gameConfig[selectedText].paddleSpeed;
+        g_BALL_SPEED = gameConfig[selectedText].ballSpeed;
+    }
+    else if (selectedText === "Custom")
+        document.getElementById("customConfig").style.display = "block";
+    else
+        console.error('Invalid difficulty level selected');
+
+    // Hide the dropdown menu after selection
+    const dropdown = new bootstrap.Dropdown(dropdownButton);
+    dropdown.hide();
 }
 
-onPageLoad();
+function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUserName = '') {
+    let playerNames = [];
+    const playerNameModal = new bootstrap.Modal(document.getElementById('playerNameModal'));
 
+    const playerInputs = [
+        { id: 'player1Div', visible: !isLoggedIn },
+        { id: 'player2Div', visible: true },
+        { id: 'player3Div', visible: numOfPlayers === 4 },
+        { id: 'player4Div', visible: numOfPlayers === 4 },
+    ];
+    playerInputs.forEach(({ id, visible }) => {
+        document.getElementById(id).style.display = visible ? 'block' : 'none';
+    });
 
+    if (isLoggedIn) {
+        playerNames.push(loggedInUserName);
+        document.getElementById('player1').value = loggedInUserName;
+    }
 
+    playerNameModal.show();
 
+    document.getElementById('saveNamesButton').addEventListener('click', function () {
+        if (!isLoggedIn) {
+            const player1Name = document.getElementById('player1').value.trim();
+            playerNames.push(player1Name);
+        }
 
+        const player2Name = document.getElementById('player2').value.trim();
+        playerNames.push(player2Name);
+
+        if (numOfPlayers === 4) {
+            const player3Name = document.getElementById('player3').value.trim();
+            const player4Name = document.getElementById('player4').value.trim();
+            if (player3Name) playerNames.push(player3Name);
+            if (player4Name) playerNames.push(player4Name);
+        }
+
+        if (playerNames.length !== numOfPlayers)
+            alert(`Please enter names for all ${numOfPlayers} playerNames.`);
+
+        playerNameModal.hide();
+
+        startGame(playerNames);
+    });
+}
+
+function startGame(isTournament = false, playerNames) {
+    game = new Game(false, playerNames);
+    game.start();
+}
+
+function gameInit() {
+    // initializing canvas
+    canvas = document.getElementById('ponggame');
+    ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get('mode');
+    switch (mode) {
+        case '1v1':
+            askForPlayerNames(2, true, loggedInUserName);
+            break;
+        case '2v2':
+            askForPlayerNames(4, true, loggedInUserName);
+            break;
+        case 'guest':
+            askForPlayerNames(2, false);
+            break;
+        case 'tournament':
+            console.log('Tournament mode selected');
+            break;
+        default:
+            alert('Invalid mode selected');
+            window.location.href = '/';
+            break;
+    }
+
+    setupDropdownListeners();
+}

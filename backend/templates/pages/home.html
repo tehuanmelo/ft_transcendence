@@ -11,9 +11,9 @@
 <div class="container d-flex flex-column py-5 text-center">
     <h1 class="mb-5">Welcome back, {{ user.username }}!</h1>
 
-    <a class="menu-btn py-3 spa-link" href="#" data-method="GET">Play Pong 1v1</a>
-    <a class="menu-btn py-3 spa-link" href="#" data-method="GET">Play Pong 2v2</a>
-    <a class="menu-btn py-3 spa-link" href="#" data-method="GET">Play Tournament</a>
+    <a class="menu-btn py-3 spa-link" href="{% url 'pong' %}?mode=1v1" data-method="GET">Play Pong 1v1</a>
+    <a class="menu-btn py-3 spa-link" href="{% url 'pong' %}?mode=2v2" data-method="GET">Play Pong 2v2</a>
+    <a class="menu-btn py-3 spa-link" href="{% url 'pong' %}?mode=tournament" data-method="GET">Play Tournament</a>
 </div>
 
 {% else %}
@@ -26,7 +26,7 @@
         <a class="menu-btn p-3 spa-link" href="{% url 'login' %}" data-method="GET">Log In</a>
         <a class="menu-btn p-3 spa-link" href="{% url 'register' %}" data-method="GET">Register</a>
         <a class="menu-btn p-3" href="#">42 Log In</a>
-        <a class="menu-btn p-3 spa-link" href="{% url 'pong' %}" data-method="GET">Play as Guest</a>
+        <a class="menu-btn p-3 spa-link" href="{% url 'pong' %}?mode=guest" data-method="GET">Play as Guest</a>
     </div>
     <footer class="text-center pb-4 mt-auto">
         <div class="mb-3">

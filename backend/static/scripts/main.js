@@ -1,8 +1,10 @@
+// TODO remove this if its not being used
 const initFunctions = {
-    '/pong/': gameInitialization,
-    // You can add more routes and their corresponding functions here
-    // '/another-route/': anotherInitializationFunction,
+    '/pong': gameInit,
 }
+
+const data = document.currentScript.dataset;
+const loggedInUsername = data.username;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Handling case of page reloading to invoke required js
@@ -23,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const target = event.target;
             if (target.form) {
                 event.preventDefault();
-                const form = target.form
+                const form = target.form;
                 const spalink = form.querySelector('.spa-link');
                 handleSpaLinkEvent(spalink);
             }
@@ -64,8 +66,9 @@ function updateContent(pageHtml, url) {
     if (oldUrl !== url)
         history.pushState(null, '', url);
 
-    if (initFunctions[url])
-        initFunctions[url]();
+    const urlWithoutParam = url.split('?')[0];
+    if (initFunctions[urlWithoutParam])
+        initFunctions[urlWithoutParam]();
 }
 
 function getPage(url) {
