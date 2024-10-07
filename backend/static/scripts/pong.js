@@ -1122,8 +1122,9 @@ function startGame(playerNames, isTournament = false) {
         document.fonts.add(font);
         game = new Game(false, playerNames);
         game.start();
+        document.getElementById("pongContainer").style.display = "flex";
+        console.log("player names:", playerNames); // TODO: remove
     });
-
 }
 
 function gameInit(loggedInUsername) {
