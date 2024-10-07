@@ -252,17 +252,18 @@ header {
 .btn-orange {
     color: var(--text);
     background-color: var(--accent);
-    border: 2px solid var(--accent);
     padding: 0.5rem 1rem;
-    border-radius: 0px;
     text-transform: uppercase;
     transition: all 0.3s ease;
 }
 
-.btn-orange:hover,
+.btn-orange:hover {
+    background-color: var(--light-accent);
+    box-shadow: 0 0 10px rgba(243, 156, 18, 0.7);
+}
+
 .btn-orange:focus {
     background-color: var(--light-accent);
-    color: var(--background);
     box-shadow: 0 0 10px rgba(243, 156, 18, 0.7);
 }
 
