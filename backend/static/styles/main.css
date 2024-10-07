@@ -209,6 +209,7 @@ header {
 }
 
 .form-control {
+    color: var(--navbar);
     border-radius: 0;
     background-color: #c6c6c6c4;
     padding: 10px;
@@ -217,6 +218,7 @@ header {
 
 .form-control:focus,
 .form-control:hover {
+    color: var(--navbar);
     border-color: var(--primary);
     background-color: #f0f0f0;
 }
@@ -264,7 +266,7 @@ header {
     box-shadow: 0 0 10px rgba(243, 156, 18, 0.7);
 }
 
-.btn.btn-orange:active {
+.btn-orange:active {
     background-color: var(--accent);
     border-color: var(--accent);
     transform: scale(0.95);
