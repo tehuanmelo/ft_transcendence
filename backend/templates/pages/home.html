@@ -10,7 +10,7 @@
 {% if user.is_authenticated %}
 
 <div class="container d-flex flex-column py-5 text-center">
-    <h1 class="mb-5">Welcome back, {{ user.username }}!</h1>
+    <h1 class="mb-5 silk">Welcome back, <span class="username silk-heavy">{{ user.username }}</span>!</h1>
 
     <a class="menu-btn py-3 spa-link" href="{% url 'pong' %}?mode=1v1" data-method="GET">Play Pong 1v1</a>
     <a class="menu-btn py-3 spa-link" href="{% url 'pong' %}?mode=2v2" data-method="GET">Play Pong 2v2</a>

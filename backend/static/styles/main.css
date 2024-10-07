@@ -1,5 +1,6 @@
 /* main.css: CSS file containing all styles */
 
+/* ---------------------------------- Font ---------------------------------- */
 @font-face {
     font-family: 'Press Start 2P';
     src: url('../fonts/PressStart2P-Regular.ttf');
@@ -10,6 +11,16 @@
     src: url('../fonts/Silkscreen-Regular.ttf');
 }
 
+.silk {
+    font-family: 'Silkscreen', sans-serif;
+}
+
+.silk-heavy {
+    font-family: 'Silkscreen', sans-serif;
+    font-weight: 700;
+}
+
+/* --------------------------------- General -------------------------------- */
 :root {
     --text: white;
     --background: #24211a;
@@ -36,11 +47,11 @@ h1 {
     color: var(--accent);
 }
 
-ul li {
+#helpModal ul li {
     margin-bottom: 0.1rem;
 }
 
-ul li::marker {
+#helpModal ul li::marker {
     content: "·";
 }
 
@@ -101,6 +112,13 @@ header {
     outline: none;
     background-color: var(--navbar);
     color: var(--accent);
+}
+
+.navbar-nav .dropdown-item[id="logoutButton"]:hover,
+.navbar-nav .dropdown-item[id="logoutButton"]:focus {
+    outline: none;
+    background-color: var(--navbar);
+    color: var(--bs-danger);
 }
 
 .navbar-nav .dropdown-divider {
