@@ -1116,13 +1116,14 @@ function startGame(playerNames, isTournament = false) {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    // TODO
     var customFont = new FontFace('customFont', 'url(../static/fonts/PressStart2P-Regular.ttf)');
     customFont.load().then((font) => {
         document.fonts.add(font);
+        game = new Game(false, playerNames);
+        game.start();
     });
 
-    game = new Game(false, playerNames);
-    game.start();
 }
 
 function gameInit(loggedInUsername) {
