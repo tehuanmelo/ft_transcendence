@@ -44,11 +44,6 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     # to allow cross-origin requests
     "corsheaders",
-    # # all-auth 
-    # 'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
-    # 'allauth.socialaccount.providers.oauth2',
 ]
 
 
@@ -92,10 +87,6 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
-                "django.template.context_processors.debug", 
-                # NOTE this is added to provide the request object with every
-                # template, it is needed by allauth
-                # "django.template.context_processors.request", 
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],

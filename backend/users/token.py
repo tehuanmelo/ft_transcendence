@@ -6,18 +6,6 @@ from django.conf import settings
 
 from .models import CustomUser
 
-def generate_api_token(code):
-    utc = pytz.UTC
-    expiration_time = datetime.datetime.now(utc) + datetime.timedelta(hours=1)
-    payload = {
-        'code': code,
-        'is_authenticated': True,
-        # 'token_version': user.token_version,
-        'is_2fa_validated': False,
-        'exp': expiration_time,
-    }
-    token = encode_payload(payload)
-    return token
 
 def generate_token(user):
     utc = pytz.UTC

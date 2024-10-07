@@ -15,3 +15,4 @@ class CustomUser(AbstractUser):
     qrcode_img = models.ImageField(upload_to="qr_codes/", blank=True, null=True)
     token_version = models.IntegerField(default=0)
     is_authenticated = models.BooleanField(default=False)
+    is_42 = models.BooleanField(default=False)

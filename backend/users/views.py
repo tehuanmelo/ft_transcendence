@@ -1,4 +1,8 @@
 import pyotp
+import datetime
+import pytz
+import requests
+from django.db import models
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render
@@ -6,14 +10,20 @@ from django.utils import timezone
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
+from .models import CustomUser
 from .auth import generate_2fa_key_qrcode, jwt_fetch_user, jwt_login_required
 from .forms import CustomUserCreationForm, UserProfileForm
-from .token import generate_token, set_token_property, set_request_token, generate_api_token_property
+from .token import (
+    generate_token,
+    set_token_property,
+    set_request_token_property,
+)
 
 # REVIEW looks like all auth is not needed
 # from allauth.socialaccount.helpers import complete_social_login  # To handle social login completion
 # from django.urls import reverse
 # from allauth.socialaccount.providers.oauth2.views import OAuth2LoginView
+
 
 @jwt_login_required
 def reset_2fa_view(request):
@@ -21,46 +31,54 @@ def reset_2fa_view(request):
     return redirect("enable_2fa")
 
 
-# user sends login with 42
+# Exchange authorization code for access token
 def exchange_code(request):
-
+    # We have "code"
     code = request.GET.get("code")
-    print(f'Exchanging [code: {code}] for token')
+    if code is None:
+        return redirect("login")
 
-    # NOTE that this is not accessing the OAuth server
-    # as only the existence of a code, what ever it is
-    if code is not None:
-        print(f'User sucessfully authenticated')
-        token = generate_api_token(code) # NOTE we have a jwt now
-    else:
-        print(f'User bad')
+    # Response OBJECT
+    exchange_endpoint = "https://api.intra.42.fr/oauth/token"
+    client_uid = (
+        "u-s4t2ud-bc495b0a5937ba6e8a1fe11be70a9446a8f7411e2587cd57046a356bb0467d3a"
+    )
+    client_secret = (
+        "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"
+    )
+    redirect_uri = "https://localhost/users/exchange_code"
 
-    response = redirect("home")
-    response.set_cookie("jwt", token, httponly=True, secure=True)
+    # ANCHOR SEND POST
+    api_response = requests.post(
+        exchange_endpoint,
+        data={
+            "grant_type": "authorization_code",
+            "client_id": client_uid,
+            "client_secret": client_secret,
+            "code": code,
+            "redirect_uri": redirect_uri,
+        },
+    )
 
-    return response
-    
+    expiration_time = datetime.datetime.now(pytz.UTC) + datetime.timedelta(minutes=30)
 
+    if api_response.status_code == 200:
+        token_data = api_response.json()
+        access_token = token_data.get("access_token")
 
-# user sends login with 42
-def exchange_code(request):
+        user_intra = requests.get(
+            "https://api.intra.42.fr/v2/me",
+            headers={
+                "Authorization": f"Bearer {access_token}",
+            },
+        )
 
-    code = request.GET.get("code")
-    print(f'Exchanging [code: {code}] for token')
-
-    # NOTE that this is not accessing the OAuth server
-    # as only the existence of a code, what ever it is
-    if code is not None:
-        print(f'User sucessfully authenticated')
-        token = generate_api_token(code) # NOTE we have a jwt now
-    else:
-        print(f'User bad')
-
-    response = redirect("home")
-    response.set_cookie("jwt", token, httponly=True, secure=True)
-
-    return response
-    
+        is_42 = models.BooleanField(default=False)
+        user_data = user_intra.json()
+        user_42login = user_data.get("login")
+        user = User.objects.create_user(nick_name=user_42login, is_42=True)
+        user.save()
+    return api_response
 
 
 @jwt_fetch_user
