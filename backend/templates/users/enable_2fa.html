@@ -23,7 +23,7 @@
                     Android</a>.
             </p>
             <div class="mb-5 text-center">
-                <img src="{{ user.qrcode_img.url }}" alt="QR code for 2FA setup" class="img-fluid border"
+                <img src="/media/qr_codes/{{ obj.qrcode }}" alt="QR code for 2FA setup" class="img-fluid border"
                     style="max-width: 250px;">
             </div>
 
@@ -36,9 +36,9 @@
 
             <p>2. After scanning, enter the 6-digit code to enable 2FA.</p>
 
-            {% if error_message %}
+            {% if obj.error_message %}
             <div class="alert alert-danger">
-                {{ error_message }}
+                {{ obj.error_message }}
             </div>
             {% endif %}
 
@@ -46,8 +46,8 @@
                 {% csrf_token %}
                 <div class="form-group row justify-content-center">
                     <div class="col-auto">
-                        <input type="text" name="otp" id="otp" class="form-control" required
-                            placeholder="6-digit code" style="width: 250px;">
+                        <input type="text" name="otp" id="otp" class="form-control" required placeholder="6-digit code"
+                            style="width: 250px;">
                     </div>
                     <div class="col-auto">
                         <a class="btn btn-success spa-link" href="{% url 'enable_2fa' %}" data-method="POST"
