@@ -1042,52 +1042,6 @@ function handleDropdownSelection(selectedItem) {
     dropdown.hide();
 }
 
-function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
-    let playerNames = [];
-    const playerNameModal = new bootstrap.Modal(document.getElementById('playerNameModal'));
-
-    const playerInputs = [
-        { id: 'player1Div', visible: !isLoggedIn },
-        { id: 'player2Div', visible: true },
-        { id: 'player3Div', visible: numOfPlayers === 4 },
-        { id: 'player4Div', visible: numOfPlayers === 4 },
-    ];
-    playerInputs.forEach(({ id, visible }) => {
-        document.getElementById(id).style.display = visible ? 'block' : 'none';
-    });
-
-    if (isLoggedIn) {
-        playerNames.push(loggedInUsername);
-        document.getElementById('player1').value = loggedInUsername;
-    }
-
-    playerNameModal.show();
-
-    document.getElementById('saveNamesButton').addEventListener('click', function () {
-        if (!isLoggedIn) {
-            const player1Name = document.getElementById('player1').value.trim();
-            playerNames.push(player1Name);
-        }
-
-        const player2Name = document.getElementById('player2').value.trim();
-        playerNames.push(player2Name);
-
-        if (numOfPlayers === 4) {
-            const player3Name = document.getElementById('player3').value.trim();
-            const player4Name = document.getElementById('player4').value.trim();
-            if (player3Name) playerNames.push(player3Name);
-            if (player4Name) playerNames.push(player4Name);
-        }
-
-        if (playerNames.length !== numOfPlayers)
-            alert(`Please enter names for all ${numOfPlayers} playerNames.`);
-
-        playerNameModal.hide();
-
-        startGame(playerNames);
-    });
-}
-
 function visual() {
     if (game.isGameRunning() == true) {
         var myModal = new bootstrap.Modal(document.getElementById('visualmodal'));
@@ -1109,34 +1063,74 @@ function visual() {
         g_paddleHeigh = canvas.height / 8;
         g_paddleWidth = canvas.width / 50;
     }
+
+    game.forceRefresh();
 }
 
-game.forceRefresh();
+function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
+    let playerNames = [];
+    const playerNameModal = new bootstrap.Modal(document.getElementById('playerNameModal'));
 
-function startGame(isTournament = false, playerNames) {
-    game = new Game(false, playerNames);
-    game.start();
+    const playerInputs = [
+        { id: 'player1Div', visible: !isLoggedIn },
+        { id: 'player2Div', visible: true },
+        { id: 'player3Div', visible: numOfPlayers === 4 },
+        { id: 'player4Div', visible: numOfPlayers === 4 },
+    ];
+    playerInputs.forEach(({ id, visible }) => {
+        document.getElementById(id).style.display = visible ? 'block' : 'none';
+    });
+
+    if (isLoggedIn)
+        document.getElementById('player1').value = loggedInUsername;
+
+    playerNameModal.show();
+
+    document.getElementById('startGameButton').addEventListener('click', function () {
+        const player1Name = document.getElementById('player1').value.trim();
+        playerNames.push(player1Name);
+
+        const player2Name = document.getElementById('player2').value.trim();
+        playerNames.push(player2Name);
+
+        if (numOfPlayers === 4) {
+            const player3Name = document.getElementById('player3').value.trim();
+            playerNames.push(player3Name);
+            const player4Name = document.getElementById('player4').value.trim();
+            playerNames.push(player4Name);
+        }
+
+        if (playerNames.length !== numOfPlayers)
+            alert(`Please enter names for all ${numOfPlayers} playerNames.`);
+
+        playerNameModal.hide();
+
+        startGame(playerNames);
+    });
 }
 
-var customFont = new FontFace('customFont', 'url(../static/fonts/PressStart2P-Regular.ttf)');
-console.log('Loading fonts...');
-customFont.load().then(function(font){
-    document.fonts.add(font);
-    console.log('Font loaded');
-    game = new Game(false, ["Tehuan", "Tanvir", "Paula", "Samih"]);
-    // ! Missing: get players names
-    game.start();
-});
-
-function gameInit(loggedInUsername) {
+function startGame(playerNames, isTournament = false) {
     // initializing canvas
     canvas = document.getElementById('ponggame');
     ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    var customFont = new FontFace('customFont', 'url(../static/fonts/PressStart2P-Regular.ttf)');
+    customFont.load().then((font) => {
+        document.fonts.add(font);
+    });
+
+    game = new Game(false, playerNames);
+    game.start();
+}
+
+function gameInit(loggedInUsername) {
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get('mode');
+
+    // TODO: need a better way to handle incorrect modes and guest mode when logged in
+
     switch (mode) {
         case '1v1':
             askForPlayerNames(2, true, loggedInUsername);
@@ -1152,7 +1146,6 @@ function gameInit(loggedInUsername) {
             break;
         default:
             alert('Invalid mode selected');
-            window.location.href = '/';
             break;
     }
 
