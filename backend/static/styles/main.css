@@ -5,6 +5,11 @@
     src: url('../fonts/PressStart2P-Regular.ttf');
 }
 
+@font-face {
+    font-family: 'Silkscreen';
+    src: url('../fonts/Silkscreen-Regular.ttf');
+}
+
 :root {
     --text: white;
     --background: #24211a;
