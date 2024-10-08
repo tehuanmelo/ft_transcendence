@@ -1132,6 +1132,9 @@ function gameInit(loggedInUsername) {
     const mode = urlParams.get('mode');
 
     // TODO: need a better way to handle incorrect modes and guest mode when logged in
+    // TODO: username not being sent to JS on initial load as html gets rendered with "" instead of user.username
+    // TODO: need to improve name validation
+    // TODO: fix custom settings not showing up
 
     switch (mode) {
         case '1v1':
@@ -1146,6 +1149,9 @@ function gameInit(loggedInUsername) {
         case 'tournament':
             console.log('Tournament mode selected');
             break;
+        case 'test':
+            startGame(['test1', 'tanas', 'qqq', 'www']);
+            break; // TODO: remove after testing
         default:
             alert('Invalid mode selected');
             break;
