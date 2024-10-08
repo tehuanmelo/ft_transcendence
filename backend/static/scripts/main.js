@@ -1,18 +1,16 @@
 // main.js: contains routing logic and SPA loading
 
-let loggedInUsername = null;
-
 document.addEventListener('DOMContentLoaded', () => {
     // Handling case of page reloading to invoke required js
     const currentPath = document.location.pathname;
     if (currentPath === '/pong')
-        gameInit(loggedInUsername);
+        gameInit();
 
     document.body.addEventListener('click', (event) => {
         const target = event.target;
         if (target.matches('.spa-link')) {
             event.preventDefault();
-            handleSpaLinkEvent(target)
+            handleSpaLinkEvent(target);
         }
     });
 
@@ -62,17 +60,13 @@ function updateContent(pageHtml, url) {
     const newTitle = page.querySelector('title').innerHTML;
     document.title = newTitle;
 
-    const usernameElement = page.querySelector('meta[name="username"]');
-    const newUsername = usernameElement ? usernameElement.getAttribute('content') : null;
-    loggedInUsername = newUsername;
-
     const oldUrl = document.location.pathname;
     if (oldUrl !== url)
         history.pushState(null, '', url);
 
     const urlWithoutParam = url.split('?')[0];
     if (urlWithoutParam === '/pong')
-        gameInit(loggedInUsername);
+        gameInit();
 }
 
 function getPage(url) {

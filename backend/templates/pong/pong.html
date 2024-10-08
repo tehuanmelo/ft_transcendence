@@ -6,6 +6,12 @@
 
 {% block content %}
 
+{% if user.is_authenticated %}
+<meta name="username" content="{{ user.username }}">
+{% else %}
+<meta name="username" content="">
+{% endif %}
+
 <!-- Pong -->
 <div id="pongContainer" class="container-fluid h-100" style="display: none;">
     <div class="row">

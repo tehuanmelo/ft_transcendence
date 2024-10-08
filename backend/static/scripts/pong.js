@@ -1120,7 +1120,6 @@ function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
 }
 
 function startGame(playerNames, isTournament = false) {
-    // initializing canvas
     canvas = document.getElementById('ponggame');
     ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
@@ -1135,37 +1134,48 @@ function startGame(playerNames, isTournament = false) {
         document.getElementById("pongContainer").style.display = "flex";
         console.log("player names:", playerNames); // TODO: remove
     });
-}
-
-function gameInit(loggedInUsername) {
-    const urlParams = new URLSearchParams(window.location.search);
-    const mode = urlParams.get('mode');
-
-    // TODO: need a better way to handle incorrect modes and guest mode when logged in
-    // TODO: username not being sent to JS on initial load as html gets rendered with "" instead of user.username
-    // TODO: need to improve name validation
-    // TODO: fix custom settings not showing up
-
-    switch (mode) {
-        case '1v1':
-            askForPlayerNames(2, true, loggedInUsername);
-            break;
-        case '2v2':
-            askForPlayerNames(4, true, loggedInUsername);
-            break;
-        case 'guest':
-            askForPlayerNames(2, false);
-            break;
-        case 'tournament':
-            console.log('Tournament mode selected');
-            break;
-        case 'test':
-            startGame(['test1', 'tanas', 'qqq', 'www']);
-            break; // TODO: remove after testing
-        default:
-            alert('Invalid mode selected');
-            break;
-    }
 
     setupDropdownListeners();
+}
+
+function gameInit() {
+    const usernameElement = document.querySelector('meta[name="username"]');
+    const loggedInUsername = usernameElement ? usernameElement.getAttribute('content') : null;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get('mode');
+    
+    const gameModes = [
+        { mode: '1v1', loggedIn: true, players: 2 },
+        { mode: '2v2', loggedIn: true, players: 4 },
+        { mode: 'guest', loggedIn: false, players: 2 },
+        { mode: 'tournament', loggedIn: true, players: 2 },
+    ];
+    
+    // Find the game mode object based on the 'mode' parameter
+    const selectedMode = gameModes.find(gameMode => gameMode.mode === mode);
+    if (!selectedMode) {
+        alert('Invalid mode selected');
+        return;
+    }
+
+    // Check if the login status matches the selected mode's requirement
+    const isLoggedIn = (loggedInUsername !== null);
+    if (selectedMode.loggedIn && !isLoggedIn) {
+        alert('You must be logged in to access this mode');
+        return;
+    }
+    else if (!selectedMode.loggedIn && isLoggedIn) {
+        alert('You are already logged in, you cannot play as guest');
+        return;
+    }
+
+    if (selectedMode.mode === '1v1' || selectedMode.mode === '2v2')
+        askForPlayerNames(selectedMode.players, true, loggedInUsername);
+    else if (selectedMode.mode === 'guest')
+        askForPlayerNames(selectedMode.players, false);
+    else if (selectedMode.mode === 'tournament')
+        console.log('Tournament mode selected');
+    else if (selectedMode.mode === 'test')
+        startGame(['test1', 'tanas', 'qqq', 'www']); // TODO: testing only, remove after done
 }
