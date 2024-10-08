@@ -60,25 +60,44 @@ def exchange_code(request):
         },
     )
 
-    expiration_time = datetime.datetime.now(pytz.UTC) + datetime.timedelta(minutes=30)
+    if api_response.status_code != 200:
+            return redirect("login") # Return Early 
+    token_data = api_response.json()
+    access_token = token_data.get("access_token")
 
-    if api_response.status_code == 200:
-        token_data = api_response.json()
-        access_token = token_data.get("access_token")
+    user_intra = requests.get(
+        "https://api.intra.42.fr/v2/me",
+        headers={
+            "Authorization": f"Bearer {access_token}",
+        },
+    )
 
-        user_intra = requests.get(
-            "https://api.intra.42.fr/v2/me",
-            headers={
-                "Authorization": f"Bearer {access_token}",
-            },
-        )
+    if user_intra.status_code != 200:
+        return redirect("login") # Return Early 
 
-        is_42 = models.BooleanField(default=False)
-        user_data = user_intra.json()
-        user_42login = user_data.get("login")
-        user = User.objects.create_user(nick_name=user_42login, is_42=True)
-        user.save()
-    return api_response
+    user_data = user_intra.json()
+    user_42login = user_data.get("login") # user name
+    # all the required fields
+    print(f"User login name is [{user_42login}]")
+
+    if not user_42login:
+        return redirect("home")  # ANCHOR not the right redirect
+
+    user, created = CustomUser.objects.get_or_create(
+        username=user_42login,
+    )
+
+    if created:
+        user.is_42 = True
+        user.set_unusable_password()
+
+    user.save()
+    token = generate_token(user)
+
+    response = redirect("home")
+    response.set_cookie("jwt", token, httponly=True, secure=True)
+
+    return response
 
 
 @jwt_fetch_user
@@ -151,6 +170,7 @@ def enable_2fa(request):
 def login_view(request):
     if request.method == "POST":
         form = AuthenticationForm(data=request.POST)
+        print(f"the request POST is [{request.POST}]")
         if form.is_valid():
             user = form.get_user()
             user.last_login = timezone.now()
