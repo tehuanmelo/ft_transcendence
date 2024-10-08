@@ -52,8 +52,9 @@
             </div>
 
             <div class="row">
-                <button type="button" data-bs-toggle="modal" data-bs-target="#configModal" class="btn btn-light fa fa-gear"
-                    data-toggle="tooltip" data-placement="top" title="Settings" onclick="loadConfiguration()"></button>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#configModal"
+                    class="btn btn-light fa fa-gear" data-toggle="tooltip" data-placement="top" title="Settings"
+                    onclick="loadConfiguration()"></button>
             </div>
 
             <div class="row">
@@ -226,27 +227,42 @@
                 <form id="playerNamesForm">
                     <div class="mb-3" id="player1Div">
                         <label for="player1" class="form-label">Player 1</label>
-                        <input type="text" class="form-control" id="player1" required>
+                        <input type="text" class="form-control" id="player1" required pattern="[a-zA-Z0-9_]+"
+                            maxlength="20">
+                        <div class="invalid-feedback">
+                            Player 1 name must be between 1 and 20 characters, alphanumeric, or underscores.
+                        </div>
                     </div>
                     <div class="mb-3" id="player2Div">
                         <label for="player2" class="form-label">Player 2</label>
-                        <input type="text" class="form-control" id="player2" required>
+                        <input type="text" class="form-control" id="player2" required pattern="[a-zA-Z0-9_]+"
+                            maxlength="20">
+                        <div class="invalid-feedback">
+                            Player 2 name must be between 1 and 20 characters, alphanumeric, or underscores.
+                        </div>
                     </div>
                     <div class="mb-3" id="player3Div" style="display: none;">
                         <label for="player3" class="form-label">Player 3</label>
-                        <input type="text" class="form-control" id="player3">
+                        <input type="text" class="form-control" id="player3" required pattern="[a-zA-Z0-9_]+"
+                            maxlength="20">
+                        <div class="invalid-feedback">
+                            Player 3 name must be between 1 and 20 characters, alphanumeric, or underscores.
+                        </div>
                     </div>
                     <div class="mb-3" id="player4Div" style="display: none;">
                         <label for="player4" class="form-label">Player 4</label>
-                        <input type="text" class="form-control" id="player4">
+                        <input type="text" class="form-control" id="player4" required pattern="[a-zA-Z0-9_]+"
+                            maxlength="20">
+                        <div class="invalid-feedback">
+                            Player 4 name must be between 1 and 20 characters, alphanumeric, or underscores.
+                        </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <a class="btn btn-secondary spa-link" href="{% url 'home' %}" data-method="GET"
                     data-bs-dismiss="modal">Cancel</a>
-                <button type="button" class="btn btn-primary" id="startGameButton"
-                    data-bs-dismiss="modal">Start</button>
+                <button type="button" class="btn btn-primary" id="startGameButton">Start</button>
             </div>
         </div>
     </div>
