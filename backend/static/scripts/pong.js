@@ -742,9 +742,8 @@ class Sound {
 		document.body.appendChild(this.sound);
 	}
 	play() {
-		if (g_SOUND) {
+		if (g_SOUND)
 			this.sound.play();
-		}
 	}
 }
 
@@ -756,25 +755,29 @@ class Countdown {
 	}
 
 	start() {
+		this.drawCountdown();
 		this.intervalId = setInterval(this.countdown.bind(this), 1000);
 	}
 
 	countdown() {
-		if (this.count === 0) {
+		if (this.count === 1) {
 			clearInterval(this.intervalId);
-			this.pong.startGame();
+			setTimeout(() => {
+				this.pong.startGame();
+			}, 200);
 		}
 		else {
-			this.drawCountdown();
 			this.count--;
+			this.drawCountdown();
 		}
 	}
+
 	drawCountdown() {
 		this.pong.render();
 		ctx.font = "280px customFont";
 		ctx.fillStyle = 'red';
 		var textWidth = ctx.measureText(this.count).width;
-		ctx.fillText(this.count, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2 + 70));
+		ctx.fillText(this.count, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) + (textWidth / 2));
 	}
 }
 
@@ -849,6 +852,7 @@ class Game {
 		}
 	}
 }
+
 function playAgain() {
 	pong.start();
 }
@@ -862,9 +866,8 @@ function refreshConfig() {
 }
 
 function loadConfiguration() {
-	if (game.isGameRunning() == true) {
+	if (game.isGameRunning() == true)
 		document.getElementById('score').disabled = true;
-	}
 	else
 		document.getElementById('score').disabled = false;
 	game.pause();
@@ -1125,7 +1128,6 @@ function startGame(playerNames, isTournament = false) {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // TODO
     var customFont = new FontFace('customFont', 'url(../static/fonts/PressStart2P-Regular.ttf)');
     customFont.load().then((font) => {
         document.fonts.add(font);
@@ -1144,6 +1146,10 @@ function gameInit() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get('mode');
+    if (mode === 'test') {
+        startGame(['test1', 'tanas', 'qqq', 'www']); // TODO: testing only, remove after done
+        return;
+    }
     
     const gameModes = [
         { mode: '1v1', loggedIn: true, players: 2 },
@@ -1176,6 +1182,4 @@ function gameInit() {
         askForPlayerNames(selectedMode.players, false);
     else if (selectedMode.mode === 'tournament')
         console.log('Tournament mode selected');
-    else if (selectedMode.mode === 'test')
-        startGame(['test1', 'tanas', 'qqq', 'www']); // TODO: testing only, remove after done
 }
