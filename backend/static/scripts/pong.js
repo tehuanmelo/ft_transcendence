@@ -1020,7 +1020,7 @@ function setupDropdownListeners() {
             const selectedText = selectedItem.textContent.trim();
             const dropdownButton = modal.querySelector('.dropdown-toggle');
             dropdownButton.textContent = selectedText;
-            
+
             if (selectedText in gameConfig) {
                 g_PADDLE_SPEED = gameConfig[selectedText].paddleSpeed;
                 g_BALL_SPEED = gameConfig[selectedText].ballSpeed;
@@ -1029,7 +1029,7 @@ function setupDropdownListeners() {
                 document.getElementById("customConfig").style.display = "block";
             else
                 console.error('Invalid difficulty level selected');
-            
+
             // Hide the dropdown menu after selection
             const dropdown = new bootstrap.Dropdown(dropdownButton);
             dropdown.hide();

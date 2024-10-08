@@ -9,6 +9,8 @@
 <!-- Home -->
 {% if user.is_authenticated %}
 
+<meta name="username" content="{{ user.username }}">
+
 <div class="container d-flex flex-column py-5 text-center">
     <h1 class="mb-5 silk">Welcome back, <span class="username silk-heavy">{{ user.username }}</span>!</h1>
 
@@ -20,9 +22,12 @@
 
 {% else %}
 
+<meta name="username" content="">
+
 <div class="container d-flex flex-column align-items-center h-100">
     <div class="text-center py-5 mb-4 mt-auto">
-        <img src="{% static 'images/PONG.svg' %}" alt="PONG logo" class="img-fluid logo" style="max-width: 400px;">
+        <img src="{% static 'images/PONG.svg' %}" alt="PONG logo" class="img-fluid logo" width="250px"
+            style="max-width: 300px;">
     </div>
     <div class="d-flex flex-column text-center">
         <a class="menu-btn p-3 spa-link" href="{% url 'login' %}" data-method="GET">Log In</a>

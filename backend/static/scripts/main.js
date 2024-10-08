@@ -1,5 +1,6 @@
-const data = document.currentScript.dataset;
-const loggedInUsername = data.username;
+// main.js: contains routing logic and SPA loading
+
+let loggedInUsername = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Handling case of page reloading to invoke required js
@@ -60,6 +61,10 @@ function updateContent(pageHtml, url) {
 
     const newTitle = page.querySelector('title').innerHTML;
     document.title = newTitle;
+
+    const usernameElement = page.querySelector('meta[name="username"]');
+    const newUsername = usernameElement ? usernameElement.getAttribute('content') : null;
+    loggedInUsername = newUsername;
 
     const oldUrl = document.location.pathname;
     if (oldUrl !== url)
