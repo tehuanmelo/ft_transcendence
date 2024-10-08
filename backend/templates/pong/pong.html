@@ -18,8 +18,9 @@
             </div>
 
             <div class="row">
-                <a href="/" class="btn btn-light fa fa-home spa-link" data-toggle="tooltip" data-placement="top"
-                    title="Back to Home Page" data-method="GET" on-spa-navigate="game.reset();"></a>
+                <a href="{% url 'home' %}" class="btn btn-light fa fa-home spa-link" data-toggle="tooltip"
+                    data-placement="top" title="Back to Home Page" data-method="GET"
+                    on-spa-navigate="game.reset();"></a>
             </div>
 
             <div class="row">
@@ -51,7 +52,7 @@
             </div>
 
             <div class="row">
-                <button type="button" data-bs-toggle="modal" data-bs-target="#config" class="btn btn-light fa fa-gear"
+                <button type="button" data-bs-toggle="modal" data-bs-target="#configModal" class="btn btn-light fa fa-gear"
                     data-toggle="tooltip" data-placement="top" title="Settings" onclick="loadConfiguration()"></button>
             </div>
 
@@ -102,7 +103,8 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="playAgain()">Play
                     Again!</button>
-                <button type="button" class="btn btn-secondary">Back to Home Page</button>
+                <a href="{% url 'home' %}" class="btn btn-secondary spa-link" data-toggle="tooltip" data-placement="top"
+                    title="Back to Home" data-method="GET" data-bs-dismiss="modal">Back to Home</a>
             </div>
         </div>
     </div>
@@ -148,7 +150,7 @@
 </div>
 
 <!-- Modal Config (level and sound)-->
-<div id="config" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+<div id="configModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="background-color: #fec66b; max-height: 90vh; height: auto;">

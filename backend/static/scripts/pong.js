@@ -1009,37 +1009,32 @@ function nextGame() {
 }
 
 function setupDropdownListeners() {
-    const modal = document.getElementById('config');
+    const modal = document.getElementById('configModal');
     const dropdownMenu = modal.querySelector('.dropdown-menu');
-    const customConfig = document.querySelector("#customConfig");
-    customConfig.style.display = "none";
 
     dropdownMenu.addEventListener('click', (event) => {
         const selectedItem = event.target.closest('.dropdown-item');
         if (selectedItem) {
             event.preventDefault();
-            handleDropdownSelection(selectedItem);
+
+            const selectedText = selectedItem.textContent.trim();
+            const dropdownButton = modal.querySelector('.dropdown-toggle');
+            dropdownButton.textContent = selectedText;
+            
+            if (selectedText in gameConfig) {
+                g_PADDLE_SPEED = gameConfig[selectedText].paddleSpeed;
+                g_BALL_SPEED = gameConfig[selectedText].ballSpeed;
+            }
+            else if (selectedText === "Custom")
+                document.getElementById("customConfig").style.display = "block";
+            else
+                console.error('Invalid difficulty level selected');
+            
+            // Hide the dropdown menu after selection
+            const dropdown = new bootstrap.Dropdown(dropdownButton);
+            dropdown.hide();
         }
     });
-}
-
-function handleDropdownSelection(selectedItem) {
-    const selectedText = selectedItem.textContent.trim();
-    const dropdownButton = modal.querySelector('.dropdown-toggle');
-    dropdownButton.textContent = selectedText;
-
-    if (selectedText in gameConfig) {
-        g_PADDLE_SPEED = gameConfig[selectedText].paddleSpeed;
-        g_BALL_SPEED = gameConfig[selectedText].ballSpeed;
-    }
-    else if (selectedText === "Custom")
-        document.getElementById("customConfig").style.display = "block";
-    else
-        console.error('Invalid difficulty level selected');
-
-    // Hide the dropdown menu after selection
-    const dropdown = new bootstrap.Dropdown(dropdownButton);
-    dropdown.hide();
 }
 
 function visual() {
