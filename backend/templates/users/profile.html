@@ -7,36 +7,58 @@
 {% block content %}
 
 <!-- Profile -->
+<div class="container-xl py-5">
+    <div class="sidebar border">
+        <div class="profile-image-wrapper border">
             {% if user.profile_image %}
-            <img src="{{ user.profile_image.url }}" class="img-fluid rounded-circle"
-                alt="{{ user.username}}'s Profile Image" style="max-width: 300px;">
+            <img src="{{ user.profile_image.url }}" class="profile-image rounded-circle"
+                alt="{{ user.username }}'s Profile Image">
             {% else %}
-            <img src="{% static 'images/default_user.jpg' %}" class="img-fluid rounded-circle" alt="Default User Image"
-                style="max-width: 300px;">
+            <img src="{% static 'images/default_user.jpg' %}" class="profile-image rounded-circle"
+                alt="Default User Image">
             {% endif %}
+        </div>
 
+        <h1 class="profile-name">{{ user.username }}</h1>
+
+        <div class="name">
+            {% if user.first_name %}
+            <div>First name: {{ user.first_name }}</div>
+            {% endif %}
+            {% if user.last_name %}
+            <div>Last name: {{ user.last_name }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="main border">
+        <div class="card-body">
             <p class="card-text"><small>Member since: {{ user.date_joined|date:"F Y" }}</small></p>
-
             {% if user.bio %}
-            <p class="card-text">{{user.bio}}</p>
+            <div class="border bio-text p-4">
+                <p class="card-text">{{user.bio}}</p>
+            </div>
             {% endif %}
 
-            <p class="social-links">
+            <p class="social-links mt-3">
                 {% if user.github %}
-                <a href="{{user.github}}" target="_blank">Github</a>
+                <a href="{{user.github}}" target="_blank" class="btn-social"><i class="bi bi-github"></i></a>
                 {% endif %}
                 {% if user.twitter %}
-                <a href="{{user.twitter}}" target="_blank">Twiter</a>
+                <a href="{{user.twitter}}" target="_blank" class="btn-social"><i class="bi bi-twitter"></i></a>
                 {% endif %}
             </p>
 
-            {% if user.email %}
-            <p class="card-text">Email: <a href="mailto:{{user.email}}">{{user.email}}</a></p>
-            {% endif %}
+            <div class="email">
+                {% if user.email %}
+                <p class="card-text">Email: <a href="mailto:{{user.email}}">{{user.email}}</a></p>
+                {% endif %}
+            </div>
 
             <p><small>Last login: {{ user.last_login|date:"F j, Y, g:i a" }}</small></p>
 
-            <a class="btn btn-primary spa-link" href="{% url 'edit_profile' %}" data-method="GET">Edit Profile</a>
+            <a class="btn btn-orange mt-3 spa-link" href="{% url 'edit_profile' %}" data-method="GET">Edit
+                Profile</a>
         </div>
     </div>
 </div>
