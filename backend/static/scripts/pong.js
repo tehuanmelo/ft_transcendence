@@ -541,10 +541,10 @@ class Pong {
 	}
 
 	initialDisplay() {
-		ctx.font = "72px customFont"
+		ctx.font = "72px 'Press Start 2P'";
 		var textWidth = ctx.measureText("PONG").width;
 		ctx.fillText("PONG", (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 100);
-		ctx.font = "32px customFont"
+		ctx.font = "32px 'Press Start 2P'";
 		var textWidth1 = ctx.measureText("Press Enter to Start or").width;
 		var textWidth2 = ctx.measureText("Select Visual Impairment Mode").width;
 		ctx.fillText("Press Enter to Start or", (canvas.width / 2) - (textWidth1 / 2), (canvas.height / 2) + 100);
@@ -721,7 +721,7 @@ class Score {
 	}
 
 	drawScore() {
-		ctx.font = "72px customFont";
+		ctx.font = "72px 'Press Start 2P'";
 		ctx.fillText(this.scoreL, canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Left player score
 		ctx.fillText(this.scoreR, 3 * canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Right player score
 	}
@@ -774,7 +774,7 @@ class Countdown {
 
 	drawCountdown() {
 		this.pong.render();
-		ctx.font = "280px customFont";
+		ctx.font = "280px 'Press Start 2P'";
 		ctx.fillStyle = 'red';
 		var textWidth = ctx.measureText(this.count).width;
 		ctx.fillText(this.count, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) + (textWidth / 2));
@@ -994,14 +994,14 @@ class Tournament {
 		ctx.fillStyle = 'black';
 		ctx.fillRect(0, 0, canvas.width, canvas.height); // Draw a rectangle (x, y, width, height)
 		ctx.fillStyle = 'red';
-		ctx.font = "50px 'customFont'";
+		ctx.font = "50px 'Press Start 2P'";
 
 		var textWidth = ctx.measureText(gameType).width;
 		ctx.fillText(gameType, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 200);
-		ctx.font = "50px 'customFont'";
+		ctx.font = "50px 'Press Start 2P'";
 		textWidth = ctx.measureText(firstPlayerName + " X " + secondPlayerName).width;
 		ctx.fillText(firstPlayerName + " X " + secondPlayerName, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 50);
-		ctx.font = "50px 'customFont'";
+		ctx.font = "50px 'Press Start 2P'";
 		textWidth = ctx.measureText("Press Enter to Start").width;
 		ctx.fillText("Press Enter to Start", (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) + 100);
 	}
@@ -1128,16 +1128,12 @@ function startGame(playerNames, isTournament = false) {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    var customFont = new FontFace('customFont', 'url(../static/fonts/PressStart2P-Regular.ttf)');
-    customFont.load().then((font) => {
-        document.fonts.add(font);
-        game = new Game(false, playerNames);
-        game.start();
-        document.getElementById("pongContainer").style.display = "flex";
-        console.log("player names:", playerNames); // TODO: remove
-    });
-
+    game = new Game(false, playerNames);
+    game.start();
     setupDropdownListeners();
+
+    document.getElementById("pongContainer").style.display = "flex";
+    console.log("player names:", playerNames); // TODO: remove
 }
 
 function gameInit() {
