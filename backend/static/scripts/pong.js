@@ -1065,41 +1065,56 @@ function visual() {
 function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
     let playerNames = [];
     const playerNameModal = new bootstrap.Modal(document.getElementById('playerNameModal'));
+    const playerForm = document.getElementById('playerNamesForm');
 
     const playerInputs = [
-        { id: 'player1Div', visible: !isLoggedIn },
-        { id: 'player2Div', visible: true },
-        { id: 'player3Div', visible: numOfPlayers === 4 },
-        { id: 'player4Div', visible: numOfPlayers === 4 },
+        { divId: 'player1Div', inputId: 'player1', visible: !isLoggedIn },
+        { divId: 'player2Div', inputId: 'player2', visible: true },
+        { divId: 'player3Div', inputId: 'player3', visible: numOfPlayers === 4 },
+        { divId: 'player4Div', inputId: 'player4', visible: numOfPlayers === 4 },
     ];
-    playerInputs.forEach(({ id, visible }) => {
-        document.getElementById(id).style.display = visible ? 'block' : 'none';
+    playerInputs.forEach(({ divId, visible }) => {
+        document.getElementById(divId).style.display = visible ? 'block' : 'none';
     });
 
-    if (isLoggedIn)
+    if (isLoggedIn) {
         document.getElementById('player1').value = loggedInUsername;
+        playerNames.push(loggedInUsername);
+    }
 
     playerNameModal.show();
 
-    document.getElementById('startGameButton').addEventListener('click', function () {
-        const player1Name = document.getElementById('player1').value.trim();
-        playerNames.push(player1Name);
+    document.getElementById('startGameButton').addEventListener('click', (event) => {
+        event.preventDefault();
 
-        const player2Name = document.getElementById('player2').value.trim();
-        playerNames.push(player2Name);
+        playerForm.classList.remove('was-validated');
 
-        if (numOfPlayers === 4) {
-            const player3Name = document.getElementById('player3').value.trim();
-            playerNames.push(player3Name);
-            const player4Name = document.getElementById('player4').value.trim();
-            playerNames.push(player4Name);
-        }
+        let allValid = true;
+        playerInputs.forEach(({ inputId, visible }) => {
+            if (visible) {
+                const inputField = document.getElementById(inputId);
+                if (inputField.checkValidity())
+                    inputField.classList.remove('is-invalid');
+                else {
+                    allValid = false;
+                    inputField.classList.add('is-invalid');
+                }
+            }
+        });
 
-        if (playerNames.length !== numOfPlayers)
-            alert(`Please enter names for all ${numOfPlayers} playerNames.`);
+        playerForm.classList.add('was-validated');
+
+        if (!allValid)
+            return;
+
+        playerInputs.forEach(({ inputId, visible }) => {
+            if (visible) {
+                const playerName = document.getElementById(inputId).value.trim();
+                if (playerName) playerNames.push(playerName);
+            }
+        });
 
         playerNameModal.hide();
-
         startGame(playerNames);
     });
 }
