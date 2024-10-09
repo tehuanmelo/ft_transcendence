@@ -19,7 +19,7 @@ var g_fillColor = 'black';
 var g_ballRadius;
 var g_ballColor = 'white';
 var g_paddleWidth;
-var g_paddleHeigh;
+var g_paddleHeight;
 
 const PaddleTypes = Object.freeze({
 	LEFT1:	1,
@@ -51,11 +51,11 @@ class Ball {
 	}
 
 	drawBall() {
-		ctx.fillStyle = g_ballColor; // Fill color
-		ctx.beginPath(); // Start a new path
-		ctx.arc(this.ballX, this.ballY, g_ballRadius, 0, Math.PI * 2, false); // Draw a circle
-		ctx.fill(); // Fill the circle with color
-		ctx.closePath(); // Close the path
+		ctx.fillStyle = g_ballColor;
+		ctx.beginPath();
+		ctx.arc(this.ballX, this.ballY, g_ballRadius, 0, Math.PI * 2, false);
+		ctx.fill();
+		ctx.closePath();
 	}
 
 	ballStartAngle() {
@@ -404,16 +404,16 @@ class Ball {
 	}
 
 	updateScore() {
-		if (this.ballX < 0) {
+		if (this.ballX < 0) { // Right player scored
 			this.score.incrementScoreR();
 			this.ballMoving = false;
 			if (this.score.checkGameOver() === false) {
 				this.ballResetPosition();
 				this.startBallMovement();
 			}
-
 		}
-		if (this.ballX > canvas.width) {
+
+		if (this.ballX > canvas.width) { // Left player scored
 			this.score.incrementScoreL();
 			this.ballMoving = false;
 			if (this.score.checkGameOver() === false) {
@@ -425,17 +425,18 @@ class Ball {
 }
 
 class Paddle {
-	constructor(paddleType) {
-		this.paddleType = paddleType;
-		this.width = canvas.width; // Canvas width in pixels
-		this.height = canvas.height; // Canvas height in pixels
-		this.paddleWidth = this.width / 50;
-		this.paddleHeight = this.height / 8;
-		g_paddleHeigh = this.height / 8;
-		g_paddleWidth = this.width / 50;
-		this.resetPosition();
-		this.ballRef = null;
-	}
+    constructor(paddleType) {
+        this.paddleType = paddleType;
+        this.width = canvas.width; // Canvas width in pixels
+        this.height = canvas.height; // Canvas height in pixels
+        this.paddleWidth = this.width / 50;
+        this.paddleHeight = this.height / 8;
+        g_paddleWidth = this.width / 50;
+        g_paddleHeight = this.height / 8;
+
+        this.resetPosition();
+        this.ballRef = null;
+    }
 
 	setBallRef(ballRef) {
 		this.ballRef = ballRef;
@@ -469,11 +470,12 @@ class Paddle {
 	}
 
 	drawPaddle() {
-		if (this.paddleHeight != g_paddleHeigh) {
-			this.paddleHeight = g_paddleHeigh;
+		if (this.paddleHeight != g_paddleHeight) {
+			this.paddleHeight = g_paddleHeight;
 			this.paddleWidth = g_paddleWidth;
 			this.resetPosition();
 		}
+
 		ctx.fillStyle = 'white'; // Fill color players 1 and 2
 		if (this.paddleType == PaddleTypes.LEFT1) {
 			ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight); // Draw a rectangle (x, y, width, height)
@@ -1051,14 +1053,14 @@ function visual() {
         g_fillColor = 'blue';
         g_ballRadius = canvas.width / 40;
         g_ballColor = 'yellow';
-        g_paddleHeigh = canvas.height / 4;
+        g_paddleHeight = canvas.height / 4;
         g_paddleWidth = canvas.width / 25;
     }
     else {
         g_fillColor = 'black'
         g_ballRadius = canvas.width / 100;
         g_ballColor = 'white';
-        g_paddleHeigh = canvas.height / 8;
+        g_paddleHeight = canvas.height / 8;
         g_paddleWidth = canvas.width / 50;
     }
 
