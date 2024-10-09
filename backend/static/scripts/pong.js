@@ -470,24 +470,16 @@ class Paddle {
 	}
 
 	drawPaddle() {
-		if (this.paddleHeight != g_paddleHeight) {
-			this.paddleHeight = g_paddleHeight;
-			this.paddleWidth = g_paddleWidth;
-			this.resetPosition();
-		}
+        if (this.paddleHeight != g_paddleHeight) {
+            this.paddleHeight = g_paddleHeight;
+            this.paddleWidth = g_paddleWidth;
+            this.resetPosition();
+        }
 
-		ctx.fillStyle = 'white'; // Fill color players 1 and 2
-		if (this.paddleType == PaddleTypes.LEFT1) {
-			ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight); // Draw a rectangle (x, y, width, height)
-		}
-
-		if (this.paddleType == PaddleTypes.RIGHT1)
-			ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight);
-		ctx.fillStyle = '#dc3545'; // Fill color players 3 and 4
-		if (this.paddleType == PaddleTypes.LEFT2)
-			ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight);
-		if (this.paddleType == PaddleTypes.RIGHT2)
-			ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight);
+        ctx.fillStyle = 'white'; // Fill color players 1 and 2
+        if (this.paddleType === PaddleTypes.LEFT2 || this.paddleType === PaddleTypes.RIGHT2)
+            ctx.fillStyle = 'red';
+        ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight);
 	}
 
 	resetPosition() {
