@@ -1156,7 +1156,10 @@ function gameInit() {
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get('mode');
     if (mode === 'test') {
-        startGame(['test1', 'tanas', 'qqq', 'www']); // TODO: testing only, remove after done
+        // TODO: testing only, remove after done
+        startGame(['test1', 'tanas']); //* 1v1 test
+        // startGame(['test1', 'tanas', 'qqq', 'www']); //* 2v2 test
+        // startGame(['test1', 'tanas', 'qqq', 'www'], true); //* tournament test
         return;
     }
     
