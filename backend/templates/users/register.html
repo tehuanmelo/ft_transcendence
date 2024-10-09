@@ -6,14 +6,15 @@
 
 {% block content %}
 
+<!-- Register -->
 <div class="d-flex align-items-center flex-column h-100">
     <div class="container my-auto" style="max-width: 1000px;">
-        <h1 class="text-center">Register</h1>
+        <h1 class="text-center">REGISTER</h1>
 
         <form id="register-form" class="p-2">
             {% csrf_token %}
             {{ form|crispy }}
-            <div class="text-center my-3">
+            <div class="text-center mt-5 mb-3">
                 <a class="btn btn-orange spa-link w-50" href="{% url 'register' %}" data-method="POST"
                     data-form="#register-form">Register</a>
             </div>

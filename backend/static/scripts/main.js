@@ -1,20 +1,16 @@
-const initFunctions = {
-    '/pong/': gameInitialization,
-    // You can add more routes and their corresponding functions here
-    // '/another-route/': anotherInitializationFunction,
-}
+// main.js: contains routing logic and SPA loading
 
 document.addEventListener('DOMContentLoaded', () => {
     // Handling case of page reloading to invoke required js
     const currentPath = document.location.pathname;
-    if (initFunctions[currentPath])
-        initFunctions[currentPath]();
+    if (currentPath === '/pong')
+        gameInit();
 
     document.body.addEventListener('click', (event) => {
         const target = event.target;
         if (target.matches('.spa-link')) {
             event.preventDefault();
-            handleSpaLinkEvent(target)
+            handleSpaLinkEvent(target);
         }
     });
 
@@ -23,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const target = event.target;
             if (target.form) {
                 event.preventDefault();
-                const form = target.form
+                const form = target.form;
                 const spalink = form.querySelector('.spa-link');
                 handleSpaLinkEvent(spalink);
             }
@@ -31,6 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     window.addEventListener('popstate', () => {
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop)
+            backdrop.remove();
+
         const url = document.location.pathname;
         getPage(url);
     });
@@ -41,8 +41,8 @@ function handleSpaLinkEvent(target) {
     const url = target.getAttribute('href');
     const formSelector = target.getAttribute('data-form');
     const onNavigation = target.getAttribute('on-spa-navigate');
-    console.log("handleSpaLinkEvent");
-    if(onNavigation != null)
+
+    if (onNavigation != null)
         eval(onNavigation);
     if (method === 'GET')
         getPage(url);
@@ -64,8 +64,9 @@ function updateContent(pageHtml, url) {
     if (oldUrl !== url)
         history.pushState(null, '', url);
 
-    if (initFunctions[url])
-        initFunctions[url]();
+    const urlWithoutParam = url.split('?')[0];
+    if (urlWithoutParam === '/pong')
+        gameInit();
 }
 
 function getPage(url) {

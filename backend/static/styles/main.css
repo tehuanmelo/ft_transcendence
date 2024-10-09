@@ -1,10 +1,35 @@
 /* main.css: CSS file containing all styles */
 
+/* ---------------------------------- Font ---------------------------------- */
 @font-face {
     font-family: 'Press Start 2P';
-    src: url('../fonts/PressStart2P-Regular.ttf');
+    src: url('../fonts/PressStart2P-Regular.ttf') format("truetype");
 }
 
+@font-face {
+    font-family: 'Silkscreen';
+    src: url('../fonts/Silkscreen-Regular.ttf') format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Silkscreen';
+    src: url('../fonts/Silkscreen-Bold.ttf') format("truetype");
+    font-weight: bold;
+    font-style: normal;
+}
+
+.silk {
+    font-family: 'Silkscreen', sans-serif;
+}
+
+.silk-heavy {
+    font-family: 'Silkscreen', sans-serif;
+    font-weight: bold;
+}
+
+/* --------------------------------- General -------------------------------- */
 :root {
     --text: white;
     --background: #24211a;
@@ -12,6 +37,7 @@
     --primary: #d7ce97;
     --secondary: #dabd89;
     --accent: #f39c12;
+    --light-accent: #ffb641;
 }
 
 * {
@@ -30,15 +56,16 @@ h1 {
     color: var(--accent);
 }
 
-ul li {
+#helpModal ul li {
     margin-bottom: 0.1rem;
 }
 
-ul li::marker {
+#helpModal ul li::marker {
     content: "·";
 }
 
 kbd {
+    font-family: 'Press Start 2P', sans-serif;
     border-radius: 10px;
 }
 
@@ -67,11 +94,13 @@ header {
 }
 
 .nav-link {
+    outline: none;
     color: var(--text);
 }
 
 .nav-link:hover,
 .nav-link:focus {
+    box-shadow: none;
     background-color: var(--background);
     color: var(--accent);
 }
@@ -89,8 +118,16 @@ header {
 
 .navbar-nav .dropdown-item:hover,
 .navbar-nav .dropdown-item:focus {
+    outline: none;
     background-color: var(--navbar);
     color: var(--accent);
+}
+
+.navbar-nav .dropdown-item[id="logoutButton"]:hover,
+.navbar-nav .dropdown-item[id="logoutButton"]:focus {
+    outline: none;
+    background-color: var(--navbar);
+    color: var(--bs-danger);
 }
 
 .navbar-nav .dropdown-divider {
@@ -157,11 +194,16 @@ header {
     transform: translateY(-5px);
 }
 
+.menu-btn:focus {
+    outline: solid var(--accent);
+}
+
 .menu-btn:active {
     transform: scale(0.95);
 }
 
 .link-effect {
+    outline: none;
     position: relative;
     color: var(--accent);
     text-decoration: none;
@@ -180,11 +222,15 @@ header {
     transition: all 0.3s ease;
 }
 
-.link-effect:hover {
+.link-effect:hover,
+.link-effect:focus {
+    outline: none;
     font-size: 1.2rem;
 }
 
-.link-effect:hover::after {
+.link-effect:hover::after,
+.link-effect:focus::after {
+    outline: none;
     transform: scaleX(1);
 }
 
@@ -195,6 +241,7 @@ header {
 }
 
 .form-control {
+    color: var(--navbar);
     border-radius: 0;
     background-color: #c6c6c6c4;
     padding: 10px;
@@ -203,6 +250,7 @@ header {
 
 .form-control:focus,
 .form-control:hover {
+    color: var(--navbar);
     border-color: var(--primary);
     background-color: #f0f0f0;
 }
@@ -236,22 +284,111 @@ header {
 .btn-orange {
     color: var(--text);
     background-color: var(--accent);
-    border: 2px solid var(--accent);
     padding: 0.5rem 1rem;
-    border-radius: 0px;
     text-transform: uppercase;
     transition: all 0.3s ease;
 }
 
-.btn-orange:hover,
-.btn-orange:focus {
-    background-color: var(--accent);
+.btn-orange:hover {
+    background-color: var(--light-accent);
     box-shadow: 0 0 10px rgba(243, 156, 18, 0.7);
 }
 
-.btn.btn-orange:active {
+.btn-orange:focus {
+    background-color: var(--light-accent);
+    box-shadow: 0 0 10px rgba(243, 156, 18, 0.7);
+}
+
+.btn-orange:active {
     background-color: var(--accent);
     border-color: var(--accent);
     transform: scale(0.95);
     box-shadow: none;
+}
+
+/* -------------------------------- Profile --------------------------------- */
+.profile-name {
+    font-size: 2.5rem;
+}
+
+.profile-divider {
+    width: 50%;
+    margin: 0.5rem auto;
+    border-top: 3px solid var(--accent);
+}
+
+.main {
+    color: var(--text);
+    background-color: var(--navbar);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.profile-image-wrapper {
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s ease-in-out;
+}
+
+.profile-image-wrapper:hover .profile-image {
+    cursor: pointer;
+    filter: brightness(1.1);
+}
+
+.bio-text {
+    font-style: italic;
+    color: var(--text);
+    font-size: 0.8rem;
+}
+
+.social-links a {
+    display: inline-block;
+    margin: 0 10px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.social-links a:hover {
+    background-color: var(--accent);
+}
+
+.btn-social {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--background);
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+/* -------------------------------- About --------------------------------- */
+.about-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: var(--navbar);
+}
+
+.about-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary);
+    transform: scale(1.05);
 }

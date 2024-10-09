@@ -1,11 +1,12 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% if user.is_authenticated %}
+{% if user.is_authenticated and request.path != '/pong' %}
 
+<!-- Nav -->
 <header class="navbar navbar-expand-lg py-4">
-    <nav class="container">
-        <img src="{% static 'images/Pong.svg' %}" alt="PONG logo" width="150px" class="img-fluid spa-link logo"
+    <nav class="container-xl">
+        <img src="{% static 'images/PONG.svg' %}" alt="PONG logo" width="150px" class="img-fluid spa-link logo"
             href="{% url 'home' %}" data-method="GET" style="cursor: pointer;">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
             aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation"
@@ -19,7 +20,8 @@
             <div class="navbar-nav flex-grow-1 justify-content-center">
                 <a class="nav-link spa-link px-4" href="{% url 'home' %}" data-method="GET">Home</a>
                 <a class="nav-link spa-link px-4" href="{% url 'about' %}" data-method="GET">About</a>
-                <a class="nav-link spa-link px-4" href="{% url 'pong' %}" data-method="GET">Pong</a>
+                <a class="nav-link spa-link px-4" href="{% url 'pong' %}?mode=1v1" data-method="GET">Pong 1v1</a>
+                <a class="nav-link spa-link px-4" href="{% url 'pong' %}?mode=2v2" data-method="GET">Pong 2v2</a>
             </div>
             <div class="navbar-nav">
                 <div class="nav-item dropdown">
@@ -37,7 +39,7 @@
                         <a class="dropdown-item spa-link" href="{% url 'profile' %}" data-method="GET">Profile</a>
                         <a class="dropdown-item spa-link" href="{% url 'settings' %}" data-method="GET">Settings</a>
                         <hr class="dropdown-divider">
-                        <a class="dropdown-item spa-link" href="#" data-bs-toggle="modal"
+                        <a class="dropdown-item spa-link" id="logoutButton" href="#" data-bs-toggle="modal"
                             data-bs-target="#logoutModal">Log Out</a>
                     </div>
                 </div>
