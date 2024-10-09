@@ -1128,7 +1128,7 @@ function startGame(playerNames, isTournament = false) {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    game = new Game(false, playerNames);
+    game = new Game(isTournament, playerNames);
     game.start();
     setupDropdownListeners();
 
