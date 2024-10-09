@@ -18,7 +18,7 @@ include .env
 
 all: up
 
-check_docker:
+check_docker: check_env
 	@if ! docker info > /dev/null 2>&1; then \
 		if ! command -v docker > /dev/null 2>&1; then \
 			echo "$(RED)Docker is not installed.$(RESET) 😨"; \
@@ -39,7 +39,7 @@ check_env:
 		exit 1; \
 	fi
 
-up: check_docker check_env
+up: check_docker
 	$(DOCKER_COMPOSE) up --build --detach
 	@echo "Access the website at https://localhost:443"
 
@@ -76,13 +76,13 @@ fclean: clean nuke
 re: fclean up
 
 # run container in shell
-exec-%:
+exec-%: check_docker
 	$(DOCKER_COMPOSE) exec -it $* /bin/sh
 
-run-database: check_env
+run-database: check_docker
 	$(DOCKER_COMPOSE) exec -it postgres psql -U ${POSTGRES_USER} -d ${POSTGRES_DB}
 
-show-users: check_env
+show-users: check_docker
 	$(DOCKER_COMPOSE) exec postgres psql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "SELECT * FROM users_customuser;"
 
-.PHONY: all check_docker up down re nuke clean fclean exec-%
+.PHONY: all check_docker check_env up down nuke clean fclean re exec-% run-database show-users

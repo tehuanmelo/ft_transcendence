@@ -6,32 +6,39 @@
 
 {% block content %}
 
+<!-- Home -->
 {% if user.is_authenticated %}
 
 <div class="container d-flex flex-column py-5 text-center">
-    <h1 class="mb-5">Welcome back, {{ user.username }}!</h1>
+    <h1 class="mb-5 silk">Welcome back, <span class="username silk-heavy">{{ user.username }}</span>!</h1>
 
-    <a class="menu-btn py-3 spa-link" href="#" data-method="GET">Play Pong 1v1</a>
-    <a class="menu-btn py-3 spa-link" href="#" data-method="GET">Play Pong 2v2</a>
-    <a class="menu-btn py-3 spa-link" href="#" data-method="GET">Play Tournament</a>
+    <a class="menu-btn py-3 spa-link" href="{% url 'pong' %}?mode=1v1" data-method="GET">Play Pong 1v1</a>
+    <a class="menu-btn py-3 spa-link" href="{% url 'pong' %}?mode=2v2" data-method="GET">Play Pong 2v2</a>
+    <a class="menu-btn py-3 spa-link" href="{% url 'pong' %}?mode=test" data-method="GET">Play Pong TEST</a>
+    <a class="menu-btn py-3 spa-link" href="{% url 'pong' %}?mode=tournament" data-method="GET">Play Tournament</a>
 </div>
 
 {% else %}
 
-<div class="d-flex justify-content-center align-items-center vh-100">
-    <div class="d-flex flex-column">
-        <img src="{% static 'images/Pong.svg' %}" alt="PONG logo" class="mb-5">
-        <div id="auth-container" class="d-flex flex-column text-center mb-4">
-            <a class="menu-btn mb-3 spa-link" href="{% url 'login' %}" data-method="GET">Log In</a>
-            <a class="menu-btn mb-3 spa-link" href="{% url 'register' %}" data-method="GET">Register</a>
-            <a class="menu-btn mb-3 allow-click" href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-bc495b0a5937ba6e8a1fe11be70a9446a8f7411e2587cd57046a356bb0467d3a&redirect_uri=https%3A%2F%2Flocalhost%2Fusers%2Flogin_42&response_type=code" data-method="GET">42 Log In!</a>
-            <a class="menu-btn mb-3 spa-link" href="{% url 'pong' %}" data-method="GET"  onSpaPageUpdate="gameInitialization()" >Play as Guest</a>
-        </div>
+<div class="container d-flex flex-column align-items-center h-100">
+    <div class="text-center py-5 mb-4 mt-auto">
+        <img src="{% static 'images/PONG.svg' %}" alt="PONG logo" class="img-fluid logo" width="250px"
+            style="max-width: 300px;">
+    </div>
+    <div class="d-flex flex-column text-center">
+        <a class="menu-btn p-3 spa-link" href="{% url 'login' %}" data-method="GET">Log In</a>
+        <a class="menu-btn p-3 spa-link" href="{% url 'register' %}" data-method="GET">Register</a>
+        <a class="menu-btn mb-3 allow-click" href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-bc495b0a5937ba6e8a1fe11be70a9446a8f7411e2587cd57046a356bb0467d3a&redirect_uri=https%3A%2F%2Flocalhost%2Fusers%2Flogin_42&response_type=code" data-method="GET">42 Log In!</a>
+        <a class="menu-btn p-3 spa-link" href="{% url 'pong' %}?mode=guest" data-method="GET">Play as Guest</a>
+    </div>
+    <footer class="text-center pb-4 mt-auto">
+        <div class="mb-3">
+            <a class="spa-link link-effect" href="{% url 'about' %}" data-method="GET">About Us</a>
         <footer class="text-center text-light">
             <p>&copy; 2024 PONG.</p>
         </footer>
+        </div>
     </footer>
-</div>
 
 {% endif %}
 

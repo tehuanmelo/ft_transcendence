@@ -1,8 +1,15 @@
-canvas = null;
-ctx = null;
-game = null;
+let canvas = null;
+let ctx = null;
+let game = null;
 
 // Global variables for the game configuration
+const gameConfig = {
+    "Easy": { paddleSpeed: 15, ballSpeed: 7 },
+    "Medium": { paddleSpeed: 30, ballSpeed: 15 },
+    "Hard": { paddleSpeed: 66, ballSpeed: 33 },
+    "Visual Impaired": { paddleSpeed: 15, ballSpeed: 10 }
+};
+
 var g_PADDLE_SPEED = 30;
 var g_BALL_SPEED = 15;
 var g_SOUND = true;
@@ -534,10 +541,10 @@ class Pong {
 	}
 
 	initialDisplay() {
-		ctx.font = "72px customFont"
+		ctx.font = "72px 'Press Start 2P'";
 		var textWidth = ctx.measureText("PONG").width;
 		ctx.fillText("PONG", (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 100);
-		ctx.font = "32px customFont"
+		ctx.font = "32px 'Press Start 2P'";
 		var textWidth1 = ctx.measureText("Press Enter to Start or").width;
 		var textWidth2 = ctx.measureText("Select Visual Impairment Mode").width;
 		ctx.fillText("Press Enter to Start or", (canvas.width / 2) - (textWidth1 / 2), (canvas.height / 2) + 100);
@@ -714,7 +721,7 @@ class Score {
 	}
 
 	drawScore() {
-		ctx.font = "72px customFont";
+		ctx.font = "72px 'Press Start 2P'";
 		ctx.fillText(this.scoreL, canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Left player score
 		ctx.fillText(this.scoreR, 3 * canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Right player score
 	}
@@ -735,9 +742,8 @@ class Sound {
 		document.body.appendChild(this.sound);
 	}
 	play() {
-		if (g_SOUND) {
+		if (g_SOUND)
 			this.sound.play();
-		}
 	}
 }
 
@@ -749,25 +755,29 @@ class Countdown {
 	}
 
 	start() {
+		this.drawCountdown();
 		this.intervalId = setInterval(this.countdown.bind(this), 1000);
 	}
 
 	countdown() {
-		if (this.count === 0) {
+		if (this.count === 1) {
 			clearInterval(this.intervalId);
-			this.pong.startGame();
+			setTimeout(() => {
+				this.pong.startGame();
+			}, 200);
 		}
 		else {
-			this.drawCountdown();
 			this.count--;
+			this.drawCountdown();
 		}
 	}
+
 	drawCountdown() {
 		this.pong.render();
-		ctx.font = "280px customFont";
+		ctx.font = "280px 'Press Start 2P'";
 		ctx.fillStyle = 'red';
 		var textWidth = ctx.measureText(this.count).width;
-		ctx.fillText(this.count, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2 + 70));
+		ctx.fillText(this.count, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) + (textWidth / 2));
 	}
 }
 
@@ -846,6 +856,7 @@ class Game {
 function playAgain() {
 	pong.start();
 }
+
 function refreshConfig() {
 	document.getElementById('playerspeed').value = g_PADDLE_SPEED;
 	document.getElementById('ballspeed').value = g_BALL_SPEED;
@@ -855,9 +866,8 @@ function refreshConfig() {
 }
 
 function loadConfiguration() {
-	if (game.isGameRunning() == true) {
+	if (game.isGameRunning() == true)
 		document.getElementById('score').disabled = true;
-	}
 	else
 		document.getElementById('score').disabled = false;
 	game.pause();
@@ -984,14 +994,14 @@ class Tournament {
 		ctx.fillStyle = 'black';
 		ctx.fillRect(0, 0, canvas.width, canvas.height); // Draw a rectangle (x, y, width, height)
 		ctx.fillStyle = 'red';
-		ctx.font = "50px 'customFont'";
+		ctx.font = "50px 'Press Start 2P'";
 
 		var textWidth = ctx.measureText(gameType).width;
 		ctx.fillText(gameType, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 200);
-		ctx.font = "50px 'customFont'";
+		ctx.font = "50px 'Press Start 2P'";
 		textWidth = ctx.measureText(firstPlayerName + " X " + secondPlayerName).width;
 		ctx.fillText(firstPlayerName + " X " + secondPlayerName, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 50);
-		ctx.font = "50px 'customFont'";
+		ctx.font = "50px 'Press Start 2P'";
 		textWidth = ctx.measureText("Press Enter to Start").width;
 		ctx.fillText("Press Enter to Start", (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) + 100);
 	}
@@ -1001,108 +1011,171 @@ function nextGame() {
 	game.tournament.nextMatch();
 }
 
-function gameInitialization() {
-	const dropdownItems = document.querySelectorAll('.dropdown-item');
-	customConfigShow(false);
+function setupDropdownListeners() {
+    const modal = document.getElementById('configModal');
+    const dropdownMenu = modal.querySelector('.dropdown-menu');
 
-	dropdownItems.forEach(item => {
-		item.addEventListener('click', function (event) {
-			event.preventDefault();
+    dropdownMenu.addEventListener('click', (event) => {
+        const selectedItem = event.target.closest('.dropdown-item');
+        if (selectedItem) {
+            event.preventDefault();
 
-			// Get the text content and value of the selected item
-			const selectedText = this.textContent.trim();
-			const selectedValue = this.getAttribute('data-value');
+            const selectedText = selectedItem.textContent.trim();
+            const dropdownButton = modal.querySelector('.dropdown-toggle');
+            dropdownButton.textContent = selectedText;
 
-			// Log or use the selected item
-			console.log('Selected Text:', selectedText);
-			if (selectedText == "Easy") {
-				g_PADDLE_SPEED = 15;
-				g_BALL_SPEED = 7;
-			}
-			if (selectedText == "Medium") {
-				g_PADDLE_SPEED = 30;
-				g_BALL_SPEED = 15;
-			}
-			if (selectedText == "Hard") {
-				g_PADDLE_SPEED = 66;
-				g_BALL_SPEED = 33;
-			}
-			if (selectedText == "Visual Impaired") {
-				g_PADDLE_SPEED = 15;
-				g_BALL_SPEED = 10;
-			}
-			refreshConfig();
-			if (selectedText == "Custom") {
-				customConfigShow(true);
-			}
-			else {
-				customConfigShow(false);
-			}
+            if (selectedText in gameConfig) {
+                g_PADDLE_SPEED = gameConfig[selectedText].paddleSpeed;
+                g_BALL_SPEED = gameConfig[selectedText].ballSpeed;
+            }
+            else if (selectedText === "Custom")
+                document.getElementById("customConfig").style.display = "block";
+            else
+                console.error('Invalid difficulty level selected');
 
-			const dropdownButton = document.getElementById('dropdownMenuButton');
-			dropdownButton.textContent = selectedText;
-
-			const dropdownMenu = this.closest('.dropdown-menu');
-			const dropdown = new bootstrap.Dropdown(dropdownMenu.previousElementSibling);
-			dropdown.hide();
-		});
-	});
-
-	canvas = document.getElementById('ponggame');
-	ctx = canvas.getContext('2d');
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-
-	var customFont = new FontFace('customFont', 'url(../static/fonts/PressStart2P-Regular.ttf)');
-	console.log('Loading fonts...');
-	customFont.load().then(function(font){
-		document.fonts.add(font);
-		console.log('Font loaded');
-		game = new Game(false, ["Tehuan", "Tanvir", "Paula", "Samih"]);
-		// ! Missing: get players names
-		game.start();
-	});
-
-
-
-
-
-}
-
-function customConfigShow(show) {
-	var x = document.getElementById("customConfig");
-	if (show == true) {
-		x.style.display = "block";
-	} else {
-		x.style.display = "none";
-	}
+            // Hide the dropdown menu after selection
+            const dropdown = new bootstrap.Dropdown(dropdownButton);
+            dropdown.hide();
+        }
+    });
 }
 
 function visual() {
-	if (game.isGameRunning() == true) {
-		var myModal = new bootstrap.Modal(document.getElementById('visualmodal'));
-		myModal.show();
-		return;
-	}
+    if (game.isGameRunning() == true) {
+        var myModal = new bootstrap.Modal(document.getElementById('visualmodal'));
+        myModal.show();
+        return;
+    }
 
-	if (g_fillColor === 'black') {
-		g_fillColor = 'blue';
-		g_ballRadius = canvas.width / 40;
-		g_ballColor = 'yellow';
-		g_paddleHeigh = canvas.height / 4;
-		g_paddleWidth = canvas.width / 25;
+    if (g_fillColor === 'black') {
+        g_fillColor = 'blue';
+        g_ballRadius = canvas.width / 40;
+        g_ballColor = 'yellow';
+        g_paddleHeigh = canvas.height / 4;
+        g_paddleWidth = canvas.width / 25;
+    }
+    else {
+        g_fillColor = 'black'
+        g_ballRadius = canvas.width / 100;
+        g_ballColor = 'white';
+        g_paddleHeigh = canvas.height / 8;
+        g_paddleWidth = canvas.width / 50;
+    }
 
-	}
-	else {
-		g_fillColor = 'black'
-		g_ballRadius = canvas.width / 100;
-		g_ballColor = 'white';
-		g_paddleHeigh = canvas.height / 8;
-		g_paddleWidth = canvas.width / 50;
-	}
-
-	game.forceRefresh();
-
+    game.forceRefresh();
 }
 
+function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
+    let playerNames = [];
+    const playerNameModal = new bootstrap.Modal(document.getElementById('playerNameModal'));
+    const playerForm = document.getElementById('playerNamesForm');
 
+    const playerInputs = [
+        { divId: 'player1Div', inputId: 'player1', visible: !isLoggedIn },
+        { divId: 'player2Div', inputId: 'player2', visible: true },
+        { divId: 'player3Div', inputId: 'player3', visible: numOfPlayers === 4 },
+        { divId: 'player4Div', inputId: 'player4', visible: numOfPlayers === 4 },
+    ];
+    playerInputs.forEach(({ divId, visible }) => {
+        document.getElementById(divId).style.display = visible ? 'block' : 'none';
+    });
+
+    if (isLoggedIn) {
+        document.getElementById('player1').value = loggedInUsername;
+        playerNames.push(loggedInUsername);
+    }
+
+    playerNameModal.show();
+
+    document.getElementById('startGameButton').addEventListener('click', (event) => {
+        event.preventDefault();
+
+        playerForm.classList.remove('was-validated');
+
+        let allValid = true;
+        playerInputs.forEach(({ inputId, visible }) => {
+            if (visible) {
+                const inputField = document.getElementById(inputId);
+                if (inputField.checkValidity())
+                    inputField.classList.remove('is-invalid');
+                else {
+                    allValid = false;
+                    inputField.classList.add('is-invalid');
+                }
+            }
+        });
+
+        playerForm.classList.add('was-validated');
+
+        if (!allValid)
+            return;
+
+        playerInputs.forEach(({ inputId, visible }) => {
+            if (visible) {
+                const playerName = document.getElementById(inputId).value.trim();
+                if (playerName) playerNames.push(playerName);
+            }
+        });
+
+        playerNameModal.hide();
+        startGame(playerNames);
+    });
+}
+
+function startGame(playerNames, isTournament = false) {
+    canvas = document.getElementById('ponggame');
+    ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    game = new Game(isTournament, playerNames);
+    game.start();
+    setupDropdownListeners();
+
+    document.getElementById("pongContainer").style.display = "flex";
+    console.log("player names:", playerNames); // TODO: remove
+}
+
+function gameInit() {
+    const usernameElement = document.querySelector('meta[name="username"]');
+    const loggedInUsername = usernameElement ? usernameElement.getAttribute('content') : null;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get('mode');
+    if (mode === 'test') {
+        startGame(['test1', 'tanas', 'qqq', 'www']); // TODO: testing only, remove after done
+        return;
+    }
+    
+    const gameModes = [
+        { mode: '1v1', loggedIn: true, players: 2 },
+        { mode: '2v2', loggedIn: true, players: 4 },
+        { mode: 'guest', loggedIn: false, players: 2 },
+        { mode: 'tournament', loggedIn: true, players: 2 },
+    ];
+    
+    // Find the game mode object based on the 'mode' parameter
+    const selectedMode = gameModes.find(gameMode => gameMode.mode === mode);
+    if (!selectedMode) {
+        alert('Invalid mode selected');
+        return;
+    }
+
+    // Check if the login status matches the selected mode's requirement
+    const isLoggedIn = (loggedInUsername !== null);
+    if (selectedMode.loggedIn && !isLoggedIn) {
+        alert('You must be logged in to access this mode');
+        return;
+    }
+    else if (!selectedMode.loggedIn && isLoggedIn) {
+        alert('You are already logged in, you cannot play as guest');
+        return;
+    }
+
+    if (selectedMode.mode === '1v1' || selectedMode.mode === '2v2')
+        askForPlayerNames(selectedMode.players, true, loggedInUsername);
+    else if (selectedMode.mode === 'guest')
+        askForPlayerNames(selectedMode.players, false);
+    else if (selectedMode.mode === 'tournament')
+        console.log('Tournament mode selected');
+}
