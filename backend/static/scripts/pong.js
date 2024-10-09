@@ -1129,11 +1129,21 @@ function startGame(playerNames, isTournament = false) {
     canvas.height = window.innerHeight;
 
     game = new Game(isTournament, playerNames);
-    game.start();
-    setupDropdownListeners();
 
-    document.getElementById("pongContainer").style.display = "flex";
-    console.log("player names:", playerNames); // TODO: remove
+    document.fonts.load('10pt "Press Start 2P"')
+        .then(() => {
+            return document.fonts.ready;
+        })
+        .then(() => {
+            game.start();
+            setupDropdownListeners();
+
+            document.getElementById("pongContainer").style.display = "flex";
+            console.log("player names:", playerNames); // TODO: remove
+        })
+        .catch(error => {
+            console.error("Error loading font:", error);
+        });
 }
 
 function gameInit() {
