@@ -392,7 +392,7 @@ class Ball {
 
 			this.collision(this.paddle1);
 			this.collision(this.paddle2);
-			if (this.nbPlayers == 4) {
+			if (this.nbPlayers === 4) {
 				this.collision(this.paddle3);
 				this.collision(this.paddle4);
 			}
@@ -525,7 +525,7 @@ class Pong {
 		this.isTournament = isTournament;
 		this.isGameRunning = false;
 
-		if (this.nbPlayers == 4) {
+		if (this.nbPlayers === 4) {
 			this.paddle3 = new Paddle(PaddleTypes.LEFT2);
 			this.paddle4 = new Paddle(PaddleTypes.RIGHT2);
 			this.ball = new Ball(this.score, 4, this.paddle1, this.paddle2, this.paddle3, this.paddle4);
@@ -556,7 +556,7 @@ class Pong {
 	start() {
 		this.paddle1.resetPosition();
 		this.paddle2.resetPosition();
-		if (this.nbPlayers == 4) {
+		if (this.nbPlayers === 4) {
 			this.paddle3.resetPosition();
 			this.paddle4.resetPosition();
 		}
@@ -612,6 +612,7 @@ class Pong {
 		ctx.lineTo(this.width / 2, this.height); //  Line final point
 		ctx.stroke(); // Apply line stile and draw
 	}
+
 	drawControlText(line) {
 		// Set text style
 		ctx.textAlign = 'center';
@@ -642,7 +643,7 @@ class Pong {
 		this.drawSquare();
 		this.paddle1.drawPaddle();
 		this.paddle2.drawPaddle();
-		if (this.nbPlayers == 4) {
+		if (this.nbPlayers === 4) {
 			this.paddle3.drawPaddle();
 			this.paddle4.drawPaddle();
 		}
@@ -743,6 +744,7 @@ class Sound {
 		this.sound.style.display = "none";
 		document.body.appendChild(this.sound);
 	}
+
 	play() {
 		if (g_SOUND)
 			this.sound.play();
@@ -786,12 +788,11 @@ class Countdown {
 class Game {
 	constructor(isTournament, players) {
 		this.isTournament = isTournament;
-		if (this.isTournament == true) {
+		if (this.isTournament == true)
 			this.tournament = new Tournament(players);
-		}
-		else {
+		else
 			this.pong = new Pong(players.length);
-		}
+
 		if (isTournament === true || players.length == 2) {
 			document.getElementById('3rdplayer').style.display = 'none';
 			document.getElementById('4thplayer').style.display = 'none';
@@ -885,16 +886,16 @@ function applyConfiguration() {
 }
 
 class Tournament {
-	// player1 will be the logged user
+    // player1 will be the logged user
 	constructor(players) {
 		this.players = players;
 		this.pong = new Pong(2, true, this.winnerCallback);
-		if (this.players.length == 3) {
+
+		if (this.players.length == 3)
 			this.playerArray = this.getUniqueRandomPlayers3();
-		}
-		else {
+		else
 			this.playerArray = this.getUniqueRandomPlayers4();
-		}
+
 		this.keyboardEventHandlerBind = this.handleKeyboardEvent.bind(this);
 		this.currentPlayer1 = this.players[this.playerArray[0]];
 		this.currentPlayer2 = this.players[this.playerArray[1]];
