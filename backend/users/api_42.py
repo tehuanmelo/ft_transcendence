@@ -1,8 +1,9 @@
 import requests
+from django.conf import settings
+from django.shortcuts import redirect
+
 from .models import CustomUser
 from .token import generate_token
-from django.shortcuts import redirect
-from django.conf import settings
 
 
 def exchange_access_token(code):

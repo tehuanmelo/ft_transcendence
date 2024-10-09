@@ -28,17 +28,18 @@
     <div class="d-flex flex-column text-center">
         <a class="menu-btn p-3 spa-link" href="{% url 'login' %}" data-method="GET">Log In</a>
         <a class="menu-btn p-3 spa-link" href="{% url 'register' %}" data-method="GET">Register</a>
-        <a class="menu-btn mb-3 allow-click" href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-bc495b0a5937ba6e8a1fe11be70a9446a8f7411e2587cd57046a356bb0467d3a&redirect_uri=https%3A%2F%2Flocalhost%2Fusers%2Flogin_42&response_type=code" data-method="GET">42 Log In!</a>
+        <a class="menu-btn p-3"
+            href="https://api.intra.42.fr/oauth/authorize?client_id={{ API_42_CLIENT_ID }}&redirect_uri={{ API_42_REDIRECT_URI|urlencode }}&response_type=code"
+            data-method="GET">42 Log In!</a>
         <a class="menu-btn p-3 spa-link" href="{% url 'pong' %}?mode=guest" data-method="GET">Play as Guest</a>
     </div>
     <footer class="text-center pb-4 mt-auto">
         <div class="mb-3">
             <a class="spa-link link-effect" href="{% url 'about' %}" data-method="GET">About Us</a>
-        <footer class="text-center text-light">
             <p>&copy; 2024 PONG.</p>
-        </footer>
         </div>
     </footer>
+</div>
 
 {% endif %}
 
