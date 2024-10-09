@@ -1,7 +1,4 @@
 import pyotp
-import requests
-from django.db import models
-from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render
 from django.utils import timezone

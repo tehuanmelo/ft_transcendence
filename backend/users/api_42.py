@@ -1,15 +1,14 @@
 import requests
 from django.conf import settings
 from django.shortcuts import redirect
+from django.utils import timezone
+
 
 from .models import CustomUser
 from .token import generate_token
 
 
 def exchange_access_token(code):
-    if code is None:
-        return redirect("login")
-
     app_details = {
         "grant_type": "authorization_code",
         "client_id": settings.API_42_CLIENT_ID,
@@ -51,21 +50,24 @@ def login_or_create_42(username):
     if created:
         user.is_42 = True
         user.set_unusable_password()
+        user.last_login = timezone.now()
+        user.save()
 
-    user.save()
     token = generate_token(user)
     return token
 
 
 def login_42(request):
-    code = request.GET.get("code")
+    auth_code = request.GET.get("code")
+    if auth_code is None:
+        return redirect("login")
 
-    access_token = exchange_access_token(code)
+    access_token = exchange_access_token(auth_code)
 
     user_data = get_user_details(access_token)
-    login_42 = user_data.get("login")  # user name
+    username = user_data.get("login")
 
-    token = login_or_create_42(login_42)
+    token = login_or_create_42(username)
 
     response = redirect("home")
     response.set_cookie("jwt", token, httponly=True, secure=True)
