@@ -46,19 +46,6 @@ INSTALLED_APPS = [
     "corsheaders",
 ]
 
-
-# SOCIALACCOUNT_PROVIDERS = {
-#     'oauth2': {
-#         'APP': {
-#             'client_id': 'u-s4t2ud-bc495b0a5937ba6e8a1fe11be70a9446a8f7411e2587cd57046a356bb0467d3a',
-#             'secret': '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',
-#             'key': ''
-#         },
-#         'SCOPE': ['public'],  # Add any necessary scopes here
-#         'AUTH_PARAMS': {'access_type': 'offline'},
-#     }
-# }
-
 # SITE_ID = 1 # NOTE what does this shit do ?
 
 AUTH_USER_MODEL = "users.CustomUser"
@@ -173,3 +160,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # allow csfr from https
 CSRF_TRUSTED_ORIGINS = ["https://localhost"]
+
+API_42_CLIENT_ID = os.getenv("API_42_CLIENT_ID")
+API_42_CLIENT_SECRET = os.getenv("API_42_CLIENT_SECRET")
+API_42_REDIRECT_URI = os.getenv("API_42_REDIRECT_URI")

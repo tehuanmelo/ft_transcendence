@@ -2,6 +2,7 @@ import requests
 from .models import CustomUser
 from .token import generate_token
 from django.shortcuts import redirect
+from django.conf import settings
 
 
 def exchange_access_token(code):
@@ -10,10 +11,10 @@ def exchange_access_token(code):
 
     app_details = {
         "grant_type": "authorization_code",
-        "client_id": "u-s4t2ud-bc495b0a5937ba6e8a1fe11be70a9446a8f7411e2587cd57046a356bb0467d3a",
-        "client_secret": "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",
+        "client_id": settings.API_42_CLIENT_ID,
+        "client_secret": settings.API_42_CLIENT_SECRET,
         "code": code,
-        "redirect_uri": "https://localhost/users/login_42",
+        "redirect_uri": settings.API_42_REDIRECT_URI,
     }
 
     response = requests.post(
@@ -30,7 +31,6 @@ def exchange_access_token(code):
 
 
 def get_user_details(access_token):
-
     user_details = requests.get(
         "https://api.intra.42.fr/v2/me",
         headers={
@@ -45,7 +45,6 @@ def get_user_details(access_token):
 
 
 def login_or_create_42(username):
-
     user, created = CustomUser.objects.get_or_create(username=username)
 
     if created:
@@ -58,7 +57,6 @@ def login_or_create_42(username):
 
 
 def login_42(request):
-
     code = request.GET.get("code")
 
     access_token = exchange_access_token(code)
