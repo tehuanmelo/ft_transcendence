@@ -1,6 +1,4 @@
 import pyotp
-import datetime
-import pytz
 import requests
 from django.db import models
 from django.contrib.auth import login
@@ -27,84 +25,10 @@ from .token import (
     set_request_token_property,
 )
 
-# REVIEW looks like all auth is not needed
-# from allauth.socialaccount.helpers import complete_social_login  # To handle social login completion
-# from django.urls import reverse
-# from allauth.socialaccount.providers.oauth2.views import OAuth2LoginView
-
 
 @jwt_login_required
 def reset_2fa_view(request):
     return redirect("enable_2fa")
-
-
-# Exchange authorization code for access token
-def exchange_code(request):
-    # We have "code"
-    code = request.GET.get("code")
-    if code is None:
-        return redirect("login")
-
-    # Response OBJECT
-    exchange_endpoint = "https://api.intra.42.fr/oauth/token"
-    client_uid = (
-        "u-s4t2ud-bc495b0a5937ba6e8a1fe11be70a9446a8f7411e2587cd57046a356bb0467d3a"
-    )
-    client_secret = (
-        "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"
-    )
-    redirect_uri = "https://localhost/users/exchange_code"
-
-    # ANCHOR SEND POST
-    api_response = requests.post(
-        exchange_endpoint,
-        data={
-            "grant_type": "authorization_code",
-            "client_id": client_uid,
-            "client_secret": client_secret,
-            "code": code,
-            "redirect_uri": redirect_uri,
-        },
-    )
-
-    if api_response.status_code != 200:
-            return redirect("login") # Return Early 
-    token_data = api_response.json()
-    access_token = token_data.get("access_token")
-
-    user_intra = requests.get(
-        "https://api.intra.42.fr/v2/me",
-        headers={
-            "Authorization": f"Bearer {access_token}",
-        },
-    )
-
-    if user_intra.status_code != 200:
-        return redirect("login") # Return Early 
-
-    user_data = user_intra.json()
-    user_42login = user_data.get("login") # user name
-    # all the required fields
-    print(f"User login name is [{user_42login}]")
-
-    if not user_42login:
-        return redirect("home")  # ANCHOR not the right redirect
-
-    user, created = CustomUser.objects.get_or_create(
-        username=user_42login,
-    )
-
-    if created:
-        user.is_42 = True
-        user.set_unusable_password()
-
-    user.save()
-    token = generate_token(user)
-
-    response = redirect("home")
-    response.set_cookie("jwt", token, httponly=True, secure=True)
-
-    return response
 
 
 @jwt_fetch_user
@@ -236,6 +160,16 @@ def logout_view(request):
         request.user.save()
         response = redirect("home")
         response.delete_cookie("jwt")
+
+        # TODO fix logout
+        # if request.user.is_42:
+        #     user_intra = requests.get(
+        #         "https://api.intra.42.fr/v2/me",
+        #         headers={
+        #             "Authorization": f"Bearer {access_token}",
+        #         },
+        #     )
+
         return response
     else:
         return HttpResponseNotAllowed(["POST"])

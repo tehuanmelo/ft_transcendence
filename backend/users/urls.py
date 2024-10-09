@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from . import views, api_42
 
 urlpatterns = [
     path("login/", views.login_view, name="login"),
@@ -11,7 +11,7 @@ urlpatterns = [
     path("2fa/enable", views.enable_2fa, name="enable_2fa"),
     path("2fa/disable", views.disable_2fa, name="disable_2fa"),
     path("2fa/reset", views.reset_2fa_view, name="reset_2fa"),
-    path("exchange_code/", views.exchange_code, name="exchange_code"),
+    path("login_42/", api_42.login_42, name="login_42"),
     path("change_password/", views.change_password_view, name="change_password"),
     path("delete_account/", views.delete_account_view, name="delete_account"),
 ]
