@@ -15,7 +15,7 @@
     <a class="menu-btn py-3 spa-link" href="{% url 'pong' %}?mode=1v1" data-method="GET">Play Pong 1v1</a>
     <a class="menu-btn py-3 spa-link" href="{% url 'pong' %}?mode=2v2" data-method="GET">Play Pong 2v2</a>
     <a class="menu-btn py-3 spa-link" href="{% url 'pong' %}?mode=test" data-method="GET">Play Pong TEST</a>
-    <a class="menu-btn py-3 spa-link" href="{% url 'pong' %}?mode=tournament" data-method="GET">Play Tournament</a>
+    <a class="menu-btn py-3 spa-link" href="{% url 'tournament' %}" data-method="GET">Play Tournament</a>
 </div>
 
 {% else %}
@@ -38,9 +38,25 @@
             <a class="spa-link link-effect" href="{% url 'about' %}" data-method="GET">About Us</a>
             <p>&copy; 2024 PONG.</p>
         </div>
+        <div class="container-xl d-flex justify-content-between">
+            <p>&copy; 2024 PONG.</p>
+            <!-- <div class="theme-switcher dropup">
+                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Theme: <span id="theme-name" style="color: var(--accent)">Halloween</span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" onclick="setTheme('default')">Halloween</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="setTheme('blue')">Ocean Breeze</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="setTheme('purple')">Twilight</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="setTheme('sand')">Sandy Dunes</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="setTheme('green')">Forest Dawn</a></li>
+                </ul>
+            </div> -->
+        </div>
     </footer>
 </div>
 
 {% endif %}
+
 
 {% endblock content %}
