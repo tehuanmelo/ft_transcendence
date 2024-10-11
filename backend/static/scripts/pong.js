@@ -10,7 +10,7 @@ const gameConfig = {
     "Visual Impaired": { paddleSpeed: 15, ballSpeed: 10 }
 };
 
-var g_PADDLE_SPEED = 30;
+var g_PADDLE_SPEED = 10;
 var g_BALL_SPEED = 15;
 var g_SOUND = true;
 var g_SCORE_TO_WIN = 5;
@@ -19,7 +19,7 @@ var g_fillColor = 'black';
 var g_ballRadius;
 var g_ballColor = 'white';
 var g_paddleWidth;
-var g_paddleHeigh;
+var g_paddleHeight;
 
 const PaddleTypes = Object.freeze({
 	LEFT1:	1,
@@ -51,11 +51,11 @@ class Ball {
 	}
 
 	drawBall() {
-		ctx.fillStyle = g_ballColor; // Fill color
-		ctx.beginPath(); // Start a new path
-		ctx.arc(this.ballX, this.ballY, g_ballRadius, 0, Math.PI * 2, false); // Draw a circle
-		ctx.fill(); // Fill the circle with color
-		ctx.closePath(); // Close the path
+		ctx.fillStyle = g_ballColor;
+		ctx.beginPath();
+		ctx.arc(this.ballX, this.ballY, g_ballRadius, 0, Math.PI * 2, false);
+		ctx.fill();
+		ctx.closePath();
 	}
 
 	ballStartAngle() {
@@ -383,16 +383,16 @@ class Ball {
 	ballMove() {
 		this.ballRadius = g_ballRadius;
 		if (this.ballMoving) {
-			// top and bottom walls
-			if (this.ballY + this.dy + this.ballRadius > canvas.height - Pong.REC_HEIGHT_SIZE || this.ballY + this.dy - this.ballRadius < Pong.REC_HEIGHT_SIZE) {
-				this.sound.play();
+			// top and bottom wall collision
+			if (this.ballY + this.dy + this.ballRadius > canvas.height ||
+                this.ballY + this.dy - this.ballRadius < 0) {
 				this.dy = -this.dy;
 				this.sound.play();
 			}
 
 			this.collision(this.paddle1);
 			this.collision(this.paddle2);
-			if (this.nbPlayers == 4) {
+			if (this.nbPlayers === 4) {
 				this.collision(this.paddle3);
 				this.collision(this.paddle4);
 			}
@@ -404,16 +404,16 @@ class Ball {
 	}
 
 	updateScore() {
-		if (this.ballX < 0) {
+		if (this.ballX < 0) { // Right player scored
 			this.score.incrementScoreR();
 			this.ballMoving = false;
 			if (this.score.checkGameOver() === false) {
 				this.ballResetPosition();
 				this.startBallMovement();
 			}
-
 		}
-		if (this.ballX > canvas.width) {
+
+		if (this.ballX > canvas.width) { // Left player scored
 			this.score.incrementScoreL();
 			this.ballMoving = false;
 			if (this.score.checkGameOver() === false) {
@@ -425,67 +425,55 @@ class Ball {
 }
 
 class Paddle {
-	constructor(paddleType) {
-		this.paddleType = paddleType;
-		this.width = canvas.width; // Canvas width in pixels
-		this.height = canvas.height; // Canvas height in pixels
-		this.paddleWidth = this.width / 50;
-		this.paddleHeight = this.height / 8;
-		g_paddleHeigh = this.height / 8;
-		g_paddleWidth = this.width / 50;
-		this.resetPosition();
-		this.ballRef = null;
-	}
+    constructor(paddleType) {
+        this.paddleType = paddleType;
+        this.width = canvas.width; // Canvas width in pixels
+        this.height = canvas.height; // Canvas height in pixels
+        this.paddleWidth = this.width / 50;
+        this.paddleHeight = this.height / 8;
+        g_paddleWidth = this.width / 50;
+        g_paddleHeight = this.height / 8;
+
+        this.resetPosition();
+        this.ballRef = null;
+    }
 
 	setBallRef(ballRef) {
 		this.ballRef = ballRef;
 	}
 
-	up() {
-		if (this.y - g_PADDLE_SPEED - Pong.REC_HEIGHT_SIZE < 0) {
-			this.y = Pong.REC_HEIGHT_SIZE; // pixels to move per key event
-		}
-		else if (this.y > Pong.REC_HEIGHT_SIZE) {
-			this.y -= g_PADDLE_SPEED; // pixels to move per key event
-		}
-		if (this.ballRef.collision(this)) {
-			console.log("PADLE COLISION GOING UP");
-			this.y += g_PADDLE_SPEED;
-		}
-	}
+    up() {
+        if (this.y - g_PADDLE_SPEED < 0)
+            this.y = 0; // Prevent paddle from going out of bounds
+        else
+            this.y -= g_PADDLE_SPEED; // Move paddle up
+
+        if (this.ballRef.collision(this))
+            this.y += g_PADDLE_SPEED;
+    }
 
 	// Check if the paddle is not at the bottom of the canvas
-	down() {
-		if (this.y + Pong.REC_HEIGHT_SIZE + this.paddleHeight + 5 > this.height) {
-			this.y = this.height - Pong.REC_HEIGHT_SIZE - this.paddleHeight - 5;
-		}
-		else if (this.y < this.height - Pong.REC_HEIGHT_SIZE - this.paddleHeight - 5) {
-			this.y += g_PADDLE_SPEED;
-		}
-		if (this.ballRef.collision(this)) {
-			console.log("PADLE COLISION GOING DOWN");
-			this.y -= g_PADDLE_SPEED;
-		}
-	}
+    down() {
+        if (this.y + g_PADDLE_SPEED + this.paddleHeight > this.height)
+            this.y = this.height - this.paddleHeight; // Prevent paddle from going out of bounds
+        else
+            this.y += g_PADDLE_SPEED; // Move paddle down
+
+        if (this.ballRef.collision(this))
+            this.y -= g_PADDLE_SPEED;
+    }
 
 	drawPaddle() {
-		if (this.paddleHeight != g_paddleHeigh) {
-			this.paddleHeight = g_paddleHeigh;
-			this.paddleWidth = g_paddleWidth;
-			this.resetPosition();
-		}
-		ctx.fillStyle = 'white'; // Fill color players 1 and 2
-		if (this.paddleType == PaddleTypes.LEFT1) {
-			ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight); // Draw a rectangle (x, y, width, height)
-		}
+        if (this.paddleHeight != g_paddleHeight) {
+            this.paddleHeight = g_paddleHeight;
+            this.paddleWidth = g_paddleWidth;
+            this.resetPosition();
+        }
 
-		if (this.paddleType == PaddleTypes.RIGHT1)
-			ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight);
-		ctx.fillStyle = '#dc3545'; // Fill color players 3 and 4
-		if (this.paddleType == PaddleTypes.LEFT2)
-			ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight);
-		if (this.paddleType == PaddleTypes.RIGHT2)
-			ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight);
+        ctx.fillStyle = 'white'; // Fill color players 1 and 2
+        if (this.paddleType === PaddleTypes.LEFT2 || this.paddleType === PaddleTypes.RIGHT2)
+            ctx.fillStyle = 'red';
+        ctx.fillRect(this.x, this.y, this.paddleWidth, this.paddleHeight);
 	}
 
 	resetPosition() {
@@ -509,7 +497,6 @@ class Paddle {
 }
 
 class Pong {
-	static REC_HEIGHT_SIZE = 20;
 	constructor(nbPlayers, isTournament = false, notifyWinner = null) {
 		// Get canvas attributes
 		this.width = canvas.width; // Canvas width in pixels
@@ -523,7 +510,7 @@ class Pong {
 		this.isTournament = isTournament;
 		this.isGameRunning = false;
 
-		if (this.nbPlayers == 4) {
+		if (this.nbPlayers === 4) {
 			this.paddle3 = new Paddle(PaddleTypes.LEFT2);
 			this.paddle4 = new Paddle(PaddleTypes.RIGHT2);
 			this.ball = new Ball(this.score, 4, this.paddle1, this.paddle2, this.paddle3, this.paddle4);
@@ -538,6 +525,8 @@ class Pong {
 			this.paddle2.setBallRef(this.ball);
 		}
 		this.intervalId = 0;
+
+        this.keys = {};
 	}
 
 	initialDisplay() {
@@ -554,7 +543,7 @@ class Pong {
 	start() {
 		this.paddle1.resetPosition();
 		this.paddle2.resetPosition();
-		if (this.nbPlayers == 4) {
+		if (this.nbPlayers === 4) {
 			this.paddle3.resetPosition();
 			this.paddle4.resetPosition();
 		}
@@ -572,9 +561,10 @@ class Pong {
 
 	startGame() {
 		this.score.resetScore();
-		this.ball.ballResetPosition();
-		this.intervalId = setInterval(this.pongRender.bind(this), 1000 / 60); // 60 FPS (frames per second)
-		document.addEventListener('keydown', this.handleKeyboardEvent.bind(this)); // addEventListener is a system function
+        this.ball.ballResetPosition();
+		document.addEventListener('keydown', this.handleKeyboardEvent.bind(this));
+        document.addEventListener('keyup', this.handleKeyboardEvent.bind(this));
+        this.intervalId = setInterval(this.pongRender.bind(this), 1000 / 60); // 60 FPS (frames per second)
 		this.ball.startBallMovement();
 	}
 
@@ -590,18 +580,14 @@ class Pong {
 	stop() {
 		clearInterval(this.intervalId);
 		document.removeEventListener('keydown', this.handleKeyboardEvent.bind(this));
+        document.removeEventListener('keyup', this.handleKeyboardEvent.bind(this));
 		this.isGameRunning = false;
 	}
 
 	drawSquare() {
-
 		ctx.fillStyle = g_fillColor; // Original fill color is black
 		ctx.fillRect(0, 0, this.width, this.height); // Draw a rectangle (x, y, width, height)
 
-		// Set properties for the rectangle
-		ctx.fillStyle = 'white'; // Fill color
-		ctx.fillRect(0, 0, this.width, Pong.REC_HEIGHT_SIZE); // Draw a rectangle (x, y, width, height)
-		ctx.fillRect(0, this.height - Pong.REC_HEIGHT_SIZE, this.width, Pong.REC_HEIGHT_SIZE); // Draw a rectangle (x, y, width, height)
 		ctx.strokeStyle = 'white'; // Line color
 		ctx.lineWidth = 2; // line Width
 		ctx.setLineDash([6, 3]); // LineDash: 6px and 3px space
@@ -610,6 +596,7 @@ class Pong {
 		ctx.lineTo(this.width / 2, this.height); //  Line final point
 		ctx.stroke(); // Apply line stile and draw
 	}
+
 	drawControlText(line) {
 		// Set text style
 		ctx.textAlign = 'center';
@@ -640,7 +627,7 @@ class Pong {
 		this.drawSquare();
 		this.paddle1.drawPaddle();
 		this.paddle2.drawPaddle();
-		if (this.nbPlayers == 4) {
+		if (this.nbPlayers === 4) {
 			this.paddle3.drawPaddle();
 			this.paddle4.drawPaddle();
 		}
@@ -658,45 +645,41 @@ class Pong {
 	}
 
 	pongRender() {
-		this.render();
-		this.ball.ballMove(); // Move the ball
-		if (this.score.checkGameOver() == true) {
-			if (this.isTournament == false)
-				this.displayWinner();
-			else
-				this.notifyWinner(this.getWinner());
-			this.stop();
-			this.render();
-		}
-	}
+        this.render();
+        this.ball.ballMove(); // Move the ball
+        this.updatePaddles(); // Update the paddles asynchronously
 
-	handleKeyboardEvent(event) {
-		// Check if the key is a letter or control key
-		if (event.key === 'q') {
-			this.paddle1.up();
-		} else if (event.key === 'a') {
-			this.paddle1.down();
-		}
-		if (event.key === 'p') {
-			this.paddle2.up();
-		}
-		else if (event.key === 'l') {
-			this.paddle2.down();
-		}
-		if (this.nbPlayers == 4) {
-			if (event.key === 'd') {
-				this.paddle3.up();
-			} else if (event.key === 'c') {
-				this.paddle3.down();
-			}
-			if (event.key === 'j') {
-				this.paddle4.up();
-			}
-			else if (event.key === 'n') {
-				this.paddle4.down();
-			}
-		}
-	}
+        if (this.score.checkGameOver() === true) {
+            if (this.isTournament === false)
+                this.displayWinner();
+            else
+                this.notifyWinner(this.getWinner());
+            this.stop();
+            this.render();
+        }
+    }
+
+    handleKeyboardEvent(event) {
+        if (event.type === 'keydown')
+            this.keys[event.key] = true;
+        else if (event.type === 'keyup')
+            this.keys[event.key] = false;
+    }
+
+    updatePaddles() {
+        if (this.keys['q']) this.paddle1.up();
+        if (this.keys['a']) this.paddle1.down();
+        if (this.keys['p']) this.paddle2.up();
+        if (this.keys['l']) this.paddle2.down();
+
+        // Handle additional paddles for 4 players
+        if (this.nbPlayers === 4) {
+            if (this.keys['d']) this.paddle3.up();
+            if (this.keys['c']) this.paddle3.down();
+            if (this.keys['j']) this.paddle4.up();
+            if (this.keys['n']) this.paddle4.down();
+        }
+    }
 }
 
 class Score {
@@ -720,11 +703,12 @@ class Score {
 		return false;
 	}
 
-	drawScore() {
-		ctx.font = "72px 'Press Start 2P'";
-		ctx.fillText(this.scoreL, canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Left player score
-		ctx.fillText(this.scoreR, 3 * canvas.width / 4, Pong.REC_HEIGHT_SIZE * 5); // Right player score
-	}
+    drawScore() {
+        ctx.fillStyle = 'white';
+        ctx.font = "72px 'Press Start 2P'";
+        ctx.fillText(this.scoreL, canvas.width / 4, 100); // Left player score
+        ctx.fillText(this.scoreR, 3 * canvas.width / 4, 100); // Right player score
+    }
 
 	resetScore() {
 		this.scoreL = 0;
@@ -741,6 +725,7 @@ class Sound {
 		this.sound.style.display = "none";
 		document.body.appendChild(this.sound);
 	}
+
 	play() {
 		if (g_SOUND)
 			this.sound.play();
@@ -784,12 +769,11 @@ class Countdown {
 class Game {
 	constructor(isTournament, players) {
 		this.isTournament = isTournament;
-		if (this.isTournament == true) {
+		if (this.isTournament == true)
 			this.tournament = new Tournament(players);
-		}
-		else {
+		else
 			this.pong = new Pong(players.length);
-		}
+
 		if (isTournament === true || players.length == 2) {
 			document.getElementById('3rdplayer').style.display = 'none';
 			document.getElementById('4thplayer').style.display = 'none';
@@ -883,16 +867,16 @@ function applyConfiguration() {
 }
 
 class Tournament {
-	// player1 will be the logged user
+    // player1 will be the logged user
 	constructor(players) {
 		this.players = players;
 		this.pong = new Pong(2, true, this.winnerCallback);
-		if (this.players.length == 3) {
+
+		if (this.players.length == 3)
 			this.playerArray = this.getUniqueRandomPlayers3();
-		}
-		else {
+		else
 			this.playerArray = this.getUniqueRandomPlayers4();
-		}
+
 		this.keyboardEventHandlerBind = this.handleKeyboardEvent.bind(this);
 		this.currentPlayer1 = this.players[this.playerArray[0]];
 		this.currentPlayer2 = this.players[this.playerArray[1]];
@@ -1051,14 +1035,14 @@ function visual() {
         g_fillColor = 'blue';
         g_ballRadius = canvas.width / 40;
         g_ballColor = 'yellow';
-        g_paddleHeigh = canvas.height / 4;
+        g_paddleHeight = canvas.height / 4;
         g_paddleWidth = canvas.width / 25;
     }
     else {
         g_fillColor = 'black'
         g_ballRadius = canvas.width / 100;
         g_ballColor = 'white';
-        g_paddleHeigh = canvas.height / 8;
+        g_paddleHeight = canvas.height / 8;
         g_paddleWidth = canvas.width / 50;
     }
 
@@ -1129,11 +1113,21 @@ function startGame(playerNames, isTournament = false) {
     canvas.height = window.innerHeight;
 
     game = new Game(isTournament, playerNames);
-    game.start();
-    setupDropdownListeners();
 
-    document.getElementById("pongContainer").style.display = "flex";
-    console.log("player names:", playerNames); // TODO: remove
+    document.fonts.load('10pt "Press Start 2P"')
+        .then(() => {
+            return document.fonts.ready;
+        })
+        .then(() => {
+            game.start();
+            setupDropdownListeners();
+
+            document.getElementById("pongContainer").style.display = "flex";
+            console.log("player names:", playerNames); // TODO: remove
+        })
+        .catch(error => {
+            console.error("Error loading font:", error);
+        });
 }
 
 function gameInit() {
@@ -1143,7 +1137,10 @@ function gameInit() {
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get('mode');
     if (mode === 'test') {
-        startGame(['test1', 'tanas', 'qqq', 'www']); // TODO: testing only, remove after done
+        // TODO: testing only, remove after done
+        startGame(['test1', 'tanas']); //* 1v1 test
+        // startGame(['test1', 'tanas', 'qqq', 'www']); //* 2v2 test
+        // startGame(['test1', 'tanas', 'qqq', 'www'], true); //* tournament test
         return;
     }
     
