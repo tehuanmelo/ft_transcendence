@@ -6,6 +6,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseNotAllowed
 
+from .models import CustomUser
 from .auth import (
     jwt_fetch_user,
     jwt_login_required,
@@ -15,7 +16,11 @@ from .auth import (
     extract_token,
 )
 from .forms import CustomUserCreationForm, UserProfileForm
-from .token import generate_token, set_token_property, set_request_token_property
+from .token import (
+    generate_token,
+    set_token_property,
+    set_request_token_property,
+)
 
 
 @jwt_login_required
@@ -117,6 +122,7 @@ def enable_2fa(request):
 def login_view(request):
     if request.method == "POST":
         form = AuthenticationForm(data=request.POST)
+        print(f"the request POST is [{request.POST}]")
         if form.is_valid():
             user = form.get_user()
             token = generate_token(user)
@@ -151,6 +157,16 @@ def logout_view(request):
         request.user.save()
         response = redirect("home")
         response.delete_cookie("jwt")
+
+        # TODO fix logout
+        # if request.user.is_42:
+        #     user_intra = requests.get(
+        #         "https://api.intra.42.fr/v2/me",
+        #         headers={
+        #             "Authorization": f"Bearer {access_token}",
+        #         },
+        #     )
+
         return response
     else:
         return HttpResponseNotAllowed(["POST"])

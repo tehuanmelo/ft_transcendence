@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     "corsheaders",
 ]
 
+# SITE_ID = 1 # NOTE what does this shit do ?
+
 AUTH_USER_MODEL = "users.CustomUser"
 
 MIDDLEWARE = [
@@ -59,6 +61,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # allauth
+    # "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "admin.urls"
@@ -70,8 +74,6 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
@@ -114,6 +116,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# # NOTE if authentication backends isn't defined by default it uses ModelBackend
+# AUTHENTICATION_BACKENDS = [
+#     # Needed to login by username in Django admin, regardless of `allauth`
+#     'django.contrib.auth.backends.ModelBackend',
+
+#     # `allauth` specific authentication methods, such as login by email
+#     'allauth.account.auth_backends.AuthenticationBackend',
+# ]
+
+# LOGIN_REDIRECT_URL = ''
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -148,3 +160,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # allow csfr from https
 CSRF_TRUSTED_ORIGINS = ["https://localhost"]
+
+API_42_CLIENT_ID = os.getenv("API_42_CLIENT_ID")
+API_42_CLIENT_SECRET = os.getenv("API_42_CLIENT_SECRET")
+API_42_REDIRECT_URI = os.getenv("API_42_REDIRECT_URI")
