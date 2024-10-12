@@ -1080,8 +1080,10 @@ function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
         playerInputs.forEach(({ inputId, visible }) => {
             if (visible) {
                 const inputField = document.getElementById(inputId);
-                if (inputField.checkValidity())
+                if (inputField.checkValidity()) {
                     inputField.classList.remove('is-invalid');
+                    inputField.classList.add('is-valid');
+                }
                 else {
                     allValid = false;
                     inputField.classList.add('is-invalid');
