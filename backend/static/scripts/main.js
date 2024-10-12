@@ -1,10 +1,15 @@
 // main.js: contains routing logic and SPA loading
 
+const initFunctions = {
+    '/pong': gameInit,
+    '/pong/tournament': tournamentInit,
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Handling case of page reloading to invoke required js
     const currentPath = document.location.pathname;
-    if (currentPath === '/pong')
-        gameInit();
+    if (initFunctions[currentPath])
+        initFunctions[currentPath]();
 
     document.body.addEventListener('click', (event) => {
         const target = event.target;
@@ -65,8 +70,8 @@ function updateContent(pageHtml, url) {
         history.pushState(null, '', url);
 
     const urlWithoutParam = url.split('?')[0];
-    if (urlWithoutParam === '/pong')
-        gameInit();
+    if (initFunctions[urlWithoutParam])
+        initFunctions[urlWithoutParam]();
 }
 
 function getPage(url) {
