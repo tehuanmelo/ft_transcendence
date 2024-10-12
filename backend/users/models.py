@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 
 class CustomUser(AbstractUser):
@@ -16,3 +17,47 @@ class CustomUser(AbstractUser):
     token_version = models.IntegerField(default=0)
     is_authenticated = models.BooleanField(default=False)
     is_42 = models.BooleanField(default=False)
+    last_activity = models.DateTimeField(default=timezone.now)
+    friends = models.ManyToManyField(
+        "self", through="Friendship", symmetrical=False, related_name="related_to"
+    )
+
+    def add_friend(self, friend):
+        friendship, created = Friendship.objects.get_or_create(user=self, friend=friend)
+        return friendship
+
+    def remove_friend(self, friend):
+        Friendship.objects.filter(user=self, friend=friend).delete()
+
+    def get_friends(self):
+        return CustomUser.objects.filter(friend_of__user=self)
+
+    def is_friend(self, user):
+        return Friendship.objects.filter(user=self, friend=user).exists()
+
+    def get_online_friends(self):
+        awhile_ago = timezone.now() - timezone.timedelta(minutes=0.5)
+        return self.friends.filter(last_activity__gte=awhile_ago)
+
+
+class Friendship(models.Model):
+    user = models.ForeignKey(
+        CustomUser, related_name="friendships", on_delete=models.CASCADE
+    )
+    friend = models.ForeignKey(
+        CustomUser, related_name="friend_of", on_delete=models.CASCADE
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ["user", "friend"]
+
+    def __str__(self):
+        return f"{self.user} is friends with {self.friend}"
+
+    @property
+    def is_friend_online(self):
+        # Consider a user online if their last activity was within the last 5 minutes
+        return (timezone.now() - self.friend.last_activity) < timezone.timedelta(
+            minutes=0.5
+        )

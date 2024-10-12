@@ -1,6 +1,6 @@
 import pyotp
 from django.contrib.auth.forms import AuthenticationForm
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
@@ -243,3 +243,38 @@ def change_password_view(request):
         return render(request, "users/change_password.html", {"error": error})
 
     return render(request, "users/change_password.html")
+
+
+##############
+##### Frineds Methods
+##############
+
+
+@jwt_login_required
+def add_friend(request, user_id):
+    friend = get_object_or_404(CustomUser, id=user_id)
+    request.user.add_friend(friend)
+    return redirect("user_profile", user_id=user_id)
+
+
+@jwt_login_required
+def remove_friend(request, user_id):
+    friend = get_object_or_404(CustomUser, id=user_id)
+    request.user.remove_friend(friend)
+    return redirect("user_profile", user_id=user_id)
+
+
+@jwt_login_required
+def friend_list(request):
+    friends = request.user.get_friends()
+    return render(request, "users/friend_list.html", {"friends": friends})
+
+
+@jwt_login_required
+def online_friends(request):
+    online_friends = request.user.friendships.filter(
+        friend__last_activity__gte=timezone.now() - timezone.timedelta(minutes=5)
+    )
+    return render(
+        request, "users/online_friends.html", {"online_friends": online_friends}
+    )

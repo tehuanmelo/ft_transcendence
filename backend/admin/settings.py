@@ -63,6 +63,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # allauth
     # "allauth.account.middleware.AccountMiddleware",
+    # Users Middlewares
+    "users.middleware.UpdateLastActivityMiddleware",
 ]
 
 ROOT_URLCONF = "admin.urls"
