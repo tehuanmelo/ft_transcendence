@@ -1143,18 +1143,19 @@ function gameInit() {
         // startGame(['test1', 'tanas', 'qqq', 'www'], true); //* tournament test
         return;
     }
-    
+
     const gameModes = [
         { mode: '1v1', loggedIn: true, players: 2 },
         { mode: '2v2', loggedIn: true, players: 4 },
         { mode: 'guest', loggedIn: false, players: 2 },
         { mode: 'tournament', loggedIn: true, players: 2 },
     ];
-    
+
     // Find the game mode object based on the 'mode' parameter
     const selectedMode = gameModes.find(gameMode => gameMode.mode === mode);
     if (!selectedMode) {
         alert('Invalid mode selected');
+        getPage('/');
         return;
     }
 
