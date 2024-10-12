@@ -1,5 +1,5 @@
 <!-- Back to home -->
-{% if request.path != '/about/' %}
+{% if request.path == '/users/login/' or request.path == '/users/register/' %}
 <div class="text-center" style="font-size: 0.8rem;">or</div>
 {% endif %}
 <div class="text-center my-2">
