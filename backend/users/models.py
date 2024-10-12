@@ -30,15 +30,19 @@ class CustomUser(AbstractUser):
         Friendship.objects.filter(user=self, friend=friend).delete()
 
     def get_friends(self):
-        return CustomUser.objects.filter(friend_of__user=self)
+        return CustomUser.objects.filter(
+            friendships__user=self,
+            friendships__status='accepted'
+        )        
 
     def is_friend(self, user):
         return Friendship.objects.filter(user=self, friend=user).exists()
 
     def get_online_friends(self):
-        awhile_ago = timezone.now() - timezone.timedelta(minutes=0.5)
-        return self.friends.filter(last_activity__gte=awhile_ago)
-
+        return self.friendships.filter(
+            friend__last_activity__gte=timezone.now() - timezone.timedelta(minutes=0.5),
+            status='accepted'  # Ensure only accepted friends are considered
+        )
 
 class Friendship(models.Model):
     user = models.ForeignKey(
@@ -55,7 +59,7 @@ class Friendship(models.Model):
 
     def __str__(self):
         return f"{self.user} is friends with {self.friend} ({self.status})"
-        
+
     @property
     def is_friend_online(self):
         # Consider a user online if their last activity was within the last .5 minute
