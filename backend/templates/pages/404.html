@@ -7,8 +7,6 @@
     <h1>Error 404:</h1>
     <h2 class="mb-4" style="color: white;">Page Not Found</h2>
     <p>Sorry, the page you're looking for doesn't exist.</p>
-    <div class="text-center my-2">
-        <a href="{% url 'home' %}" class="spa-link btn btn-orange" data-method="GET">Go Back to Home</a>
-    </div>
+    {% include "includes/back_to_home.html" %}
 </div>
 {% endblock content %}
