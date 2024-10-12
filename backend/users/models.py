@@ -48,16 +48,17 @@ class Friendship(models.Model):
         CustomUser, related_name="friend_of", on_delete=models.CASCADE
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=10, default='pending')
 
     class Meta:
         unique_together = ["user", "friend"]
 
     def __str__(self):
-        return f"{self.user} is friends with {self.friend}"
-
+        return f"{self.user} is friends with {self.friend} ({self.status})"
+        
     @property
     def is_friend_online(self):
-        # Consider a user online if their last activity was within the last 5 minutes
+        # Consider a user online if their last activity was within the last .5 minute
         return (timezone.now() - self.friend.last_activity) < timezone.timedelta(
             minutes=0.5
         )

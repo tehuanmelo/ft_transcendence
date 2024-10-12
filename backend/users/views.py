@@ -263,6 +263,18 @@ def remove_friend(request, user_id):
     request.user.remove_friend(friend)
     return redirect("user_profile", user_id=user_id)
 
+@jwt_login_required
+def accept_friend(request, user_id):
+    friendship = get_object_or_404(Friendship, user=request.user, friend__id=user_id, status='pending')
+    friendship.status = 'accepted'
+    friendship.save()
+    return redirect("friend_list")
+
+@jwt_login_required
+def reject_friend(request, user_id):
+    friendship = get_object_or_404(Friendship, user=request.user, friend__id=user_id, status='pending')
+    friendship.delete()  # Remove the friendship request
+    return redirect("friend_list")
 
 @jwt_login_required
 def friend_list(request):
