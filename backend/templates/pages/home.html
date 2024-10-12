@@ -29,29 +29,14 @@
         <a class="menu-btn p-3 spa-link" href="{% url 'login' %}" data-method="GET">Log In</a>
         <a class="menu-btn p-3 spa-link" href="{% url 'register' %}" data-method="GET">Register</a>
         <a class="menu-btn p-3"
-            href="https://api.intra.42.fr/oauth/authorize?client_id={{ API_42_CLIENT_ID }}&redirect_uri={{ API_42_REDIRECT_URI|urlencode }}&response_type=code"
-            data-method="GET">42 Log In!</a>
+            href="https://api.intra.42.fr/oauth/authorize?client_id={{ API_42_CLIENT_ID }}&redirect_uri={{ API_42_REDIRECT_URI|urlencode }}&response_type=code">42
+            Log In!</a>
         <a class="menu-btn p-3 spa-link" href="{% url 'pong' %}?mode=guest" data-method="GET">Play as Guest</a>
     </div>
     <footer class="text-center pb-4 mt-auto">
         <div class="mb-3">
             <a class="spa-link link-effect" href="{% url 'about' %}" data-method="GET">About Us</a>
             <p>&copy; 2024 PONG.</p>
-        </div>
-        <div class="container-xl d-flex justify-content-between">
-            <p>&copy; 2024 PONG.</p>
-            <!-- <div class="theme-switcher dropup">
-                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Theme: <span id="theme-name" style="color: var(--accent)">Halloween</span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#" onclick="setTheme('default')">Halloween</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="setTheme('blue')">Ocean Breeze</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="setTheme('purple')">Twilight</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="setTheme('sand')">Sandy Dunes</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="setTheme('green')">Forest Dawn</a></li>
-                </ul>
-            </div> -->
         </div>
     </footer>
 </div>
