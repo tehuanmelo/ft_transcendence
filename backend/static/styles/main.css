@@ -281,7 +281,7 @@ header {
     word-wrap: break-word;
 }
 
-.btn-orange {
+.btn-form {
     color: var(--text);
     background-color: var(--accent);
     padding: 0.5rem 1rem;
@@ -289,17 +289,17 @@ header {
     transition: all 0.3s ease;
 }
 
-.btn-orange:hover {
+.btn-form:hover {
     background-color: var(--light-accent);
     box-shadow: 0 0 10px rgba(243, 156, 18, 0.7);
 }
 
-.btn-orange:focus {
+.btn-form:focus {
     background-color: var(--light-accent);
     box-shadow: 0 0 10px rgba(243, 156, 18, 0.7);
 }
 
-.btn-orange:active {
+.btn-form:active {
     background-color: var(--accent);
     border-color: var(--accent);
     transform: scale(0.95);
@@ -382,13 +382,20 @@ header {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
-.btn-primary {
+.btn-orange {
+    color: white;
     background-color: var(--accent);
-    border-color: var(--accent);
+    border: solid 2px var(--accent);
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.btn-primary:hover {
-    background-color: var(--secondary);
+.btn-orange:hover {
+    color: white;
+    background-color: var(--light-accent);
     transform: scale(1.05);
+}
+
+.btn-orange:focus {
+    color: white;
+    border: solid 2px var(--accent);
 }

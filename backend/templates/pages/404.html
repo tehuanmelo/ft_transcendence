@@ -2,9 +2,13 @@
 {% load static %}
 {% block title %}404 Error{% endblock title %}
 {% block content %}
-<div class="container d-flex flex-column py-5 text-center">
-    <h1>404 - Page Not Found</h1>
+<!-- 404 Page -->
+<div class="container d-flex flex-column align-items-center justify-content-center text-center h-100">
+    <h1>Error 404:</h1>
+    <h2 class="mb-4" style="color: white;">Page Not Found</h2>
     <p>Sorry, the page you're looking for doesn't exist.</p>
-    <a href="{% url "home" %}" data-method="GET" class="spa-link">Return to homepage</a>
+    <div class="text-center my-2">
+        <a href="{% url 'home' %}" class="spa-link btn btn-orange" data-method="GET">Go Back to Home</a>
+    </div>
 </div>
 {% endblock content %}
