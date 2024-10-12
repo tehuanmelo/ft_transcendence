@@ -285,8 +285,21 @@ def friend_list(request):
 @jwt_login_required
 def online_friends(request):
     online_friends = request.user.friendships.filter(
-        friend__last_activity__gte=timezone.now() - timezone.timedelta(minutes=5)
+        friend__last_activity__gte=timezone.now() - timezone.timedelta(minutes=0.5)
     )
     return render(
         request, "users/online_friends.html", {"online_friends": online_friends}
     )
+
+##############
+##### Match Record Methods
+##############
+@jwt_login_required
+def record_match_result(winner, loser):
+    winner.wins += 1
+    loser.losses += 1
+    winner.save()
+    loser.save()
+
+    Match.objects.create(user=winner, opponent=loser) 
+    Match.objects.create(user=loser, opponent=winner) 

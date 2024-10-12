@@ -21,6 +21,8 @@ class CustomUser(AbstractUser):
     friends = models.ManyToManyField(
         "self", through="Friendship", symmetrical=False, related_name="related_to"
     )
+    wins = models.IntegerField(default=0)
+    losses = models.IntegerField(default=0)
 
     def add_friend(self, friend):
         friendship, created = Friendship.objects.get_or_create(user=self, friend=friend)
@@ -43,6 +45,20 @@ class CustomUser(AbstractUser):
             friend__last_activity__gte=timezone.now() - timezone.timedelta(minutes=0.5),
             status='accepted'  # Ensure only accepted friends are considered
         )
+
+    def get_all_matches(self):
+        """Retrieve all matches for this user."""
+        return self.matches.all()  # Access matches through the related name
+
+
+class Match(models.Model):
+    user = models.ForeignKey(CustomUser, related_name='matches', on_delete=models.CASCADE)
+    opponent = models.ForeignKey(CustomUser, related_name='opponent_matches', on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)  # Automatically set the date when the match is created
+    result = models.CharField(max_length=10)  # 'win' or 'loss'
+
+    def __str__(self):
+        return f"{self.user.username} vs {self.opponent.username} on {self.date}"
 
 class Friendship(models.Model):
     user = models.ForeignKey(
