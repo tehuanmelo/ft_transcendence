@@ -246,7 +246,7 @@ def change_password_view(request):
 
 
 ##############
-##### Frineds Methods
+##### Friends Methods
 ##############
 
 
