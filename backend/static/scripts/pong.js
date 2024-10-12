@@ -619,7 +619,7 @@ class Pong {
 		else {
 			element.innerText = "Right Player wins!";
 		}
-		var myModal = new bootstrap.Modal(document.getElementById('winnerpopup'));
+		var myModal = new bootstrap.Modal('#winnerpopup');
 		myModal.show();
 	}
 
@@ -909,11 +909,11 @@ class Tournament {
 			}
 		}
 		if (this.isFinalGame == true) {
-			var myModal = new bootstrap.Modal(document.getElementById('winnerFinalpopup'));
+			var myModal = new bootstrap.Modal('#winnerFinalpopup');
 			myModal.show();
 		}
 		else {
-			var myModal = new bootstrap.Modal(document.getElementById('winnerTpopup'));
+			var myModal = new bootstrap.Modal('#winnerTpopup');
 			myModal.show();
 		}
 	}
@@ -1026,7 +1026,7 @@ function setupDropdownListeners() {
 
 function visual() {
     if (game.isGameRunning() == true) {
-        var myModal = new bootstrap.Modal(document.getElementById('visualmodal'));
+        var myModal = new bootstrap.Modal('#visualmodal');
         myModal.show();
         return;
     }
@@ -1051,7 +1051,7 @@ function visual() {
 
 function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
     let playerNames = [];
-    const playerNameModal = new bootstrap.Modal(document.getElementById('playerNameModal'));
+    const playerNameModal = new bootstrap.Modal('#playerNameModal');
     const playerForm = document.getElementById('playerNamesForm');
 
     const playerInputs = [
