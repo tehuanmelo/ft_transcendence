@@ -9,7 +9,7 @@ from .models import CustomUser
 
 def generate_token(user):
     utc = pytz.UTC
-    expiration_time = datetime.datetime.now(utc) + datetime.timedelta(minutes=30)
+    expiration_time = datetime.datetime.now(utc) + datetime.timedelta(minutes=120)
     payload = {
         "user_id": user.id,
         "is_authenticated": True,
