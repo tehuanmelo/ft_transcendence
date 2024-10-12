@@ -33,17 +33,21 @@ class CustomUser(AbstractUser):
 
     def get_friends(self):
         return CustomUser.objects.filter(
-            friendships__user=self,
-            friendships__status='accepted'
-        )        
+            friendships__user=self, friendships__status="accepted"
+        )
 
     def is_friend(self, user):
         return Friendship.objects.filter(user=self, friend=user).exists()
 
+    def get_pending_requests(self):
+        return CustomUser.objects.filter(
+            friendships__friend=self, friendships__status="pending"
+        )
+
     def get_online_friends(self):
         return self.friendships.filter(
             friend__last_activity__gte=timezone.now() - timezone.timedelta(minutes=0.5),
-            status='accepted'  # Ensure only accepted friends are considered
+            status="accepted",  # Ensure only accepted friends are considered
         )
 
     def get_all_matches(self):
@@ -52,13 +56,20 @@ class CustomUser(AbstractUser):
 
 
 class Match(models.Model):
-    user = models.ForeignKey(CustomUser, related_name='matches', on_delete=models.CASCADE)
-    opponent = models.ForeignKey(CustomUser, related_name='opponent_matches', on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now_add=True)  # Automatically set the date when the match is created
+    user = models.ForeignKey(
+        CustomUser, related_name="matches", on_delete=models.CASCADE
+    )
+    opponent = models.ForeignKey(
+        CustomUser, related_name="opponent_matches", on_delete=models.CASCADE
+    )
+    date = models.DateTimeField(
+        auto_now_add=True
+    )  # Automatically set the date when the match is created
     result = models.CharField(max_length=10)  # 'win' or 'loss'
 
     def __str__(self):
         return f"{self.user.username} vs {self.opponent.username} on {self.date}"
+
 
 class Friendship(models.Model):
     user = models.ForeignKey(
@@ -68,7 +79,7 @@ class Friendship(models.Model):
         CustomUser, related_name="friend_of", on_delete=models.CASCADE
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, default='pending')
+    status = models.CharField(max_length=10, default="pending")
 
     class Meta:
         unique_together = ["user", "friend"]

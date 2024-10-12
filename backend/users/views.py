@@ -6,7 +6,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseNotAllowed
 
-from .models import CustomUser
+from .models import CustomUser, Friendship
 from .auth import (
     jwt_fetch_user,
     jwt_login_required,
@@ -187,7 +187,8 @@ def register_view(request):
 
 @jwt_login_required
 def profile_view(request):
-    return render(request, "users/profile.html")
+    matches = request.user.get_all_matches()
+    return render(request, "users/profile.html", {"matches": matches})
 
 
 @jwt_login_required
@@ -251,35 +252,69 @@ def change_password_view(request):
 
 
 @jwt_login_required
-def add_friend(request, user_id):
-    friend = get_object_or_404(CustomUser, id=user_id)
+def add_friend(request, username):
+    friend = get_object_or_404(CustomUser, username=username)
     request.user.add_friend(friend)
-    return redirect("user_profile", user_id=user_id)
+    return redirect("friend_list", username=username)
 
 
 @jwt_login_required
-def remove_friend(request, user_id):
-    friend = get_object_or_404(CustomUser, id=user_id)
+def add_friend_view(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        friend = get_object_or_404(CustomUser, username=username)  # or filter by email
+        request.user.add_friend(friend)
+        return redirect("friend_list")  # Redirect to the friends list after adding
+
+    return render(request, "users/add_friend.html")
+
+
+@jwt_login_required
+def remove_friend(request, username):
+    friend = get_object_or_404(CustomUser, username=username)
     request.user.remove_friend(friend)
-    return redirect("user_profile", user_id=user_id)
+    return redirect("friend_list", username=username)
+
 
 @jwt_login_required
-def accept_friend(request, user_id):
-    friendship = get_object_or_404(Friendship, user=request.user, friend__id=user_id, status='pending')
-    friendship.status = 'accepted'
+def accept_friend(request, username):
+    friend = get_object_or_404(CustomUser, username=username)  # Look up the user by username
+    friendship = get_object_or_404(
+        Friendship,
+        user=request.user,
+        friend=friend,  # Use the friend object instead of username
+        status="pending",
+    )
+    friendship.status = "accepted"
     friendship.save()
     return redirect("friend_list")
 
+
 @jwt_login_required
-def reject_friend(request, user_id):
-    friendship = get_object_or_404(Friendship, user=request.user, friend__id=user_id, status='pending')
+def reject_friend(request, username):
+    friend = get_object_or_404(CustomUser, username=username)
+    friendship = get_object_or_404(
+        Friendship, user=request.user, friend=friend, status="pending"
+    )
     friendship.delete()  # Remove the friendship request
     return redirect("friend_list")
+
 
 @jwt_login_required
 def friend_list(request):
     friends = request.user.get_friends()
-    return render(request, "users/friend_list.html", {"friends": friends})
+    online_friends = request.user.get_online_friends()
+    pending_requests = request.user.get_pending_requests()
+
+    return render(
+        request,
+        "users/friend_list.html",
+        {
+            "friends": friends,
+            "online_friends": online_friends,
+            "pending_requests": pending_requests,
+        },
+    )
 
 
 @jwt_login_required
@@ -291,6 +326,7 @@ def online_friends(request):
         request, "users/online_friends.html", {"online_friends": online_friends}
     )
 
+
 ##############
 ##### Match Record Methods
 ##############
@@ -301,5 +337,5 @@ def record_match_result(winner, loser):
     winner.save()
     loser.save()
 
-    Match.objects.create(user=winner, opponent=loser) 
-    Match.objects.create(user=loser, opponent=winner) 
+    Match.objects.create(user=winner, opponent=loser)
+    Match.objects.create(user=loser, opponent=winner)

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Friends List{% endblock %}
+
+{% block content %}
+<h1>Friends List</h1>
+
+<div class="main border">
+    <h2>Online Friends</h2>
+    <ul>
+        {% if online_friends %}
+        {% for friend in online_friends %}
+        <li>{{ friend.username }} (Online)</li>
+        {% endfor %}
+        {% else %}
+        <li>No online friends.</li>
+        {% endif %}
+    </ul>
+</div>
+<div class="main border">
+    <h2>All Friends</h2>
+    <ul>
+        {% if friends %}
+        {% for friend in friends %}
+        <li>{{ friend.username }} {% if friend in online_friends %}(Online){% else %}(Offline){% endif %}</li>
+        {% endfor %}
+        {% else %}
+        <li>No friends.</li>
+        {% endif %}
+    </ul>
+</div>
+
+<div class="main border">
+    <h2>Pending Friend Requests</h2>
+    <ul>
+        {% if pending_requests %}
+        {% for request in pending_requests %}
+        <li>
+            {{ request.username }} wants to be your friend.
+             <a href="{% url 'accept_friend' request.username %}">Accept</a> |
+            <a href="{% url 'reject_friend' request.username %}">Reject</a>
+        </li>
+        {% endfor %}
+        {% else %}
+        <li>No pending friend requests.</li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock %}

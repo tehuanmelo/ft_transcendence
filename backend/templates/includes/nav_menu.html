@@ -22,6 +22,8 @@
                 <a class="nav-link spa-link px-4" href="{% url 'about' %}" data-method="GET">About</a>
                 <a class="nav-link spa-link px-4" href="{% url 'pong' %}?mode=1v1" data-method="GET">Pong 1v1</a>
                 <a class="nav-link spa-link px-4" href="{% url 'pong' %}?mode=2v2" data-method="GET">Pong 2v2</a>
+
+                <a class="nav-link spa-link px-4" href="{% url 'friend_list' %}" data-method="GET">Friends List</a>
             </div>
             <div class="navbar-nav">
                 <div class="nav-item dropdown">
@@ -37,6 +39,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
                         <a class="dropdown-item spa-link" href="{% url 'profile' %}" data-method="GET">Profile</a>
+                        <a class="dropdown-item spa-link" href="{% url 'add_friend' %}" data-method="GET">Add Friend</a>
                         <a class="dropdown-item spa-link" href="{% url 'settings' %}" data-method="GET">Settings</a>
                         <hr class="dropdown-divider">
                         <a class="dropdown-item spa-link" id="logoutButton" href="#" data-bs-toggle="modal"

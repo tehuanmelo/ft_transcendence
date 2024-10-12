@@ -60,6 +60,26 @@
             <a class="btn btn-orange mt-3 spa-link" href="{% url 'edit_profile' %}" data-method="GET">Edit
                 Profile</a>
         </div>
+        <div class="main border">
+            <div class="stats">
+                <h2>Stats</h2>
+                <p>Wins: {{ user.wins }}</p>
+                <p>Losses: {{ user.losses }}</p>
+            </div>
+        </div>
+        <div class="main border">
+            <div class="card-body">
+                <h2>Match History</h2>
+                <ul>
+                    {% for match in matches %}
+                    <li>{{ match.date|date:"F j, Y, g:i a" }} - Opponent: {{ match.opponent }} - Result: {{ match.result
+                        }}</li>
+                    {% empty %}
+                    <li>No matches found.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 

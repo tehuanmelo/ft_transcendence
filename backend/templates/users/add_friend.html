@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Add Friend{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1>Add a Friend</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="Enter username or email" required>
+        <button type="submit" class="btn btn-primary">Send Friend Request</button>
+    </form>
+</div>
+{% endblock %}
