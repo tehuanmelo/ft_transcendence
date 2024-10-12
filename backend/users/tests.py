@@ -74,49 +74,74 @@ class FriendshipTests(TestCase):
         )
 
     def test_add_friend(self):
-        self.user1.add_friend(self.user2)
-        self.assertTrue(self.user1.is_friend(self.user2))
-        self.assertFalse(self.user2.is_friend(self.user1))  # Friendship is not symmetrical
+        # User1 sends a friend request to User2
+        friendship = self.user1.add_friend(self.user2)
+        self.assertEqual(friendship.status, 'pending')
+        self.assertFalse(self.user1.is_friend(self.user2))  # Not friends yet
+
+    def test_accept_friend(self):
+        # User1 sends a friend request to User2
+        friendship = self.user1.add_friend(self.user2)
+        self.assertEqual(friendship.status, 'pending')
+
+        # User2 accepts the friend request
+        self.user2.accept_friend(self.user1)
+        friendship.refresh_from_db()
+        self.assertEqual(friendship.status, 'accepted')
+        self.assertTrue(self.user1.is_friend(self.user2))  # Now they are friends
+
+    def test_reject_friend(self):
+        # User1 sends a friend request to User2
+        friendship = self.user1.add_friend(self.user2)
+        self.assertEqual(friendship.status, 'pending')
+
+        # User2 rejects the friend request
+        self.user2.reject_friend(self.user1)
+        self.assertFalse(Friendship.objects.filter(user=self.user1, friend=self.user2).exists())
+        self.assertFalse(self.user1.is_friend(self.user2))  # Not friends anymore
 
     def test_remove_friend(self):
-        self.user1.add_friend(self.user2)
+        # User1 sends a friend request to User2 and accepts it
+        friendship = self.user1.add_friend(self.user2)
+        self.user2.accept_friend(self.user1)
+        self.assertTrue(self.user1.is_friend(self.user2))  # They are friends
+
+        # User1 removes User2 as a friend
         self.user1.remove_friend(self.user2)
-        self.assertFalse(self.user1.is_friend(self.user2))
+        self.assertFalse(self.user1.is_friend(self.user2))  # Not friends anymore
 
     def test_get_friends(self):
+        # User1 sends friend requests to User2 and User3
         self.user1.add_friend(self.user2)
         self.user1.add_friend(self.user3)
+
+        # User2 accepts the friend request
+        self.user2.accept_friend(self.user1)
+
+        # Check the friends list
         friends = self.user1.get_friends()
-        self.assertEqual(friends.count(), 2)
+        self.assertEqual(friends.count(), 1)  # Only User2 should be in the friends list
         self.assertIn(self.user2, friends)
-        self.assertIn(self.user3, friends)
+        self.assertNotIn(self.user3, friends)  # User3 is not accepted yet
 
     def test_get_online_friends(self):
+        # User1 sends a friend request to User2 and User3
         self.user1.add_friend(self.user2)
         self.user1.add_friend(self.user3)
-        
-        # Set user2 as online (active in the last 30 seconds)
-        self.user2.last_activity = timezone.now()
-        self.user2.save()
-        
-        # Set user3 as offline (inactive for more than 30 seconds)
-        self.user3.last_activity = timezone.now() - timedelta(minutes=1)
-        self.user3.save()
-        
-        online_friends = self.user1.get_online_friends()
-        self.assertEqual(online_friends.count(), 1)
-        self.assertIn(self.user2, online_friends)
-        self.assertNotIn(self.user3, online_friends)
 
-    def test_is_friend_online(self):
-        friendship = self.user1.add_friend(self.user2)
-        
-        # Set user2 as online
-        self.user2.last_activity = timezone.now()
+        # User2 accepts the friend request
+        self.user2.accept_friend(self.user1)
+
+        # Simulate last activity for User2
+        self.user2.last_activity = timezone.now()  # User2 is online
         self.user2.save()
-        self.assertTrue(friendship.is_friend_online)
-        
-        # Set user2 as offline
-        self.user2.last_activity = timezone.now() - timedelta(minutes=1)
-        self.user2.save()
-        self.assertFalse(friendship.is_friend_online)
+
+        # User3 does not accept the request, so they should not be online
+        self.user3.last_activity = timezone.now() - timezone.timedelta(minutes=10)  # User3 is offline
+        self.user3.save()
+
+        # Check online friends
+        online_friends = self.user1.get_online_friends()  # Using get_online_friends method
+        self.assertEqual(online_friends.count(), 1)  # Only User2 should be online
+        self.assertIn(self.user2, online_friends)
+        self.assertNotIn(self.user3, online_friends)  # User3 is not accepted and not online
