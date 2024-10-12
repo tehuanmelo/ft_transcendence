@@ -19,10 +19,6 @@
         <!-- Tournament Bracket Display (this will be updated dynamically using JavaScript) -->
     </div>
 
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tournamentModal">
-        Register for Tournament
-    </button>
-
     <div id="tournament-progress">
         <h3>Current Tournament Progress</h3>
         <!-- Display ongoing matches -->
@@ -35,35 +31,36 @@
 <!-- Tournament Registration Modal -->
 <div id="tournamentModal" class="modal fade" tabindex="-1" aria-labelledby="tournamentModalLabel" aria-hidden="true"
     data-bs-theme="dark">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="tournamentModalLabel">Register for the Tournament</h5>
+                <h5 class="modal-title silk-heavy" id="tournamentModalLabel">Tournament Registration</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="tournament-form" class="tournament-form">
                     <div class="mb-3">
-                        <label for="alias" class="form-label">Your Alias</label>
-                        <input type="text" id="alias" name="alias" class="form-control" required maxlength="20">
+                        <label for="alias1" class="form-label silk-heavy">Your Alias</label>
+                        <input type="text" id="alias1" name="alias1" class="form-control" required maxlength="20" placeholder="test">
                     </div>
                     <div class="mb-3">
-                        <label for="player2" class="form-label">Player 2</label>
-                        <input type="text" id="player2" name="player2" class="form-control" maxlength="20">
+                        <label for="alias2" class="form-label silk-heavy">Player 2</label>
+                        <input type="text" id="alias2" name="alias2" class="form-control" required maxlength="20">
                     </div>
                     <div class="mb-3">
-                        <label for="player3" class="form-label">Player 3</label>
-                        <input type="text" id="player3" name="player3" class="form-control" maxlength="20">
+                        <label for="alias3" class="form-label silk-heavy">Player 3</label>
+                        <input type="text" id="alias3" name="alias3" class="form-control" required maxlength="20">
                     </div>
                     <div class="mb-3">
-                        <label for="player4" class="form-label">Player 4</label>
-                        <input type="text" id="player4" name="friend3" class="form-control" maxlength="20">
+                        <label for="alias4" class="form-label silk-heavy">Player 4</label>
+                        <input type="text" id="alias4" name="alias4" class="form-control" required maxlength="20">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="registerButton">Register</button>
+                <button id="registerButton" type="submit" class="btn btn-primary"
+                    form="tournament-form">Register</button>
             </div>
         </div>
     </div>
