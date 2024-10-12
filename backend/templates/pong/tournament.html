@@ -13,54 +13,86 @@
 {% endif %}
 
 <!-- Tournament -->
-<div class="container">
-    <h1>Tournament Bracket</h1>
-    <div id="tournament-bracket">
-        <!-- Tournament Bracket Display (this will be updated dynamically using JavaScript) -->
-    </div>
-
-    <div id="tournament-progress">
-        <h3>Current Tournament Progress</h3>
-        <!-- Display ongoing matches -->
-        <ul id="progress-list">
-            <!-- Matches will be populated here dynamically -->
-        </ul>
-    </div>
+<div id="tournament" class="container" style="display: none;">
+    <h1>Tournament</h1>
+    <table class="table table-bordered" id="tournament-table">
+        <thead>
+            <tr>
+                <th>Match #</th>
+                <th>Player 1</th>
+                <th>Player 2</th>
+                <th>Winner</th>
+            </tr>
+        </thead>
+        <tbody id="tournament-body">
+            <!-- Matches will be inserted here dynamically -->
+        </tbody>
+    </table>
 </div>
 
 <!-- Tournament Registration Modal -->
-<div id="tournamentModal" class="modal fade" tabindex="-1" aria-labelledby="tournamentModalLabel" aria-hidden="true"
-    data-bs-theme="dark">
-    <div class="modal-dialog modal-dialog-centered">
+<div id="tournamentModal" class="modal fade" tabindex="-1" data-bs-backdrop="static"
+    aria-labelledby="tournamentModalLabel" aria-hidden="true" data-bs-theme="dark">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-blur">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title silk-heavy" id="tournamentModalLabel">Tournament Registration</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h1 class="modal-title" id="tournamentModalLabel">Tournament Registration</h1>
             </div>
             <div class="modal-body">
                 <form id="tournament-form" class="tournament-form">
-                    <div class="mb-3">
-                        <label for="alias1" class="form-label silk-heavy">Your Alias</label>
-                        <input type="text" id="alias1" name="alias1" class="form-control" required maxlength="20" placeholder="test">
+                    <div id="playerAliases" class="mb-4">
+                        <div class="row mb-2">
+                            <div class="col">
+                                <label for="alias1" class="form-label">Player 1*</label>
+                                <input type="text" id="alias1" name="alias1" class="form-control" required
+                                    maxlength="20" placeholder="Player 1">
+                            </div>
+                            <div class="col">
+                                <label for="alias2" class="form-label">Player 2*</label>
+                                <input type="text" id="alias2" name="alias2" class="form-control" required
+                                    maxlength="20" placeholder="Player 2">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label for="alias3" class="form-label">Player 3*</label>
+                                <input type="text" id="alias3" name="alias3" class="form-control" required
+                                    maxlength="20" placeholder="Player 3">
+                            </div>
+                            <div class="col">
+                                <label for="alias4" class="form-label">Player 4</label>
+                                <input type="text" id="alias4" name="alias4" class="form-control" maxlength="20"
+                                    placeholder="Player 4 (Optional)">
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="alias2" class="form-label silk-heavy">Player 2</label>
-                        <input type="text" id="alias2" name="alias2" class="form-control" required maxlength="20">
-                    </div>
-                    <div class="mb-3">
-                        <label for="alias3" class="form-label silk-heavy">Player 3</label>
-                        <input type="text" id="alias3" name="alias3" class="form-control" required maxlength="20">
-                    </div>
-                    <div class="mb-3">
-                        <label for="alias4" class="form-label silk-heavy">Player 4</label>
-                        <input type="text" id="alias4" name="alias4" class="form-control" required maxlength="20">
+                    <div id="tournamentSettings">
+                        <h5 class="text-center mb-2">Game Settings</h5>
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <button class="dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">Mode</button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Easy</a></li>
+                                    <li><a class="dropdown-item" href="#">Medium</a></li>
+                                    <li><a class="dropdown-item" href="#">Hard</a></li>
+                                    <hr class="dropdown-divider">
+                                </ul>
+                            </div>
+                            <div class="col">
+                                <input type="range" id="scoreSlider" name="scoreToWin" class="form-range" min="3"
+                                    max="11" value="7"
+                                    oninput="document.getElementById('scoreDisplay').innerText = this.value">
+                                <p>Score To Win: <span id="scoreDisplay">7</span></p>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button id="registerButton" type="submit" class="btn btn-primary"
-                    form="tournament-form">Register</button>
+                <a class="btn btn-secondary spa-link" href="{% url 'home' %}" data-method="GET"
+                    data-bs-dismiss="modal">Cancel</a>
+                <button type="submit" class="btn btn-orange" form="tournament-form">Register</button>
             </div>
         </div>
     </div>

@@ -254,23 +254,25 @@ header {
 }
 
 .form-control {
-    color: var(--navbar);
+    color: var(--text);
     border-radius: 0;
-    background-color: #c6c6c6c4;
+    border: none;
+    background-color: var(--navbar);
     padding: 10px;
     transition: all 0.3s ease;
 }
 
 .form-control:focus,
 .form-control:hover {
-    color: var(--navbar);
+    color: var(--text);
     border-color: var(--primary);
-    background-color: #f0f0f0;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .form-control:focus {
+    background-color: rgba(0, 0, 0, 0.5);
     border-color: none;
-    box-shadow: 0 0 8px rgba(215, 215, 215, 0.6);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     outline: 0;
 }
 
@@ -405,10 +407,66 @@ header {
 .btn-orange:hover {
     color: white;
     background-color: var(--light-accent);
-    transform: scale(1.05);
+    transform: translateY(-5px);
 }
 
 .btn-orange:focus {
     color: white;
     border: solid 2px var(--accent);
+}
+
+/* ----------------------------- Tournament ------------------------------- */
+#tournamentModal * {
+    font-family: 'Silkscreen', sans-serif;
+    font-weight: bold;
+    border: none;
+}
+
+#tournamentModal .modal-content {
+    background-color: transparent;
+}
+
+#tournamentModal .modal-body {
+    background-color: var(--background);
+}
+
+#tournamentModal>.form-label {
+    margin: none;
+}
+
+#tournamentModal .dropdown-toggle {
+    color: var(--text);
+    text-align: left;
+    border-radius: 0;
+    background-color: var(--navbar);
+    padding: 10px;
+    transition: all 0.3s ease;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#tournamentModal .dropdown-toggle:focus,
+#tournamentModal .dropdown-toggle:hover {
+    color: var(--text);
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#tournamentModal .dropdown-toggle:focus {
+    border-color: none;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    outline: 0;
+}
+
+#tournamentModal .dropdown-menu {
+    background-color: var(--background);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    outline: 0;
+}
+
+#tournamentModal .dropdown-menu:hover,
+#tournamentModal .dropdown-menu:focus {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    outline: 0;
 }

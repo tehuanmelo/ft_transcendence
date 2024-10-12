@@ -4,33 +4,42 @@ function registerPlayers(players) {
     console.log('Players registered:', players);
 }
 
-function updateTournamentBracket(players) {
-    const bracket = document.getElementById('tournament-bracket');
-    bracket.innerHTML = ''; // Clear existing bracket
+function updateTournamentTable(players) {
+    const tableBody = document.getElementById('tournament-body');
+    tableBody.innerHTML = ''; // Clear existing table content
 
-    // Simple representation of the bracket
-    players.forEach(player => {
-        const playerElem = document.createElement('div');
-        playerElem.textContent = player;
-        playerElem.classList.add('bracket-player');
-        bracket.appendChild(playerElem);
-    });
+    let matchNumber = 1;
 
-    // Optionally update tournament progress
-    updateTournamentProgress([]);
+    for (let i = 0; i < players.length; i += 2) {
+        const row = document.createElement('tr');
+
+        // Player 1 and Player 2
+        const player1 = players[i];
+        const player2 = players[i + 1] || "Bye"; // Handle case where there's an odd number of players
+
+        // Match row elements
+        const matchCell = document.createElement('td');
+        matchCell.textContent = matchNumber++;
+
+        const player1Cell = document.createElement('td');
+        player1Cell.textContent = player1;
+
+        const player2Cell = document.createElement('td');
+        player2Cell.textContent = player2;
+
+        const winnerCell = document.createElement('td');
+        winnerCell.textContent = ''; // Initially, no winner is selected
+
+        // Append cells to row
+        row.appendChild(matchCell);
+        row.appendChild(player1Cell);
+        row.appendChild(player2Cell);
+        row.appendChild(winnerCell);
+
+        // Append row to table body
+        tableBody.appendChild(row);
+    }
 }
-
-function updateTournamentProgress(matches) {
-    const progressList = document.getElementById('progress-list');
-    progressList.innerHTML = ''; // Clear existing progress
-
-    matches.forEach(match => {
-        const matchElem = document.createElement('li');
-        matchElem.textContent = `${match.player1} vs ${match.player2} - ${match.status}`;
-        progressList.appendChild(matchElem);
-    });
-}
-
 
 function tournamentInit() {
     // select tournament settings (difficulty and score to win)
@@ -41,20 +50,22 @@ function tournamentInit() {
     tournamentForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
-        // Collect player aliases
+        tournamentForm.classList.remove('was-validated');
+
         const alias1 = document.getElementById('alias1').value.trim();
         const alias2 = document.getElementById('alias2').value.trim();
         const alias3 = document.getElementById('alias3').value.trim();
         const alias4 = document.getElementById('alias4').value.trim();
 
-        // Build the players array
         const players = [alias1, alias2, alias3, alias4];
 
-        // Logic to register players and update the bracket
-        registerPlayers(players);
-        // updateTournamentBracket(players);
+        tournamentForm.classList.add('was-validated');
 
-        // Close the modal after registration
+        registerPlayers(players);
+
+        updateTournamentTable(players);
+
         tournamentModal.hide();
+        document.getElementById('tournament').style.display = 'block';
     });
 }
