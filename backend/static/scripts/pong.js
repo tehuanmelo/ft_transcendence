@@ -584,6 +584,11 @@ class Pong {
 		this.isGameRunning = false;
 	}
 
+	reset() {
+		this.stop();
+		this.score.resetScore();
+	}
+
 	drawSquare() {
 		ctx.fillStyle = g_fillColor; // Original fill color is black
 		ctx.fillRect(0, 0, this.width, this.height); // Draw a rectangle (x, y, width, height)
@@ -740,6 +745,7 @@ class Countdown {
 	}
 
 	start() {
+		this.count = 3;
 		this.drawCountdown();
 		this.intervalId = setInterval(this.countdown.bind(this), 1000);
 	}
@@ -794,7 +800,7 @@ class Game {
 			this.tournament.resetTournament();
 		}
 		else {
-			this.pong.stop();
+			this.pong.reset();
 		}
 	}
 
@@ -838,7 +844,9 @@ class Game {
 }
 
 function playAgain() {
-	pong.start();
+	game.reset();
+	game.start();
+	document.getElementById("ponggame").focus();
 }
 
 function refreshConfig() {
@@ -864,6 +872,7 @@ function applyConfiguration() {
 	g_SCORE_TO_WIN = parseInt(document.getElementById('score').value, 10);
 	g_SOUND = document.getElementById('customSwitch').checked;
 	game.resume();
+	document.getElementById("ponggame").focus();
 }
 
 class Tournament {
@@ -1104,8 +1113,16 @@ function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
         });
 
         playerNameModal.hide();
-        startGame(playerNames);
-    });
+
+		document.getElementById('player1name').innerText = playerNames[0].length > 5 ? playerNames[0].slice(0, 5) + '.' : playerNames[0];
+		document.getElementById('player2name').innerText = playerNames[1].length > 5 ? playerNames[1].slice(0, 5) + '.' : playerNames[1];
+		if (playerNames.length === 4) {
+			document.getElementById('player3name').innerText = playerNames[2].length > 5 ? playerNames[2].slice(0, 5) + '.' : playerNames[2];
+			document.getElementById('player4name').innerText = playerNames[3].length > 5 ? playerNames[3].slice(0, 5) + '.' : playerNames[3];
+		}
+
+		startGame(playerNames);
+	});
 }
 
 function startGame(playerNames, isTournament = false) {
