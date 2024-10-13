@@ -69,3 +69,11 @@ canvas {
     border-color: #e9a108f3;
     color: rgb(12, 12, 12);
 }
+
+.visual-impairement {
+    --bs-btn-font-size: 2rem;
+}
+
+.visual-impairement-icon {
+    font-size: 50px;
+}

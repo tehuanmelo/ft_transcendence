@@ -1041,6 +1041,36 @@ function visual() {
         return;
     }
 
+	if(!document.getElementById("buttonQ").classList.contains("visual-impairement")){
+		document.getElementById("buttonQ").classList.add("visual-impairement");
+		document.getElementById("buttonA").classList.add("visual-impairement");
+		document.getElementById("buttonP").classList.add("visual-impairement");
+		document.getElementById("buttonL").classList.add("visual-impairement");
+		document.getElementById("buttonD").classList.add("visual-impairement");
+		document.getElementById("buttonC").classList.add("visual-impairement");
+		document.getElementById("buttonJ").classList.add("visual-impairement");
+		document.getElementById("buttonN").classList.add("visual-impairement");
+		document.getElementById("backhome").classList.add("visual-impairement-icon");
+		document.getElementById("impaired").classList.add("visual-impairement-icon");
+		document.getElementById("gear").classList.add("visual-impairement-icon");
+		document.getElementById("help").classList.add("visual-impairement-icon");
+	}else{
+		document.getElementById("buttonQ").classList.remove("visual-impairement");
+		document.getElementById("buttonA").classList.remove("visual-impairement");
+		document.getElementById("buttonP").classList.remove("visual-impairement");
+		document.getElementById("buttonL").classList.remove("visual-impairement");
+		document.getElementById("buttonD").classList.remove("visual-impairement");
+		document.getElementById("buttonC").classList.remove("visual-impairement");
+		document.getElementById("buttonJ").classList.remove("visual-impairement");
+		document.getElementById("buttonN").classList.remove("visual-impairement");
+		document.getElementById("backhome").classList.remove("visual-impairement-icon");
+		document.getElementById("impaired").classList.remove("visual-impairement-icon");
+		document.getElementById("gear").classList.remove("visual-impairement-icon");
+		document.getElementById("help").classList.remove("visual-impairement-icon");
+	}
+
+
+
     if (g_fillColor === 'black') {
         g_fillColor = 'blue';
         g_ballRadius = canvas.width / 40;
