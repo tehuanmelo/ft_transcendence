@@ -397,20 +397,28 @@ header {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
-.btn-orange {
+/* -------------------------------- Button -------------------------------- */
+.btn {
+    transition: transform 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+}
+
+.btn-accent {
     color: white;
     background-color: var(--accent);
     border: solid 2px var(--accent);
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.3s ease;
 }
 
-.btn-orange:hover {
+.btn-accent:hover {
     color: white;
     background-color: var(--light-accent);
-    transform: translateY(-5px);
 }
 
-.btn-orange:focus {
+.btn-accent:focus {
     color: white;
     border: solid 2px var(--accent);
 }

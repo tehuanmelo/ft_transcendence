@@ -13,7 +13,7 @@
     <form id="edit-profile-form">
         {% csrf_token %}
         {{ form|crispy }}
-        <a class="btn btn-primary spa-link" href="{% url 'edit_profile' %}" data-method="POST"
+        <a class="btn btn-accent spa-link" href="{% url 'edit_profile' %}" data-method="POST"
             data-form="#edit-profile-form">Save changes</a>
     </form>
 </div>
