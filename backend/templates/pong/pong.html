@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-1 d-flex d-md-flex button-alignment">
             <div class="row">
-                <p id="player1"></p>
+                <p id="player1name"></p>
             </div>
             <div class="row">
                 <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
@@ -42,7 +42,7 @@
                     <button type="button" class="btn btn-danger">&darr; C</button>
                 </div>
                 <div class="row">
-                    <p id="player3"></p>
+                    <p id="player3name"></p>
                 </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
 
         <div class="col-1 d-flex d-md-flex button-alignment">
             <div class="row">
-                <p id="player2"></p>
+                <p id="player2name"></p>
             </div>
             <div class="row">
                 <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
@@ -82,7 +82,7 @@
                     <button type="button" class="btn btn-danger">&darr; N</button>
                 </div>
                 <div class="row">
-                    <p id="player4"></p>
+                    <p id="player4name"></p>
                 </div>
             </div>
         </div>
@@ -90,16 +90,15 @@
 </div>
 
 <!-- Visual Imp Mode Modal -->
-<div id="visualmodal" class="modal fade">
+<div id="visualmodal" class="modal fade" data-bs-theme="dark">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title handjet-font" id="staticBackdropLabel">Warning!</h2>
+                <h1 class="modal-title" id="staticBackdropLabel">Warning!</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="handjet-font">This mode can only be chosen before the game begins!</p>
-                <h2 id="winner" class="handjet-font"></h2>
+                <p>This mode can only be chosen before the game begins!</p>
             </div>
         </div>
     </div>
@@ -107,15 +106,15 @@
 
 <!-- Modal Winner Pop-up-->
 <div id="winnerpopup" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-theme="dark">
     <div class="modal-dialog">
-        <div class="modal-content" style="background-color: #fec66b;">
+        <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title handjet-font" id="staticBackdropLabel">Pong Game</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Pong Game</h1>
             </div>
             <div class="modal-body">
-                <h1 class="handjet-font">Game Over!</h1>
-                <h2 id="winner" class="handjet-font"></h2>
+                <h1>Game Over!</h1>
+                <h2 id="winner"></h2>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="playAgain()">Play
@@ -129,14 +128,14 @@
 
 <!-- Modal Tounament Winner Pop-up-->
 <div id="winnerTpopup" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-theme="dark">
     <div class="modal-dialog">
-        <div class="modal-content" style="background-color: #fec66b;">
+        <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title handjet-font" id="staticBackdropLabel">Pong Game</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Pong Game</h1>
             </div>
             <div class="modal-body">
-                <h2 id="winnerT" class="handjet-font"></h2>
+                <h2 id="winnerT"></h2>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-dark-orange" data-bs-dismiss="modal"
@@ -168,11 +167,11 @@
 
 <!-- Modal Config (level and sound)-->
 <div id="configModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-theme="dark">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="background-color: #fec66b; max-height: 90vh; height: auto;">
-            <div class="modal-header border-0">
-                <h1 class="modal-title press-start-2p-regular-conf" id="staticBackdropLabel">Pong Configurations
+        <div class="modal-content" style="max-height: 90vh; height: auto;">
+            <div class="modal-header">
+                <h1 id="staticBackdropLabel" class="modal-title fs-5">Pong Configurations
                 </h1>
             </div>
             <div class="modal-body">
@@ -180,7 +179,7 @@
                     <!-- Sound switch -->
                     <div class="mb-3 mt-4">
                         <div class="switch-container">
-                            <label class="switch-label chakra-petch-regular" for="customSwitch">Sound</label>
+                            <label class="switch-label" for="customSwitch">Sound</label>
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="customSwitch" checked>
                             </div>
@@ -214,14 +213,14 @@
                         </div>
 
                         <div>
-                            <label id="currentScore" for="score" class="form-label">Score</label>
+                            <label id="currentScore" for="score" class="form-label" style="margin-top: 30px;">Score</label>
                             <input type="range" class="form-range" id="score" min="1" max="11" step="1"
                                 oninput="this.previousElementSibling.innerHTML = 'Score - ' + this.value">
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer border-0">
+            <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-dark-orange" data-bs-dismiss="modal"
                     onclick="applyConfiguration()">Confirm</button>
             </div>
