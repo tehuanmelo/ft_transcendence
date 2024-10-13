@@ -846,6 +846,7 @@ class Game {
 function playAgain() {
 	game.reset();
 	game.start();
+	document.getElementById("ponggame").focus();
 }
 
 function refreshConfig() {
@@ -871,6 +872,7 @@ function applyConfiguration() {
 	g_SCORE_TO_WIN = parseInt(document.getElementById('score').value, 10);
 	g_SOUND = document.getElementById('customSwitch').checked;
 	game.resume();
+	document.getElementById("ponggame").focus();
 }
 
 class Tournament {
