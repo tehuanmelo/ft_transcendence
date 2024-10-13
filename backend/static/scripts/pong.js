@@ -1132,6 +1132,10 @@ function startGame(playerNames, isTournament = false) {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+	if(game != null){
+		game.reset();
+		game = null;
+	}
     game = new Game(isTournament, playerNames);
     window.addEventListener('popstate', () => game.pong.stop());
 
