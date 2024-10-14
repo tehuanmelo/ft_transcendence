@@ -278,6 +278,8 @@ def add_friend(request, username):
 
     if not friend:
         error_message = "User not found."
+    elif friend == request.user:
+        error_message = "You cannot add yourself as a friend."
     else:
         request.user.add_friend(friend)
 
