@@ -270,6 +270,7 @@ def add_friend_view(request):
         return redirect("friend_list")  # Redirect to the friends list after adding
 
     return render(request, "users/add_friend.html")
+    
 @jwt_login_required
 def add_friend(request, username):
     friend = CustomUser.objects.filter(username=username).first()
