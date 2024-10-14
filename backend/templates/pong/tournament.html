@@ -35,7 +35,7 @@
     aria-labelledby="tournamentModalLabel" aria-hidden="true" data-bs-theme="dark">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-blur">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header justify-content-center">
                 <h1 class="modal-title" id="tournamentModalLabel">Tournament Registration</h1>
             </div>
             <div class="modal-body">
@@ -70,20 +70,26 @@
                         <h5 class="text-center mb-2">Game Settings</h5>
                         <div class="row align-items-center">
                             <div class="col">
-                                <button class="dropdown-toggle" data-bs-toggle="dropdown"
-                                    aria-expanded="false">Mode</button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Easy</a></li>
-                                    <li><a class="dropdown-item" href="#">Medium</a></li>
-                                    <li><a class="dropdown-item" href="#">Hard</a></li>
-                                    <hr class="dropdown-divider">
-                                </ul>
+                                <label for="difficultyDropdown">Difficulty*</label>
+                                <div class="dropdown">
+                                    <!-- Dropdown will default to Medium -->
+                                    <button class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+                                        id="difficultyDropdown">
+                                        Medium
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">Easy</a></li>
+                                        <li><a class="dropdown-item" href="#">Medium</a></li>
+                                        <li><a class="dropdown-item" href="#">Hard</a></li>
+                                    </ul>
+                                </div>
                             </div>
                             <div class="col">
-                                <input type="range" id="scoreSlider" name="scoreToWin" class="form-range" min="3"
-                                    max="11" value="7"
+                                <label for="scoreSlider" class="pb-3">Score To Win: <span
+                                        id="scoreDisplay">5</span></label>
+                                <input type="range" id="scoreSlider" name="scoreToWin" class="form-range" min="1"
+                                    max="10" value="5"
                                     oninput="document.getElementById('scoreDisplay').innerText = this.value">
-                                <p>Score To Win: <span id="scoreDisplay">7</span></p>
                             </div>
                         </div>
                     </div>
@@ -92,7 +98,8 @@
             <div class="modal-footer">
                 <a class="btn btn-secondary spa-link" href="{% url 'home' %}" data-method="GET"
                     data-bs-dismiss="modal">Cancel</a>
-                <button type="submit" class="btn btn-orange" form="tournament-form">Register</button>
+                <button id="registerTournament" type="submit" class="btn btn-accent"
+                    form="tournament-form">Register</button>
             </div>
         </div>
     </div>
