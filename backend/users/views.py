@@ -252,51 +252,76 @@ def change_password_view(request):
 
 
 @jwt_login_required
-def add_friend(request, username):
-    friend = get_object_or_404(CustomUser, username=username)
-    request.user.add_friend(friend)
-    return redirect("friend_list", username=username)
-
-
-@jwt_login_required
 def add_friend_view(request):
+    error_message = None
+
     if request.method == "POST":
         username = request.POST.get("username")
-        friend = get_object_or_404(CustomUser, username=username)  # or filter by email
-        request.user.add_friend(friend)
+        friend = CustomUser.objects.filter(username=username).first()  # Use filter to avoid 404
+
+        if not friend:
+            error_message = "User not found."
+        else:
+            request.user.add_friend(friend)
+
+        if error_message:
+            return render(request, "users/friend_list.html", {"error_message": error_message})
+
         return redirect("friend_list")  # Redirect to the friends list after adding
 
     return render(request, "users/add_friend.html")
+@jwt_login_required
+def add_friend(request, username):
+    friend = CustomUser.objects.filter(username=username).first()
+    error_message = None
+
+    if not friend:
+        error_message = "User not found."
+    else:
+        request.user.add_friend(friend)
+
+    if error_message:
+        return render(request, "users/friend_list.html", {"error_message": error_message})
+
+    return redirect("friend_list")
 
 
 @jwt_login_required
 def remove_friend(request, username):
-    friend = get_object_or_404(CustomUser, username=username)
-    request.user.remove_friend(friend)
-    return redirect("friend_list", username=username)
+    friend = CustomUser.objects.filter(username=username).first()
+    error_message = None
 
+    if not friend:
+        error_message = "User not found."
+    else:
+        request.user.remove_friend(friend)
 
-@jwt_login_required
-def accept_friend(request, username):
-    friend = get_object_or_404(CustomUser, username=username)  # Look up the user by username
-    friendship = get_object_or_404(
-        Friendship,
-        user=request.user,
-        friend=friend,  # Use the friend object instead of username
-        status="pending",
-    )
-    friendship.status = "accepted"
-    friendship.save()
+    if error_message:
+        return render(request, "users/friend_list.html", {"error_message": error_message})
+
     return redirect("friend_list")
 
 
 @jwt_login_required
 def reject_friend(request, username):
-    friend = get_object_or_404(CustomUser, username=username)
-    friendship = get_object_or_404(
-        Friendship, user=request.user, friend=friend, status="pending"
-    )
-    friendship.delete()  # Remove the friendship request
+    friend = CustomUser.objects.filter(username=username).first()
+    error_message = None
+
+    if not friend:
+        error_message = "User not found."
+    else:
+        friendship = Friendship.objects.filter(
+            user=request.user, friend=friend, status="pending"
+        ).first()
+
+        if not friendship:
+            error_message = "No pending friendship request found."
+        else:
+            friendship.delete()  # Remove the friendship request
+
+    if error_message:
+        return render(request, "users/friend_list.html", {"error_message": error_message})
+
     return redirect("friend_list")
 
 
@@ -326,6 +351,31 @@ def online_friends(request):
         request, "users/online_friends.html", {"online_friends": online_friends}
     )
 
+
+@jwt_login_required
+def accept_friend(request, username):
+    friend = CustomUser.objects.filter(username=username).first()
+    error_message = None
+
+    if not friend:
+        error_message = "User not found."
+    else:
+        friendship = Friendship.objects.filter(
+            user=request.user,
+            friend=friend,
+            status="pending"
+        ).first()
+
+        if not friendship:
+            error_message = "No pending friendship request found."
+
+    if error_message:
+        return render(request, "users/friend_list.html", {"error_message": error_message})
+
+    # If both friend and friendship exist, proceed to accept the friendship
+    friendship.status = "accepted"
+    friendship.save()
+    return redirect("friend_list")
 
 ##############
 ##### Match Record Methods
