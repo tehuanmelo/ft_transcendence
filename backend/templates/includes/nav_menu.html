@@ -23,7 +23,12 @@
                 <a class="nav-link spa-link px-4" href="{% url 'pong' %}?mode=1v1" data-method="GET">Pong 1v1</a>
                 <a class="nav-link spa-link px-4" href="{% url 'pong' %}?mode=2v2" data-method="GET">Pong 2v2</a>
 
-                <a class="nav-link spa-link px-4" href="{% url 'friend_list' %}" data-method="GET">Friends List</a>
+                <a class="nav-link spa-link px-4" href="{% url 'friend_list' %}" data-method="GET">
+                    Friends List 
+                    {% if pending_requests|length > 0 %}
+                        <span class="badge bg-danger">{{ pending_requests|length }}</span>
+                    {% endif %}
+                </a>
             </div>
             <div class="navbar-nav">
                 <div class="nav-item dropdown">
