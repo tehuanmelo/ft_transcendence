@@ -16,10 +16,11 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf.urls.static import static
 from django.conf.urls import handler404
 from django.shortcuts import render
+from django.views.generic import TemplateView
 
 from . import settings
 
@@ -28,14 +29,9 @@ urlpatterns = [
     path("", include("pages.urls")),
     path("users/", include("users.urls")),
     path("pong", include("pong.urls")),
+    re_path(r"^.*$", TemplateView.as_view(template_name="pages/404.html")),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-
-def custom_404(request, exception):
-    return render(request, "pages/404.html", status=404)
-
-
-handler404 = "admin.urls.custom_404"
