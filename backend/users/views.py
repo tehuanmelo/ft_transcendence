@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseNotAllowed
+from django.db.models import Q
 
 from .models import CustomUser, Friendship
 from .auth import (
@@ -257,20 +258,43 @@ def add_friend_view(request):
 
     if request.method == "POST":
         username = request.POST.get("username")
-        friend = CustomUser.objects.filter(username=username).first()  # Use filter to avoid 404
+        friend = CustomUser.objects.filter(username=username).first()
 
         if not friend:
             error_message = "User not found."
+        elif friend == request.user:
+            error_message = "You cannot add yourself as a friend."
         else:
-            request.user.add_friend(friend)
+            # Check if there is already a pending request from the friend
+            existing_request = Friendship.objects.filter(
+                user=friend, friend=request.user, status="pending"
+            ).first()
+
+            if existing_request:
+                # accept pedning request
+                existing_request.status = "accepted"
+                existing_request.save()
+
+                # create a friendship
+                Friendship.objects.get_or_create(
+                    user=request.user, friend=friend, defaults={"status": "accepted"}
+                )
+            else:
+                # Create a new friend request
+                Friendship.objects.get_or_create(
+                    user=request.user, friend=friend, defaults={"status": "pending"}
+                )
 
         if error_message:
-            return render(request, "users/friend_list.html", {"error_message": error_message})
+            return render(
+                request, "users/friend_list.html", {"error_message": error_message}
+            )
 
-        return redirect("friend_list")  # Redirect to the friends list after adding
+        return redirect("friend_list")
 
     return render(request, "users/add_friend.html")
-    
+
+
 @jwt_login_required
 def add_friend(request, username):
     friend = CustomUser.objects.filter(username=username).first()
@@ -284,7 +308,9 @@ def add_friend(request, username):
         request.user.add_friend(friend)
 
     if error_message:
-        return render(request, "users/friend_list.html", {"error_message": error_message})
+        return render(
+            request, "users/friend_list.html", {"error_message": error_message}
+        )
 
     return redirect("friend_list")
 
@@ -297,10 +323,56 @@ def remove_friend(request, username):
     if not friend:
         error_message = "User not found."
     else:
-        request.user.remove_friend(friend)
+        # Remove the friendship from both sides
+        friendship = Friendship.objects.filter(
+            Q(user=request.user, friend=friend) | Q(user=friend, friend=request.user)
+        )
+
+        if not friendship.exists():
+            error_message = "Friendship not found."
+        else:
+            friendship.delete()
 
     if error_message:
-        return render(request, "users/friend_list.html", {"error_message": error_message})
+        return render(
+            request, "users/friend_list.html", {"error_message": error_message}
+        )
+
+    return redirect("friend_list")
+
+
+@jwt_login_required
+def accept_friend(request, username):
+    friend = CustomUser.objects.filter(username=username).first()
+    error_message = None
+
+    if not friend:
+        error_message = "User not found."
+    else:
+        # Find the pending friendship request
+        friendship = Friendship.objects.filter(
+            user=friend, friend=request.user, status="pending"
+        ).first()
+
+        if not friendship:
+            error_message = "No pending friendship request found."
+        else:
+            # Accept the friendship
+            friendship.status = "accepted"
+            friendship.save()
+
+            # Ensure mutual friendship
+            reciprocal_friendship, created = Friendship.objects.get_or_create(
+                user=friend, friend=request.user
+            )
+            if created:
+                reciprocal_friendship.status = "accepted"
+                reciprocal_friendship.save()
+
+    if error_message:
+        return render(
+            request, "users/friend_list.html", {"error_message": error_message}
+        )
 
     return redirect("friend_list")
 
@@ -313,17 +385,21 @@ def reject_friend(request, username):
     if not friend:
         error_message = "User not found."
     else:
+        # Find the pending friendship request
         friendship = Friendship.objects.filter(
-            user=request.user, friend=friend, status="pending"
+            user=friend, friend=request.user, status="pending"
         ).first()
 
         if not friendship:
             error_message = "No pending friendship request found."
         else:
-            friendship.delete()  # Remove the friendship request
+            # Reject the friendship
+            friendship.delete()
 
     if error_message:
-        return render(request, "users/friend_list.html", {"error_message": error_message})
+        return render(
+            request, "users/friend_list.html", {"error_message": error_message}
+        )
 
     return redirect("friend_list")
 
@@ -347,38 +423,11 @@ def friend_list(request):
 
 @jwt_login_required
 def online_friends(request):
-    online_friends = request.user.friendships.filter(
-        friend__last_activity__gte=timezone.now() - timezone.timedelta(minutes=0.5)
-    )
+    online_friends = request.user.get_online_friends()
     return render(
         request, "users/online_friends.html", {"online_friends": online_friends}
     )
 
-
-@jwt_login_required
-def accept_friend(request, username):
-    friend = CustomUser.objects.filter(username=username).first()
-    error_message = None
-
-    if not friend:
-        error_message = "User not found."
-    else:
-        friendship = Friendship.objects.filter(
-            user=request.user,
-            friend=friend,
-            status="pending"
-        ).first()
-
-        if not friendship:
-            error_message = "No pending friendship request found."
-
-    if error_message:
-        return render(request, "users/friend_list.html", {"error_message": error_message})
-
-    # If both friend and friendship exist, proceed to accept the friendship
-    friendship.status = "accepted"
-    friendship.save()
-    return redirect("friend_list")
 
 ##############
 ##### Match Record Methods

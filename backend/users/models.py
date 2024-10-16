@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
+from django.db.models import Q
 
 
 class CustomUser(AbstractUser):
@@ -30,25 +31,31 @@ class CustomUser(AbstractUser):
 
     def remove_friend(self, friend):
         Friendship.objects.filter(user=self, friend=friend).delete()
+        return not self.is_friend(
+            friend
+        )
 
     def get_friends(self):
         return CustomUser.objects.filter(
             friendships__user=self, friendships__status="accepted"
         )
 
-    def is_friend(self, user):
-        return Friendship.objects.filter(user=self, friend=user).exists()
+    def get_online_friends(self):
+        return CustomUser.objects.filter(
+            friendships__user=self,
+            last_activity__gte=timezone.now() - timezone.timedelta(minutes=5),
+            friendships__status="accepted",
+        )
 
     def get_pending_requests(self):
         return CustomUser.objects.filter(
             friendships__friend=self, friendships__status="pending"
         )
 
-    def get_online_friends(self):
-        return self.friendships.filter(
-            friend__last_activity__gte=timezone.now() - timezone.timedelta(minutes=0.5),
-            status="accepted",  # Ensure only accepted friends are considered
-        )
+    def is_friend(self, user):
+        return Friendship.objects.filter(
+            Q(user=self, friend=user) | Q(user=user, friend=self), status="accepted"
+        ).exists()  # Check for mutual friendship
 
     def get_all_matches(self):
         """Retrieve all matches for this user."""
@@ -73,11 +80,18 @@ class Match(models.Model):
 
 class Friendship(models.Model):
     user = models.ForeignKey(
-        CustomUser, related_name="friendships", on_delete=models.CASCADE
+        CustomUser,
+        related_name="friendships",
+        on_delete=models.CASCADE,
+        to_field="username",
     )
     friend = models.ForeignKey(
-        CustomUser, related_name="friend_of", on_delete=models.CASCADE
+        CustomUser,
+        related_name="friend_of",
+        on_delete=models.CASCADE,
+        to_field="username",
     )
+
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, default="pending")
 
@@ -91,5 +105,5 @@ class Friendship(models.Model):
     def is_friend_online(self):
         # Consider a user online if their last activity was within the last .5 minute
         return (timezone.now() - self.friend.last_activity) < timezone.timedelta(
-            minutes=0.5
+            minutes=5
         )
