@@ -23,7 +23,9 @@
     <ul>
         {% if friends %}
         {% for friend in friends %}
-        <li>{{ friend.username }} {% if friend in online_friends %}(Online){% else %}(Offline){% endif %}</li>
+        <li>{{ friend.username }} {% if friend in online_friends %}(Online){% else %}(Offline){% endif %}
+            <a href="{% url 'remove_friend' friend.username %}">Remove</a>
+        </li>
         {% endfor %}
         {% else %}
         <li>No friends.</li>
