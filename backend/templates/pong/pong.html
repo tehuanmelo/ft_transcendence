@@ -129,19 +129,15 @@
 <!-- Modal Tounament Winner Pop-up-->
 <div id="winnerTpopup" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-theme="dark">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title" id="staticBackdropLabel">Pong Game</h1>
-            </div>
             <div class="modal-body">
                 <h2 id="winnerT"></h2>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-dark-orange" data-bs-dismiss="modal"
-                    onclick="nextGame()">Next
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-dark-orange" data-bs-dismiss="modal" onclick="nextGame()">Next
                     Match!</button>
-                <button type="button" class="btn btn-secondary btn-dark-orange">Back to Home Page</button>
+                <button type="button" class="btn btn-dark-orange">Back to Home Page</button>
             </div>
         </div>
     </div>
@@ -150,16 +146,14 @@
 <!-- Modal Tounament FINAL Winner Pop-up-->
 <div id="winnerFinalpopup" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" style="background-color: #fec66b;">
-            <div class="modal-header">
-                <h1 class="modal-title handjet-font" id="staticBackdropLabel">Pong Game</h1>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
             </div>
             <div class="modal-body">
-                <h2 id="winnerF" class="handjet-font"></h2>
+                <h2 id="winnerF"></h2>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-dark-orange">Back to Home Page</button>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-dark-orange">Back to Home</button>
             </div>
         </div>
     </div>
@@ -188,7 +182,7 @@
                     <div class="mb-3 mt-4">
                         <!-- Mode (level) button -->
                         <div class="btn-group">
-                            <button class="btn btn-secondary btn-dark-orange btn-lg dropdown-toggle" type="button"
+                            <button class="btn btn-dark-orange btn-lg dropdown-toggle" type="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">Mode
                             </button>
                             <ul class="dropdown-menu">
@@ -213,7 +207,8 @@
                         </div>
 
                         <div>
-                            <label id="currentScore" for="score" class="form-label" style="margin-top: 30px;">Score</label>
+                            <label id="currentScore" for="score" class="form-label"
+                                style="margin-top: 30px;">Score</label>
                             <input type="range" class="form-range" id="score" min="1" max="11" step="1"
                                 oninput="this.previousElementSibling.innerHTML = 'Score - ' + this.value">
                         </div>
@@ -221,7 +216,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-dark-orange" data-bs-dismiss="modal"
+                <button type="button" class="btn btn-dark-orange" data-bs-dismiss="modal"
                     onclick="applyConfiguration()">Confirm</button>
             </div>
         </div>

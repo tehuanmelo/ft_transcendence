@@ -74,6 +74,5 @@ function tournamentInit() {
         startTournament(players);
 
         tournamentModal.hide();
-        document.getElementById('tournament').style.display = 'block';
     });
 }
