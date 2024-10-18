@@ -1132,6 +1132,7 @@ function startGame(playerNames, isTournament = false) {
     canvas.height = window.innerHeight;
 
     game = new Game(isTournament, playerNames);
+    window.addEventListener('popstate', () => game.pong.stop());
 
     document.fonts.load('10pt "Press Start 2P"')
         .then(() => {
@@ -1142,7 +1143,6 @@ function startGame(playerNames, isTournament = false) {
             setupDropdownListeners();
 
             document.getElementById("pongContainer").style.display = "flex";
-            console.log("player names:", playerNames); // TODO: remove
         })
         .catch(error => {
             console.error("Error loading font:", error);
