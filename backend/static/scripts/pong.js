@@ -7,7 +7,6 @@ const gameConfig = {
     "Easy": { paddleSpeed: 15, ballSpeed: 7 },
     "Medium": { paddleSpeed: 30, ballSpeed: 15 },
     "Hard": { paddleSpeed: 66, ballSpeed: 33 },
-    "Visual Impaired": { paddleSpeed: 15, ballSpeed: 10 }
 };
 
 var g_PADDLE_SPEED = 10;

@@ -4,15 +4,13 @@
 
 let selectedMode = 'Medium'; // Default value
 let scoreToWin = 7; // Default score
-let currentRound = 0; // Track the current round
-let matches = []; // Store the current matches
 
 function startTournament(players) {
     startGame(players, true);
 }
 
 function handleDropdown() {
-    const modeDropdown = document.querySelector('#tournamentSettings .dropdown-toggle');
+    const difficultyDropdown = document.querySelector('#tournamentSettings .dropdown-toggle');
     const dropdownItems = document.querySelectorAll('#tournamentSettings .dropdown-item');
 
     dropdownItems.forEach(item => {
@@ -20,7 +18,17 @@ function handleDropdown() {
             event.preventDefault();
 
             selectedMode = event.target.textContent;
-            modeDropdown.textContent = selectedMode; // Update the displayed text on the button
+
+            if (selectedMode in gameConfig) {
+                g_PADDLE_SPEED = gameConfig[selectedMode].paddleSpeed;
+                g_BALL_SPEED = gameConfig[selectedMode].ballSpeed;
+            }
+            else if (selectedMode === "Custom")
+                document.getElementById("customConfig").style.display = "block";
+            else
+                console.error('Invalid difficulty level selected');
+
+            difficultyDropdown.textContent = selectedMode;
         });
     });
 }
