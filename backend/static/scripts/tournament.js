@@ -36,13 +36,12 @@ function handleDropdown() {
 function handleScoreSlider() {
     const scoreSlider = document.getElementById('scoreSlider');
     scoreSlider.addEventListener('input', (event) => {
-        scoreToWin = event.target.value;
-        document.getElementById('scoreDisplay').innerText = scoreToWin;
+        g_SCORE_TO_WIN = parseInt(event.target.value, 10);
+        document.getElementById('scoreDisplay').innerText = g_SCORE_TO_WIN;
     });
 }
 
 function tournamentInit() {
-    // TODO select tournament settings (difficulty and score to win)
     const tournamentModal = new bootstrap.Modal('#tournamentModal');
     tournamentModal.show();
 
