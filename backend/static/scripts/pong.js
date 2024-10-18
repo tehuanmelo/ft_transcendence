@@ -11,7 +11,7 @@ const gameConfig = {
 };
 
 var g_PADDLE_SPEED = 10;
-var g_BALL_SPEED = 15;
+var g_BALL_SPEED = 10;
 var g_SOUND = true;
 var g_SCORE_TO_WIN = 5;
 var g_CURRENT_LEVEL = "Medium";
@@ -46,8 +46,7 @@ class Ball {
 		g_ballRadius = this.ballRadius;
 		this.score = score;
 		this.sound = new Sound("../static/sound/bounce.mp3");
-		this.angleX = 0.0;
-		this.angleY = 0.0;
+		this.angle = 0.0;
 	}
 
 	drawBall() {
@@ -58,33 +57,26 @@ class Ball {
 		ctx.closePath();
 	}
 
-	ballStartAngle() {
-		var min = -0.5;
-		var max = 0.5;
-		var angle = Math.random() * (max - min) + min;
-		if (angle < 0.15 && angle > -0.15) {
-			angle = 0.15;
-		}
-		return angle;
-	}
-
-	ballResetPosition() {
-		this.ballX = this.width / 2;
-		this.ballY = this.height / 2;
+	ballRandomSign() {
+		return Math.random() > 0.5 ? -1 : 1;
 	}
 
 	startBallMovement() {
-		this.angleX = this.ballStartAngle();
-		this.angleY = this.ballStartAngle();
-		this.dx = this.angleX * g_BALL_SPEED; // Initialize dx based on random angle
-		this.dy = this.angleY * g_BALL_SPEED; // Initialize dy based on random angle
-		this.ballMoving = true; // Set flag to true to start movement
-	}
+        this.angle = Math.random();
+        this.dx = Math.cos(this.angle) * g_BALL_SPEED * this.ballRandomSign();
+        this.dy = Math.sin(this.angle) * g_BALL_SPEED * this.ballRandomSign();
+        this.ballMoving = true;
+    }
+
+    ballResetPosition() {
+        this.ballX = this.width / 2;
+        this.ballY = this.height / 2;
+    }
 
 	resumeBallMovement() {
-		this.dx = this.angleX * g_BALL_SPEED; // Update the speed
-		this.dy = this.angleY * g_BALL_SPEED; // Update the speed
-		this.ballMoving = true;
+		this.dx = Math.cos(this.angle) * g_BALL_SPEED;
+        this.dy = Math.sin(this.angle) * g_BALL_SPEED;
+        this.ballMoving = true;
 	}
 
 	doLinesIntersect(line1, line2) {
