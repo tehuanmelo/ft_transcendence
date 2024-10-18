@@ -1,69 +1,77 @@
-// tournament.js - code for PONG tournament
+// tournamentInit.js
 
-function registerPlayers(players) {
-    console.log('Players registered:', players);
+//TODO rework this entire file
+
+let selectedMode = 'Medium'; // Default value
+let scoreToWin = 7; // Default score
+let currentRound = 0; // Track the current round
+let matches = []; // Store the current matches
+
+function startTournament(players) {
+    startGame(players, true);
 }
 
-function updateTournamentTable(players) {
-    const tableBody = document.getElementById('tournament-body');
-    tableBody.innerHTML = ''; // Clear existing table content
+function handleDropdown() {
+    const modeDropdown = document.querySelector('#tournamentSettings .dropdown-toggle');
+    const dropdownItems = document.querySelectorAll('#tournamentSettings .dropdown-item');
 
-    let matchNumber = 1;
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', (event) => {
+            event.preventDefault();
 
-    for (let i = 0; i < players.length; i += 2) {
-        const row = document.createElement('tr');
+            selectedMode = event.target.textContent;
+            modeDropdown.textContent = selectedMode; // Update the displayed text on the button
+        });
+    });
+}
 
-        // Player 1 and Player 2
-        const player1 = players[i];
-        const player2 = players[i + 1] || "Bye"; // Handle case where there's an odd number of players
-
-        // Match row elements
-        const matchCell = document.createElement('td');
-        matchCell.textContent = matchNumber++;
-
-        const player1Cell = document.createElement('td');
-        player1Cell.textContent = player1;
-
-        const player2Cell = document.createElement('td');
-        player2Cell.textContent = player2;
-
-        const winnerCell = document.createElement('td');
-        winnerCell.textContent = ''; // Initially, no winner is selected
-
-        // Append cells to row
-        row.appendChild(matchCell);
-        row.appendChild(player1Cell);
-        row.appendChild(player2Cell);
-        row.appendChild(winnerCell);
-
-        // Append row to table body
-        tableBody.appendChild(row);
-    }
+function handleScoreSlider() {
+    const scoreSlider = document.getElementById('scoreSlider');
+    scoreSlider.addEventListener('input', (event) => {
+        scoreToWin = event.target.value;
+        document.getElementById('scoreDisplay').innerText = scoreToWin;
+    });
 }
 
 function tournamentInit() {
-    // select tournament settings (difficulty and score to win)
+    // TODO select tournament settings (difficulty and score to win)
     const tournamentModal = new bootstrap.Modal('#tournamentModal');
     tournamentModal.show();
 
-    const tournamentForm = document.getElementById('tournament-form');
+    const playerInputs = ['alias1', 'alias2', 'alias3', 'alias4'];
+
+    let players = [];
+    const tournamentForm = document.getElementById('tournamentForm');
+
+    handleDropdown();
+    handleScoreSlider();
     tournamentForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
         tournamentForm.classList.remove('was-validated');
 
-        const alias1 = document.getElementById('alias1').value.trim();
-        const alias2 = document.getElementById('alias2').value.trim();
-        const alias3 = document.getElementById('alias3').value.trim();
-        const alias4 = document.getElementById('alias4').value.trim();
+        let allValid = true;
+        playerInputs.forEach((inputId) => {
+            const inputField = document.getElementById(inputId);
+            if (inputField.checkValidity()) {
+                inputField.classList.remove('is-invalid');
+                inputField.classList.add('is-valid');
+            }
+            else {
+                allValid = false;
+                inputField.classList.add('is-invalid');
+            }
+        });
 
-        const players = [alias1, alias2, alias3, alias4];
+        playerInputs.forEach((inputId) => {
+            const alias = document.getElementById(inputId).value.trim();
+            if (alias) players.push(alias);
+        });
 
+        if (!allValid) return;
         tournamentForm.classList.add('was-validated');
 
-        registerPlayers(players);
-
-        updateTournamentTable(players);
+        startTournament(players);
 
         tournamentModal.hide();
         document.getElementById('tournament').style.display = 'block';

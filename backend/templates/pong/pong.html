@@ -283,4 +283,77 @@
     </div>
 </div>
 
+<!-- Tournament Registration Modal -->
+<div id="tournamentModal" class="modal fade" tabindex="-1" data-bs-backdrop="static"
+    aria-labelledby="tournamentModalLabel" aria-hidden="true" data-bs-theme="dark">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-blur">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <h1 class="modal-title text-center" id="tournamentModalLabel">Tournament Registration</h1>
+            </div>
+            <div class="modal-body">
+                <form id="tournamentForm" class="tournament-form">
+                    <div id="playerAliases" class="mb-4">
+                        <div class="row mb-2">
+                            <div class="col">
+                                <label for="alias1" class="form-label">Player 1*</label>
+                                <input type="text" id="alias1" name="alias1" class="form-control" required
+                                    maxlength="20" placeholder="Player 1">
+                            </div>
+                            <div class="col">
+                                <label for="alias2" class="form-label">Player 2*</label>
+                                <input type="text" id="alias2" name="alias2" class="form-control" required
+                                    maxlength="20" placeholder="Player 2">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label for="alias3" class="form-label">Player 3*</label>
+                                <input type="text" id="alias3" name="alias3" class="form-control" required
+                                    maxlength="20" placeholder="Player 3">
+                            </div>
+                            <div class="col">
+                                <label for="alias4" class="form-label">Player 4</label>
+                                <input type="text" id="alias4" name="alias4" class="form-control" maxlength="20"
+                                    placeholder="Player 4 (Optional)">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tournamentSettings">
+                        <h5 class="text-center mb-2">Game Settings</h5>
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <label for="difficultyDropdownButton">Difficulty*</label>
+                                <div class="dropdown">
+                                    <!-- Dropdown will default to Medium -->
+                                    <button class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+                                        id="difficultyDropdownButton">Medium</button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">Easy</a></li>
+                                        <li><a class="dropdown-item" href="#">Medium</a></li>
+                                        <li><a class="dropdown-item" href="#">Hard</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="scoreSlider" class="pb-3">Score To Win: <span
+                                        id="scoreDisplay">5</span></label>
+                                <input type="range" id="scoreSlider" name="scoreToWin" class="form-range" min="1"
+                                    max="10" value="5"
+                                    oninput="document.getElementById('scoreDisplay').innerText = this.value">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <a class="btn btn-secondary spa-link" href="{% url 'home' %}" data-method="GET"
+                    data-bs-dismiss="modal">Cancel</a>
+                <button id="registerTournament" type="submit" class="btn btn-accent"
+                    form="tournamentForm">Start</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock content %}

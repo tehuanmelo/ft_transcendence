@@ -2,7 +2,6 @@
 
 const initFunctions = {
     '/pong': gameInit,
-    '/pong/tournament': tournamentInit,
 }
 
 document.addEventListener('DOMContentLoaded', () => {

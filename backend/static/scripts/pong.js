@@ -1167,9 +1167,9 @@ function gameInit() {
         { mode: '1v1', loggedIn: true, players: 2 },
         { mode: '2v2', loggedIn: true, players: 4 },
         { mode: 'guest', loggedIn: false, players: 2 },
+        { mode: 'tournament', loggedIn: true },
     ];
 
-    // Find the game mode object based on the 'mode' parameter
     const selectedMode = gameModes.find(gameMode => gameMode.mode === mode);
     if (!selectedMode) {
         alert('Invalid mode selected');
@@ -1177,7 +1177,6 @@ function gameInit() {
         return;
     }
 
-    // Check if the login status matches the selected mode's requirement
     const isLoggedIn = (loggedInUsername !== null);
     if (selectedMode.loggedIn && !isLoggedIn) {
         alert('You must be logged in to access this mode');
@@ -1193,5 +1192,5 @@ function gameInit() {
     else if (selectedMode.mode === 'guest')
         askForPlayerNames(selectedMode.players, false);
     else if (selectedMode.mode === 'tournament')
-        console.log('Tournament mode selected');
+        tournamentInit();
 }
