@@ -7,9 +7,9 @@
 {% block content %}
 
 <!-- Profile -->
-<div class="container-xl py-5">
-    <div class="sidebar border">
-        <div class="profile-image-wrapper border">
+<div class="container-xl d-flex justify-content-center h-75">
+    <div class="main">
+        <div class="profile-image-wrapper">
             {% if user.profile_image %}
             <img src="{{ user.profile_image.url }}" class="profile-image rounded-circle"
                 alt="{{ user.username }}'s Profile Image">
@@ -29,17 +29,8 @@
             <div>Last name: {{ user.last_name }}</div>
             {% endif %}
         </div>
-    </div>
 
-    <div class="main border">
         <div class="card-body">
-            <p class="card-text"><small>Member since: {{ user.date_joined|date:"F Y" }}</small></p>
-            {% if user.bio %}
-            <div class="border bio-text p-4">
-                <p class="card-text">{{user.bio}}</p>
-            </div>
-            {% endif %}
-
             <p class="social-links mt-3">
                 {% if user.github %}
                 <a href="{{user.github}}" target="_blank" class="btn-social"><i class="fa-brands fa-github"></i></a>
@@ -55,9 +46,14 @@
                 {% endif %}
             </div>
 
-            <p><small>Last login: {{ user.last_login|date:"F j, Y, g:i a" }}</small></p>
+            {% if user.bio %}
+            <div class="border bio-text p-4">
+                <h4>bio:</h4>
+                <p class="card-text">{{user.bio}}</p>
+            </div>
+            {% endif %}
 
-            <a class="btn btn-form mt-3 spa-link" href="{% url 'edit_profile' %}" data-method="GET">Edit
+            <a class="btn btn-accent mt-3 spa-link" href="{% url 'edit_profile' %}" data-method="GET">Edit
                 Profile</a>
         </div>
     </div>
