@@ -90,7 +90,7 @@
 </div>
 
 <!-- Visual Imp Mode Modal -->
-<div id="visualmodal" class="modal fade" data-bs-theme="dark" tabindex="-1">
+<div id="visualmodal" class="modal fade" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -106,7 +106,7 @@
 
 <!-- Modal Winner Pop-up-->
 <div id="winnerpopup" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-theme="dark">
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -128,20 +128,17 @@
 
 <!-- Modal Tounament Winner Pop-up-->
 <div id="winnerTpopup" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-theme="dark">
-    <div class="modal-dialog">
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title" id="staticBackdropLabel">Pong Game</h1>
+            <div class="modal-header justify-content-center">
+                <h2 id="winnerT" class="text-center"></h2>
             </div>
-            <div class="modal-body">
-                <h2 id="winnerT"></h2>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-dark-orange" data-bs-dismiss="modal"
-                    onclick="nextGame()">Next
+            <div class="modal-footer justify-content-center">
+                <a class="btn btn-dark-orange spa-link" href="{% url 'home' %}" data-method="GET"
+                    data-bs-dismiss="modal">Back to Home</a>
+                <button type="button" class="btn btn-dark-orange" data-bs-dismiss="modal" onclick="nextGame()">Next
                     Match!</button>
-                <button type="button" class="btn btn-secondary btn-dark-orange">Back to Home Page</button>
             </div>
         </div>
     </div>
@@ -150,16 +147,16 @@
 <!-- Modal Tounament FINAL Winner Pop-up-->
 <div id="winnerFinalpopup" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content" style="background-color: #fec66b;">
-            <div class="modal-header">
-                <h1 class="modal-title handjet-font" id="staticBackdropLabel">Pong Game</h1>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <h2 id="winnerF" class="text-center"></h2>
             </div>
-            <div class="modal-body">
-                <h2 id="winnerF" class="handjet-font"></h2>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-dark-orange">Back to Home Page</button>
+            <div class="modal-footer justify-content-center">
+                <a class="btn btn-dark-orange spa-link" href="{% url 'pong' %}?mode=tournament" data-method="GET"
+                    data-bs-dismiss="modal">Play Tournament Again</a>
+                <a class="btn btn-dark-orange spa-link" href="{% url 'home' %}" data-method="GET"
+                    data-bs-dismiss="modal">Back to Home</a>
             </div>
         </div>
     </div>
@@ -167,7 +164,7 @@
 
 <!-- Modal Config (level and sound)-->
 <div id="configModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-theme="dark">
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="max-height: 90vh; height: auto;">
             <div class="modal-header">
@@ -188,7 +185,7 @@
                     <div class="mb-3 mt-4">
                         <!-- Mode (level) button -->
                         <div class="btn-group">
-                            <button class="btn btn-secondary btn-dark-orange btn-lg dropdown-toggle" type="button"
+                            <button class="btn btn-dark-orange btn-lg dropdown-toggle" type="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">Mode
                             </button>
                             <ul class="dropdown-menu">
@@ -213,7 +210,8 @@
                         </div>
 
                         <div>
-                            <label id="currentScore" for="score" class="form-label" style="margin-top: 30px;">Score</label>
+                            <label id="currentScore" for="score" class="form-label"
+                                style="margin-top: 30px;">Score</label>
                             <input type="range" class="form-range" id="score" min="1" max="11" step="1"
                                 oninput="this.previousElementSibling.innerHTML = 'Score - ' + this.value">
                         </div>
@@ -221,7 +219,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-dark-orange" data-bs-dismiss="modal"
+                <button type="button" class="btn btn-dark-orange" data-bs-dismiss="modal"
                     onclick="applyConfiguration()">Confirm</button>
             </div>
         </div>
@@ -232,7 +230,7 @@
 
 <!-- Player Name Modal -->
 <div id="playerNameModal" class="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="playerNameModalLabel" aria-hidden="true" data-bs-theme="dark">
+    aria-labelledby="playerNameModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header justify-content-center">
@@ -278,6 +276,79 @@
                 <a class="btn btn-secondary spa-link" href="{% url 'home' %}" data-method="GET"
                     data-bs-dismiss="modal">Cancel</a>
                 <button type="button" class="btn btn-primary" id="startGameButton">Start</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tournament Registration Modal -->
+<div id="tournamentModal" class="modal fade" tabindex="-1" data-bs-backdrop="static"
+    aria-labelledby="tournamentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <h1 class="modal-title text-center" id="tournamentModalLabel">Tournament Registration</h1>
+            </div>
+            <div class="modal-body">
+                <form id="tournamentForm" class="tournament-form d-flex h-100 flex-column justify-content-center">
+                    <div id="playerAliases" class="mb-4">
+                        <div class="row mb-2">
+                            <div class="col">
+                                <label for="alias1" class="form-label">Player 1*</label>
+                                <input type="text" id="alias1" name="alias1" class="form-control" required
+                                    maxlength="20" placeholder="Player 1">
+                            </div>
+                            <div class="col">
+                                <label for="alias2" class="form-label">Player 2*</label>
+                                <input type="text" id="alias2" name="alias2" class="form-control" required
+                                    maxlength="20" placeholder="Player 2">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label for="alias3" class="form-label">Player 3*</label>
+                                <input type="text" id="alias3" name="alias3" class="form-control" required
+                                    maxlength="20" placeholder="Player 3">
+                            </div>
+                            <div class="col">
+                                <label for="alias4" class="form-label">Player 4</label>
+                                <input type="text" id="alias4" name="alias4" class="form-control" maxlength="20"
+                                    placeholder="Player 4 (Optional)">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tournamentSettings">
+                        <h5 class="text-center mb-2">Game Settings</h5>
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <label for="difficultyDropdownButton">Difficulty*</label>
+                                <div class="dropdown">
+                                    <!-- Dropdown will default to Medium -->
+                                    <button class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+                                        id="difficultyDropdownButton">Medium</button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">Easy</a></li>
+                                        <li><a class="dropdown-item" href="#">Medium</a></li>
+                                        <li><a class="dropdown-item" href="#">Hard</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="scoreSlider" class="pb-3">Score To Win: <span
+                                        id="scoreDisplay">5</span></label>
+                                <input type="range" id="scoreSlider" name="scoreToWin" class="form-range" min="1"
+                                    max="10" value="5"
+                                    oninput="document.getElementById('scoreDisplay').innerText = this.value">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <a class="btn btn-secondary spa-link" href="{% url 'home' %}" data-method="GET"
+                    data-bs-dismiss="modal">Cancel</a>
+                <button id="registerTournament" type="submit" class="btn btn-accent"
+                    form="tournamentForm">Start</button>
             </div>
         </div>
     </div>
