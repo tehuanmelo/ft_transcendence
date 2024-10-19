@@ -1,7 +1,5 @@
 // tournamentInit.js
 
-//TODO rework this entire file
-
 let selectedMode = 'Medium';
 let scoreToWin = 7;
 
