@@ -22,12 +22,22 @@
                     href="{% url 'home' %}" data-method="GET">Home</a>
                 <a class="nav-link spa-link px-4 {% if request.path == '/about/' %}active-link{% endif %}"
                     href="{% url 'about' %}" data-method="GET">About</a>
-                <a class="nav-link spa-link px-4" href="{% url 'pong' %}?mode=1v1" data-method="GET">Pong 1v1</a>
-                <a class="nav-link spa-link px-4" href="{% url 'pong' %}?mode=2v2" data-method="GET">Pong 2v2</a>
+                <div id="pongModes" class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle px-4" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">Pong</a>
+                    <ul class="dropdown-menu" style="min-width: 200px;">
+                        <li><a class="dropdown-item spa-link" href="{% url 'pong' %}?mode=1v1" data-method="GET">1v1</a>
+                        </li>
+                        <li><a class="dropdown-item spa-link" href="{% url 'pong' %}?mode=2v2" data-method="GET">2v2</a>
+                        </li>
+                        <li><a class="dropdown-item spa-link" href="{% url 'pong' %}?mode=tournament" data-method="GET">Tournament</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="navbar-nav">
                 <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                    <a id="user" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         {% if user.profile_image %}
                         <img src="{{ user.profile_image.url }}" class="rounded-circle" alt="Profile Image">

@@ -158,18 +158,28 @@ header {
     border: 2px solid transparent;
 }
 
-/* On hover, make the profile image stand out */
 .navbar-nav .dropdown .nav-link:hover img,
 .navbar-nav .dropdown .nav-link:focus img {
     transform: scale(1.2);
     border-color: var(--accent);
 }
 
-.navbar-nav .dropdown-toggle::after {
+.navbar-nav .dropdown-toggle[id="user"]::after {
     border-top-color: var(--accent);
     border-left-color: transparent;
     border-right-color: transparent;
     margin-left: -0.5rem;
+}
+
+.navbar-nav .dropdown-toggle[id="pongModes"]::after {
+    border-left-color: transparent;
+    border-right-color: transparent;
+    margin-left: -0.5rem;
+}
+
+.navbar-nav .dropdown-toggle:hover,
+.navbar-nav .dropdown-toggle:focus {
+    color: var(--accent);
 }
 
 @media (max-width: 991.98px) {
