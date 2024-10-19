@@ -131,14 +131,14 @@
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-body">
-                <h2 id="winnerT"></h2>
+            <div class="modal-header justify-content-center">
+                <h2 id="winnerT" class="text-center"></h2>
             </div>
             <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-dark-orange" data-bs-dismiss="modal" onclick="nextGame()">Next
-                    Match!</button>
                 <a class="btn btn-dark-orange spa-link" href="{% url 'home' %}" data-method="GET"
                     data-bs-dismiss="modal">Back to Home</a>
+                <button type="button" class="btn btn-dark-orange" data-bs-dismiss="modal" onclick="nextGame()">Next
+                    Match!</button>
             </div>
         </div>
     </div>
@@ -149,10 +149,12 @@
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-body">
-                <h2 id="winnerF"></h2>
+            <div class="modal-header justify-content-center">
+                <h2 id="winnerF" class="text-center"></h2>
             </div>
             <div class="modal-footer justify-content-center">
+                <a class="btn btn-dark-orange spa-link" href="{% url 'pong' %}?mode=tournament" data-method="GET"
+                    data-bs-dismiss="modal">Play Tournament Again</a>
                 <a class="btn btn-dark-orange spa-link" href="{% url 'home' %}" data-method="GET"
                     data-bs-dismiss="modal">Back to Home</a>
             </div>

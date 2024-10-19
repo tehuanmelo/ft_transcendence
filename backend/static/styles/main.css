@@ -430,12 +430,19 @@ header {
     border: none;
 }
 
-#tournamentModal .modal-content {
+.modal .modal-content {
     background-color: transparent;
 }
 
-#tournamentModal .modal-body {
+.modal .modal-header,
+.modal .modal-body,
+.modal .modal-footer {
     background-color: var(--background);
+}
+
+#tournamentModal .modal-header,
+#tournamentModal .modal-footer {
+    background-color: transparent;
 }
 
 #tournamentModal>.form-label {

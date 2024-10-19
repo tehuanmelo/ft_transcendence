@@ -779,7 +779,7 @@ class Game {
 
 	start() {
 		if (this.isTournament == true) {
-			this.tournament.startTournament();
+			this.tournament.start();
 		}
 		else {
 			this.pong.start();
@@ -788,7 +788,7 @@ class Game {
 
 	reset() {
 		if (this.isTournament == true) {
-			this.tournament.resetTournament();
+			this.tournament.reset();
 		}
 		else {
 			this.pong.reset();
@@ -867,128 +867,134 @@ function applyConfiguration() {
 }
 
 class Tournament {
-    // player1 will be the logged user
-	constructor(players) {
-		this.players = players;
-		this.pong = new Pong(2, true, this.winnerCallback);
+    constructor(players) {
+        this.players = players;
+        this.pong = new Pong(2, true, this.winnerCallback);
 
-		if (this.players.length == 3)
-			this.playerArray = this.getUniqueRandomPlayers3();
-		else
-			this.playerArray = this.getUniqueRandomPlayers4();
+        this.playerArray = (this.players.length == 3)
+            ? this.getUniqueRandomPlayers(3)
+            : this.getUniqueRandomPlayers(4);
 
-		this.keyboardEventHandlerBind = this.handleKeyboardEvent.bind(this);
-		this.currentPlayer1 = this.players[this.playerArray[0]];
-		this.currentPlayer2 = this.players[this.playerArray[1]];
-		this.winner = "";
-		this.isFinalGame = false;
-		this.semiFinalWinner1 = "";
-		this.semiFinalWinner2 = "";
-	}
+        this.keyboardEventHandlerBind = this.handleKeyboardEvent.bind(this);
+        this.currentPlayer1 = this.players[this.playerArray[0]];
+        this.currentPlayer2 = this.players[this.playerArray[1]];
+        this.winner = null;
+        this.isFinalGame = false;
+        this.semiFinalWinner1 = null;
+        this.semiFinalWinner2 = null;
 
-	// lambda =>
-	winnerCallback = (winner) => {
-		var element = document.getElementById('winnerT');
-		var elementFinal = document.getElementById('winnerF');
-		if (winner == 'left') {
-			element.innerText = this.currentPlayer1 + " Player wins!";
-			elementFinal.innerText = this.currentPlayer1 + " won the Tournament!";
-			this.winner = this.currentPlayer1;
-		}
-		else {
-			element.innerText = this.currentPlayer2 + " Player wins!";
-			elementFinal.innerText = this.currentPlayer2 + " won the Tournament!";
-			this.winner = this.currentPlayer2;
-		}
-		if (this.players.length == 4) {
-			if (this.semiFinalWinner1 == "") {
-				this.semiFinalWinner1 = this.winner;
-			}
-			else {
-				this.semiFinalWinner2 = this.winner;
-			}
-		}
-		if (this.isFinalGame == true) {
-			var myModal = new bootstrap.Modal('#winnerFinalpopup');
-			myModal.show();
-		}
-		else {
-			var myModal = new bootstrap.Modal('#winnerTpopup');
-			myModal.show();
-		}
-	}
+        this.updatePlayerNamesUI();
+    }
 
-	getUniqueRandomPlayers3() {
-		const numbers = [0, 1, 2];
-		return this.shuffleArray(numbers);
-	}
+    static GAME_TYPE_PRELIMINARY = "Preliminary Match";
+    static GAME_TYPE_FINAL = "Final";
 
-	getUniqueRandomPlayers4() {
-		const numbers = [0, 1, 2, 3];
-		return this.shuffleArray(numbers);
-	}
+    winnerCallback = (winner) => {
+        const winnerElement = document.getElementById('winnerT');
+        const finalWinnerElement = document.getElementById('winnerF');
 
-	shuffleArray(array) {
-		for (let i = array.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[array[i], array[j]] = [array[j], array[i]];
-		}
-		return (array);
-	}
+        this.winner = (winner === 'left') ? this.currentPlayer1 : this.currentPlayer2;
 
-	startTournament() {
-		this.displayGameAnnouncement("Semi Final", this.players[this.playerArray[0]], this.players[this.playerArray[1]]);
-		document.addEventListener('keydown', this.keyboardEventHandlerBind);
-	}
+        winnerElement.innerText = `${this.winner} wins this match!`;
+        finalWinnerElement.innerText = `${this.winner} won the Tournament!`;
 
-	resetTournament() {
-		document.removeEventListener('keydown', this.keyboardEventHandlerBind);
-		this.pong.stop();
-	}
+        if (this.players.length === 4)
+            this.updateSemiFinalWinner();
 
-	nextMatch() {
-		if (this.players.length == 4) {
-			if (this.semiFinalWinner1 == this.winner && this.semiFinalWinner2 == "") {
-				this.currentPlayer1 = this.players[this.playerArray[2]];
-				this.currentPlayer2 = this.players[this.playerArray[3]];
-				this.displayGameAnnouncement("Semi Final", this.players[this.playerArray[2]], this.players[this.playerArray[3]]);
-			}
-			if (this.semiFinalWinner2 == this.winner) {
-				this.displayGameAnnouncement("Final", this.semiFinalWinner1, this.semiFinalWinner2);
-				this.currentPlayer1 = this.semiFinalWinner1;
-				this.currentPlayer2 = this.semiFinalWinner2;
-				this.isFinalGame = true;
-			}
-		}
-		else {
-			this.displayGameAnnouncement("Final", this.winner, this.players[this.playerArray[2]]);
-			this.isFinalGame = true;
-		}
-		document.addEventListener('keydown', this.keyboardEventHandlerBind);
-	}
+        const modalId = this.isFinalGame ? '#winnerFinalpopup' : '#winnerTpopup';
+        const myModal = new bootstrap.Modal(modalId);
+        myModal.show();
+    }
 
-	handleKeyboardEvent(event) {
-		if (event.key === 'Enter') {
-			document.removeEventListener('keydown', this.keyboardEventHandlerBind);
-			this.pong.start();
-		}
-	}
+    updateSemiFinalWinner() {
+        if (!this.semiFinalWinner1)
+            this.semiFinalWinner1 = this.winner;
+        else if (!this.semiFinalWinner2)
+            this.semiFinalWinner2 = this.winner;
+    }
 
-	displayGameAnnouncement(gameType, firstPlayerName, secondPlayerName) {
-		ctx.fillStyle = 'black';
-		ctx.fillRect(0, 0, canvas.width, canvas.height); // Draw a rectangle (x, y, width, height)
-		ctx.fillStyle = 'red';
-		ctx.font = "50px 'Press Start 2P'";
+    getUniqueRandomPlayers(playerCount) {
+        const playerIndexes = Array.from({ length: playerCount }, (_, i) => i);
+        return this.shuffleArray(playerIndexes);
+    }
 
-		var textWidth = ctx.measureText(gameType).width;
-		ctx.fillText(gameType, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 200);
-		ctx.font = "50px 'Press Start 2P'";
-		textWidth = ctx.measureText(firstPlayerName + " X " + secondPlayerName).width;
-		ctx.fillText(firstPlayerName + " X " + secondPlayerName, (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) - 50);
-		ctx.font = "50px 'Press Start 2P'";
-		textWidth = ctx.measureText("Press Enter to Start").width;
-		ctx.fillText("Press Enter to Start", (canvas.width / 2) - (textWidth / 2), (canvas.height / 2) + 100);
-	}
+    shuffleArray(array) {
+        return array.sort(() => Math.random() - 0.5);
+    }
+
+    start() {
+        this.displayGameAnnouncement(Tournament.GAME_TYPE_PRELIMINARY, this.currentPlayer1, this.currentPlayer2);
+        document.addEventListener('keydown', this.keyboardEventHandlerBind);
+    }
+
+    reset() {
+        document.removeEventListener('keydown', this.keyboardEventHandlerBind);
+        this.pong.stop();
+    }
+
+    nextMatch() {
+        if (this.players.length === 4)
+            this.handleNextMatchForFourPlayers();
+        else
+            this.prepareFinalMatch(this.winner, this.players[this.playerArray[2]]);
+        document.addEventListener('keydown', this.keyboardEventHandlerBind);
+        this.updatePlayerNamesUI();
+    }
+
+    handleNextMatchForFourPlayers() {
+        if (this.semiFinalWinner1 && !this.semiFinalWinner2) {
+            this.currentPlayer1 = this.players[this.playerArray[2]];
+            this.currentPlayer2 = this.players[this.playerArray[3]];
+            this.displayGameAnnouncement(Tournament.GAME_TYPE_PRELIMINARY, this.currentPlayer1, this.currentPlayer2);
+        }
+        else if (this.semiFinalWinner2)
+            this.prepareFinalMatch(this.semiFinalWinner1, this.semiFinalWinner2);
+    }
+
+    prepareFinalMatch(player1, player2) {
+        this.displayGameAnnouncement(Tournament.GAME_TYPE_FINAL, player1, player2);
+        this.currentPlayer1 = player1;
+        this.currentPlayer2 = player2;
+        this.isFinalGame = true;
+    }
+
+    handleKeyboardEvent(event) {
+        if (event.key === 'Enter') {
+            document.removeEventListener('keydown', this.keyboardEventHandlerBind);
+            this.pong.start();
+        }
+    }
+
+    displayGameAnnouncement(gameType, player1, player2) {
+        const messages = [
+            { text: gameType, y: canvas.height / 2 - 200 },
+            { text: `${player1} X ${player2}`, y: canvas.height / 2 - 50 },
+            { text: "Press Enter to Start Match", y: canvas.height / 2 + 100 }
+        ]
+
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = 'red';
+        ctx.font = "50px 'Press Start 2P'";
+
+        messages.forEach(({ text, y }) => {
+            const textWidth = ctx.measureText(text).width;
+            ctx.fillText(text, (canvas.width / 2) - (textWidth / 2), y);
+        });
+    }
+
+    updatePlayerNamesUI() {
+        const player1Element = document.getElementById('player1name');
+        const player2Element = document.getElementById('player2name');
+
+        player1Element.innerText = this.getDisplayableName(this.currentPlayer1);
+        player2Element.innerText = this.getDisplayableName(this.currentPlayer2);
+    }
+
+    getDisplayableName(playerName) {
+        return playerName.length > 5 ? playerName.slice(0, 5) + '.' : playerName;
+    }
 }
 
 function nextGame() {
@@ -1105,15 +1111,15 @@ function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
 
         playerNameModal.hide();
 
-		document.getElementById('player1name').innerText = playerNames[0].length > 5 ? playerNames[0].slice(0, 5) + '.' : playerNames[0];
-		document.getElementById('player2name').innerText = playerNames[1].length > 5 ? playerNames[1].slice(0, 5) + '.' : playerNames[1];
-		if (playerNames.length === 4) {
-			document.getElementById('player3name').innerText = playerNames[2].length > 5 ? playerNames[2].slice(0, 5) + '.' : playerNames[2];
-			document.getElementById('player4name').innerText = playerNames[3].length > 5 ? playerNames[3].slice(0, 5) + '.' : playerNames[3];
-		}
+        document.getElementById('player1name').innerText = playerNames[0].length > 5 ? playerNames[0].slice(0, 5) + '.' : playerNames[0];
+        document.getElementById('player2name').innerText = playerNames[1].length > 5 ? playerNames[1].slice(0, 5) + '.' : playerNames[1];
+        if (playerNames.length === 4) {
+            document.getElementById('player3name').innerText = playerNames[2].length > 5 ? playerNames[2].slice(0, 5) + '.' : playerNames[2];
+            document.getElementById('player4name').innerText = playerNames[3].length > 5 ? playerNames[3].slice(0, 5) + '.' : playerNames[3];
+        }
 
-		startGame(playerNames);
-	});
+        startGame(playerNames);
+    });
 }
 
 function startGame(playerNames, isTournament = false) {
