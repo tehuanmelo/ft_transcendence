@@ -2,8 +2,8 @@
 
 //TODO rework this entire file
 
-let selectedMode = 'Medium'; // Default value
-let scoreToWin = 7; // Default score
+let selectedMode = 'Medium';
+let scoreToWin = 7;
 
 function startTournament(players) {
     startGame(players, true);
@@ -45,19 +45,19 @@ function tournamentInit() {
     const tournamentModal = new bootstrap.Modal('#tournamentModal');
     tournamentModal.show();
 
-    const playerInputs = ['alias1', 'alias2', 'alias3', 'alias4'];
-
     let players = [];
+    const playerInputs = ['alias1', 'alias2', 'alias3', 'alias4'];
     const tournamentForm = document.getElementById('tournamentForm');
 
     handleDropdown();
     handleScoreSlider();
+
     tournamentForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
         tournamentForm.classList.remove('was-validated');
-
         let allValid = true;
+
         playerInputs.forEach((inputId) => {
             const inputField = document.getElementById(inputId);
             if (inputField.checkValidity()) {
@@ -79,7 +79,6 @@ function tournamentInit() {
         tournamentForm.classList.add('was-validated');
 
         startTournament(players);
-
         tournamentModal.hide();
     });
 }

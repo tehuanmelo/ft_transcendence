@@ -21,9 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
             const target = event.target;
-            if (target.form) {
+            const form = target.form;
+            if (target.form && form.querySelector('.spa-link')) {
                 event.preventDefault();
-                const form = target.form;
                 const spalink = form.querySelector('.spa-link');
                 handleSpaLinkEvent(spalink);
             }
