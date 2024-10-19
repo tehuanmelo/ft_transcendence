@@ -864,7 +864,13 @@ function applyConfiguration() {
 	g_SCORE_TO_WIN = parseInt(document.getElementById('score').value, 10);
 	g_SOUND = document.getElementById('customSwitch').checked;
 	game.resume();
-	document.getElementById("ponggame").focus();
+	var myModalEl = document.getElementById('configModal');
+	var modal = bootstrap.Modal.getInstance(myModalEl)
+	modal.hide();
+	// lose focus
+	setTimeout(function(){
+		document.getElementById("ponggame").focus();
+	},500);
 }
 
 class Tournament {
