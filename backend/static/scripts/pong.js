@@ -538,6 +538,7 @@ class Pong {
 			this.paddle3.resetPosition();
 			this.paddle4.resetPosition();
 		}
+		this.score.resetScore();
 		this.render();
 		this.initialDisplay();
 		const handleEnter = (event) => {
@@ -937,6 +938,7 @@ class Tournament {
             this.handleNextMatchForFourPlayers();
         else
             this.prepareFinalMatch(this.winner, this.players[this.playerArray[2]]);
+
         document.addEventListener('keydown', this.keyboardEventHandlerBind);
         this.updatePlayerNamesUI();
     }
@@ -961,6 +963,7 @@ class Tournament {
     handleKeyboardEvent(event) {
         if (event.key === 'Enter') {
             document.removeEventListener('keydown', this.keyboardEventHandlerBind);
+
             this.pong.start();
         }
     }
@@ -998,6 +1001,7 @@ class Tournament {
 }
 
 function nextGame() {
+
 	game.tournament.nextMatch();
 }
 
