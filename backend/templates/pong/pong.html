@@ -16,74 +16,66 @@
         <div class="col-1 d-flex d-md-flex button-alignment">
             <div class="row">
                 <p id="player1name"></p>
-            </div>
-            <div class="row">
                 <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                    <button type="button" class="btn btn-light">&uarr; Q</button>
-                    <button type="button" class="btn btn-light">&darr; A</button>
+                    <button type="button" id="buttonQ" class="btn btn-light">&uarr; Q</button>
+                    <button type="button" id="buttonA" class="btn btn-light">&darr; A</button>
                 </div>
             </div>
 
             <div class="row">
-                <a href="{% url 'home' %}" class="btn btn-light fa fa-home spa-link" data-toggle="tooltip"
+                <a href="{% url 'home' %}" id="backhome" class="btn btn-light fa fa-home spa-link" data-toggle="tooltip"
                     data-placement="top" title="Back to Home Page" data-method="GET"
                     on-spa-navigate="game.reset();"></a>
             </div>
 
             <div class="row">
-                <button type="button" class="btn btn-light fa fa-eye-slash" data-toggle="tooltip" data-placement="top"
+                <button type="button" id="impaired" class="btn btn-light fa fa-eye-slash" data-toggle="tooltip" data-placement="top"
                     title="Visual Impaired Mode" onclick="visual()">
                 </button>
             </div>
 
             <div class="row">
                 <div id="3rdplayer" class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                    <button type="button" class="btn btn-danger">&uarr; D</button>
-                    <button type="button" class="btn btn-danger">&darr; C</button>
+                    <button type="button" id="buttonD" class="btn btn-danger">&uarr; D</button>
+                    <button type="button" id="buttonC" class="btn btn-danger">&darr; C</button>
                 </div>
-                <div class="row">
-                    <p id="player3name"></p>
-                </div>
+                    <p id="player3name" style="margin-top: 16px;"></p>
             </div>
         </div>
 
         <div class="col-10">
             <div class="canvas-container">
-                <canvas id="ponggame">Pong Game</canvas>
+                <canvas id="ponggame" tabindex="-1">Pong Game</canvas>
             </div>
         </div>
 
         <div class="col-1 d-flex d-md-flex button-alignment">
             <div class="row">
                 <p id="player2name"></p>
-            </div>
-            <div class="row">
                 <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                    <button type="button" class="btn btn-light text-dark">&uarr; P</button>
-                    <button type="button" class="btn btn-light text-dark">&darr; L</button>
+                    <button type="button" id="buttonP" class="btn btn-light text-dark">&uarr; P</button>
+                    <button type="button" id="buttonL" class="btn btn-light text-dark">&darr; L</button>
                 </div>
             </div>
 
             <div class="row">
-                <button type="button" data-bs-toggle="modal" data-bs-target="#configModal"
+                <button type="button" id="gear" data-bs-toggle="modal" data-bs-target="#configModal"
                     class="btn btn-light fa fa-gear" data-toggle="tooltip" data-placement="top" title="Settings"
                     onclick="loadConfiguration()"></button>
             </div>
 
             <div class="row">
-                <button type="button" data-bs-toggle="modal" data-bs-target="#helpModal"
+                <button type="button" id="help" data-bs-toggle="modal" data-bs-target="#helpModal"
                     class="btn btn-light fa fa-question-circle" aria-hidden="true" data-toggle="tooltip"
                     data-placement="top" title="Help!" onclick="game.pause()"></button>
             </div>
 
             <div class="row">
                 <div id="4thplayer" class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                    <button type="button" class="btn btn-danger">&uarr; J</button>
-                    <button type="button" class="btn btn-danger">&darr; N</button>
+                    <button type="button" id="buttonJ" class="btn btn-danger">&uarr; J</button>
+                    <button type="button" id="buttonN" class="btn btn-danger">&darr; N</button>
                 </div>
-                <div class="row">
-                    <p id="player4name"></p>
-                </div>
+                    <p id="player4name" style="margin-top: 16px;"></p>
             </div>
         </div>
     </div>
@@ -219,7 +211,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-dark-orange" data-bs-dismiss="modal"
+                <button type="button" class="btn btn-dark-orange"
                     onclick="applyConfiguration()">Confirm</button>
             </div>
         </div>
