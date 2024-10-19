@@ -118,6 +118,10 @@ header {
     color: var(--accent);
 }
 
+.nav-link.active-link {
+    color: var(--accent);
+}
+
 .navbar-nav .dropdown-menu {
     background-color: var(--background);
     border-color: var(--navbar);
@@ -145,6 +149,20 @@ header {
 
 .navbar-nav .dropdown-divider {
     border-color: var(--text);
+}
+
+.navbar-nav .dropdown .nav-link img {
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    max-width: 35px;
+    border: 2px solid transparent;
+}
+
+/* On hover, make the profile image stand out */
+.navbar-nav .dropdown .nav-link:hover img,
+.navbar-nav .dropdown .nav-link:focus img {
+    transform: scale(1.2);
+    border-color: var(--accent);
 }
 
 .navbar-nav .dropdown-toggle::after {
@@ -177,8 +195,7 @@ header {
 }
 
 .logo:hover {
-    transform: scale(1.2);
-    filter: drop-shadow(0 0 5px rgba(243, 156, 18, 0.8)) drop-shadow(0 0 10px rgba(243, 156, 18, 0.5));
+    transform: scale(1.1);
 }
 
 /* ---------------------------------- Home ---------------------------------- */
