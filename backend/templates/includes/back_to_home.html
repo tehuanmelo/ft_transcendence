@@ -1,7 +1,11 @@
 <!-- Back to home -->
 {% if request.path == '/users/login/' or request.path == '/users/register/' %}
 <div class="text-center" style="font-size: 0.8rem;">or</div>
-{% endif %}
 <div class="text-center my-2">
     <a href="{% url 'home' %}" class="spa-link link-effect" data-method="GET">Return to Home</a>
 </div>
+{% else %}
+<div class="text-center my-2">
+    <a href="{% url 'home' %}" class="spa-link btn btn-accent" data-method="GET">&larr; Back to Home</a>
+</div>
+{% endif %}

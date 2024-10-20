@@ -23,6 +23,13 @@ from django.shortcuts import render
 
 from . import settings
 
+
+def error_404(request, exception):
+    return render(request, "pages/404.html", status=404)
+
+
+handler404 = "admin.urls.error_404"
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("pages.urls")),
@@ -32,10 +39,3 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-def custom_404(request, exception):
-    return render(request, "pages/404.html", status=404)
-
-
-handler404 = "admin.urls.custom_404"

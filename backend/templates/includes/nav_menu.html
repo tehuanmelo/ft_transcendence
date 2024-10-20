@@ -66,10 +66,10 @@
             </div>
             <div class="modal-footer justify-content-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form id="logout-form">
+                <form id="logoutForm">
                     {% csrf_token %}
                     <a class="btn btn-danger spa-link" href="{% url 'logout' %}" data-method="POST"
-                        data-form="#logout-form" data-bs-dismiss="modal">Log Out</a>
+                        data-form="#logoutForm" data-bs-dismiss="modal">Log Out</a>
                 </form>
             </div>
         </div>

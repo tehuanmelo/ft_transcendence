@@ -22,7 +22,7 @@
         {% endif %}
         <a class="list-group-item list-group-item-action spa-link" href="{% url "change_password" %}" data-method="GET">Change Password</a>
         <a class="list-group-item list-group-item-action spa-link" href="#" data-bs-toggle="modal"
-            data-bs-target="#delete_accountModal">Delete account</a>
+            data-bs-target="#deleteAccountModal">Delete account</a>
     </div>
 </div>
 
@@ -36,17 +36,17 @@
             </div>
             <div class="modal-footer justify-content-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form id="disable_2fa">
+                <form id="disable2fa">
                     {% csrf_token %}
                     <a class="btn btn-danger spa-link" href="{% url 'disable_2fa' %}" data-method="POST"
-                        data-form="#disable_2fa" data-bs-dismiss="modal">Disable 2FA</a>
+                        data-form="#disable2fa" data-bs-dismiss="modal">Disable 2FA</a>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="delete_accountModal" tabindex="-1" aria-labelledby="delete_accountLabel" aria-hidden="true"
+<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="delete_accountLabel" aria-hidden="true"
     data-bs-theme="dark">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -56,10 +56,10 @@
             </div>
             <div class="modal-footer justify-content-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form id="delete_account">
+                <form id="deleteAccount">
                     {% csrf_token %}
                     <a class="btn btn-danger spa-link" href="{% url 'delete_account' %}" data-method="POST"
-                        data-form="#delete_account" data-bs-dismiss="modal">Delete</a>
+                        data-form="#deleteAccount" data-bs-dismiss="modal">Delete</a>
                 </form>
             </div>
         </div>

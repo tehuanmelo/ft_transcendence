@@ -20,6 +20,15 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Pixellari';
+    src: url('../fonts/Pixellari.ttf') format("truetype");
+}
+
+.pixellari {
+    font-family: 'Pixellari', sans-serif;
+}
+
 .silk {
     font-family: 'Silkscreen', sans-serif;
 }
@@ -54,6 +63,10 @@ body {
 
 h1 {
     color: var(--accent);
+}
+
+li::marker {
+    content: none;
 }
 
 #helpModal ul li {
@@ -241,23 +254,25 @@ header {
 }
 
 .form-control {
-    color: var(--navbar);
+    color: var(--text);
     border-radius: 0;
-    background-color: #c6c6c6c4;
+    border: none;
+    background-color: var(--navbar);
     padding: 10px;
     transition: all 0.3s ease;
 }
 
 .form-control:focus,
 .form-control:hover {
-    color: var(--navbar);
+    color: var(--text);
     border-color: var(--primary);
-    background-color: #f0f0f0;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .form-control:focus {
+    background-color: rgba(0, 0, 0, 0.5);
     border-color: none;
-    box-shadow: 0 0 8px rgba(215, 215, 215, 0.6);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     outline: 0;
 }
 
@@ -382,20 +397,119 @@ header {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
-.btn-orange {
+/* -------------------------------- Button -------------------------------- */
+.btn {
+    transition: transform 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+}
+
+.btn-accent {
     color: white;
     background-color: var(--accent);
     border: solid 2px var(--accent);
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.3s ease;
 }
 
-.btn-orange:hover {
+.btn-accent:hover {
     color: white;
     background-color: var(--light-accent);
-    transform: scale(1.05);
 }
 
-.btn-orange:focus {
+.btn-accent:focus {
     color: white;
     border: solid 2px var(--accent);
+}
+
+/* ----------------------------- Tournament ------------------------------- */
+#tournamentModal * {
+    font-family: 'Silkscreen', sans-serif;
+    font-weight: bold;
+    border: none;
+}
+
+.modal .modal-content {
+    background-color: transparent;
+}
+
+.modal .modal-header,
+.modal .modal-body,
+.modal .modal-footer {
+    background-color: var(--background);
+}
+
+#tournamentModal .modal-header,
+#tournamentModal .modal-footer {
+    background-color: transparent;
+}
+
+#tournamentModal>.form-label {
+    margin: none;
+}
+
+#tournamentModal .dropdown-toggle {
+    color: var(--text);
+    text-align: left;
+    border-radius: 0;
+    background-color: var(--navbar);
+    padding: 10px;
+    transition: all 0.3s ease;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#tournamentModal .dropdown-toggle:focus,
+#tournamentModal .dropdown-toggle:hover {
+    color: var(--text);
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#tournamentModal .dropdown-toggle:focus {
+    border-color: none;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    outline: 0;
+}
+
+#tournamentModal .dropdown-menu {
+    background-color: var(--background);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    outline: 0;
+}
+
+#tournamentModal .dropdown-menu:hover,
+#tournamentModal .dropdown-menu:focus {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    outline: 0;
+}
+
+#tournamentModal input::placeholder {
+    color: var(--text);
+    opacity: 0.5;
+}
+
+#tournamentModal #alias1::placeholder,
+#tournamentModal #alias2::placeholder,
+#tournamentModal #alias3::placeholder,
+#tournamentModal #alias4::placeholder {
+    color: var(--text);
+}
+
+@media (max-width: 991px) {
+    #playerAliases {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    #tournamentModal .row {
+        flex-direction: column;
+    }
+
+    #tournamentModal .dropdown,
+    #tournamentModal #scoreSlider {
+        margin-bottom: 20px;
+    }
 }

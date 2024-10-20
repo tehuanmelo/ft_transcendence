@@ -28,8 +28,6 @@ def set_request_token_property(request, **kwargs):
     payload = decode_token(token)
     for key, value in kwargs.items():
         payload[key] = value
-    print("checking paylod")
-    print(payload)
 
     encoded_token = encode_payload(payload)
     return encoded_token
