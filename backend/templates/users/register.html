@@ -8,14 +8,14 @@
 
 <!-- Register -->
 <div class="d-flex align-items-center flex-column h-100">
-    <div class="container my-auto" style="max-width: 1000px;">
+    <div class="container my-auto" style="max-width: 700px;">
         <h1 class="text-center">REGISTER</h1>
 
         <form id="register-form" class="p-2">
             {% csrf_token %}
             {{ form|crispy }}
-            <div class="text-center mt-5 mb-3">
-                <a class="btn btn-form spa-link w-50" href="{% url 'register' %}" data-method="POST"
+            <div class="text-center">
+                <a class="btn btn-form spa-link w-75" href="{% url 'register' %}" data-method="POST"
                     data-form="#register-form">Register</a>
             </div>
         </form>

@@ -6,10 +6,12 @@ from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = get_user_model()
-        fields = (
-            "username",
-            "email",
-        )
+        fields = ("username", "email", "password1", "password2")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["password1"].help_text = None  # Hide default help text
+        self.fields["password2"].help_text = None  # Hide default help text
 
 
 class CustomUserChangeForm(UserChangeForm):
