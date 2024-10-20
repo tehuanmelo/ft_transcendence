@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             backdrop.remove();
         const url = document.location.pathname;
         getPage(url, true);
+        console.log("pop state tiggered")
     });
 
 
@@ -79,7 +80,7 @@ function updateContent(pageHtml, url, isPopstate=false) {
 function getPage(url, isPopstate=false) {
     fetch(url)
     .then(response => {
-        if (!response.ok) throw new Error('Invalid response');
+        if (!response.ok && response.status !== 404) throw new Error('Invalid response');
         return response.text();
     })
     .then(pageHtml => updateContent(pageHtml, url, isPopstate))

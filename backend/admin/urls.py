@@ -16,18 +16,25 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include, re_path
+from django.urls import path, include
 from django.conf.urls.static import static
-from django.views.generic import TemplateView
+from django.conf.urls import handler404
+from django.shortcuts import render
 
 from . import settings
+
+
+def error_404(request, exception):
+    return render(request, "pages/404.html", status=404)
+
+
+handler404 = "admin.urls.error_404"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("pages.urls")),
     path("users/", include("users.urls")),
     path("pong", include("pong.urls")),
-    re_path(r"^.*$", TemplateView.as_view(template_name="pages/404.html")),
 ]
 
 if settings.DEBUG:
