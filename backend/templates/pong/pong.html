@@ -31,8 +31,8 @@
             </div>
 
             <div class="row">
-                <button type="button" id="impaired" class="btn btn-light fa fa-eye-slash" data-toggle="tooltip" data-placement="top"
-                    title="Visual Impaired Mode" onclick="visual()">
+                <button type="button" id="impaired" class="btn btn-light fa fa-eye-slash" data-toggle="tooltip"
+                    data-placement="top" title="Visual Impaired Mode" onclick="visual()">
                 </button>
             </div>
 
@@ -44,7 +44,7 @@
                 <div class="d-none d-lg-block" style="width: 6ch;">
                     <p id="player3name" style="margin-top: 16px;"></p>
                 </div>
-                    <p id="player3name" style="margin-top: 16px;"></p>
+                <p id="player3name" style="margin-top: 16px;"></p>
             </div>
         </div>
 
@@ -57,8 +57,8 @@
         <div class="col-1 d-flex d-md-flex button-alignment">
             <div class="row">
                 <div class="d-none d-lg-block" style="width: 6ch;">
-                <p id="player2name"></p>
-            </div>
+                    <p id="player2name"></p>
+                </div>
                 <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
                     <button type="button" id="buttonP" class="btn btn-light text-dark">&uarr; P</button>
                     <button type="button" id="buttonL" class="btn btn-light text-dark">&darr; L</button>
@@ -85,7 +85,7 @@
                 </div>
                 <div class="d-none d-lg-block" style="width: 6ch;">
                     <p id="player4name" style="margin-top: 16px;"></p>
-                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -221,8 +221,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-dark-orange"
-                    onclick="applyConfiguration()">Confirm</button>
+                <button type="button" class="btn btn-dark-orange" onclick="applyConfiguration()">Confirm</button>
             </div>
         </div>
     </div>
@@ -230,127 +229,23 @@
 
 {% include "includes/help.html" %}
 
-<!-- Player Name Modal -->
-<div id="playerNameModal" class="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="playerNameModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+<!-- Pong Register Modal -->
+<div id="pongRegisterModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="pongRegisterModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 700px">
         <div class="modal-content">
             <div class="modal-header justify-content-center">
-                <h5 class="modal-title" id="playerNameModalLabel">Enter names to start</h5>
+                <h1 class="modal-title text-center silk-heavy" id="pongRegisterModalLabel"></h1>
             </div>
             <div class="modal-body">
-                <form id="playerNamesForm">
-                    <div class="mb-3" id="player1Div">
-                        <label for="player1" class="form-label">Player 1</label>
-                        <input type="text" class="form-control" id="player1" required pattern="[a-zA-Z0-9_]+"
-                            maxlength="20">
-                        <div class="invalid-feedback">
-                            Player 1 name must be between 1 and 20 characters, alphanumeric, or underscores.
-                        </div>
-                    </div>
-                    <div class="mb-3" id="player2Div">
-                        <label for="player2" class="form-label">Player 2</label>
-                        <input type="text" class="form-control" id="player2" required pattern="[a-zA-Z0-9_]+"
-                            maxlength="20">
-                        <div class="invalid-feedback">
-                            Player 2 name must be between 1 and 20 characters, alphanumeric, or underscores.
-                        </div>
-                    </div>
-                    <div class="mb-3" id="player3Div" style="display: none;">
-                        <label for="player3" class="form-label">Player 3</label>
-                        <input type="text" class="form-control" id="player3" required pattern="[a-zA-Z0-9_]+"
-                            maxlength="20">
-                        <div class="invalid-feedback">
-                            Player 3 name must be between 1 and 20 characters, alphanumeric, or underscores.
-                        </div>
-                    </div>
-                    <div class="mb-3" id="player4Div" style="display: none;">
-                        <label for="player4" class="form-label">Player 4</label>
-                        <input type="text" class="form-control" id="player4" required pattern="[a-zA-Z0-9_]+"
-                            maxlength="20">
-                        <div class="invalid-feedback">
-                            Player 4 name must be between 1 and 20 characters, alphanumeric, or underscores.
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <a class="btn btn-secondary spa-link" href="{% url 'home' %}" data-method="GET"
-                    data-bs-dismiss="modal">Cancel</a>
-                <button type="button" class="btn btn-primary" id="startGameButton">Start</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Tournament Registration Modal -->
-<div id="tournamentModal" class="modal fade" tabindex="-1" data-bs-backdrop="static"
-    aria-labelledby="tournamentModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header justify-content-center">
-                <h1 class="modal-title text-center" id="tournamentModalLabel">Tournament Registration</h1>
-            </div>
-            <div class="modal-body">
-                <form id="tournamentForm" class="tournament-form d-flex h-100 flex-column justify-content-center">
-                    <div id="playerAliases" class="mb-4">
-                        <div class="row mb-2">
-                            <div class="col">
-                                <label for="alias1" class="form-label">Player 1*</label>
-                                <input type="text" id="alias1" name="alias1" class="form-control" required
-                                    maxlength="20" placeholder="Player 1">
-                            </div>
-                            <div class="col">
-                                <label for="alias2" class="form-label">Player 2*</label>
-                                <input type="text" id="alias2" name="alias2" class="form-control" required
-                                    maxlength="20" placeholder="Player 2">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <label for="alias3" class="form-label">Player 3*</label>
-                                <input type="text" id="alias3" name="alias3" class="form-control" required
-                                    maxlength="20" placeholder="Player 3">
-                            </div>
-                            <div class="col">
-                                <label for="alias4" class="form-label">Player 4</label>
-                                <input type="text" id="alias4" name="alias4" class="form-control" maxlength="20"
-                                    placeholder="Player 4 (Optional)">
-                            </div>
-                        </div>
-                    </div>
-                    <div id="tournamentSettings">
-                        <h5 class="text-center mb-2">Game Settings</h5>
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <label for="difficultyDropdownButton">Difficulty*</label>
-                                <div class="dropdown">
-                                    <!-- Dropdown will default to Medium -->
-                                    <button class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
-                                        id="difficultyDropdownButton">Medium</button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#">Easy</a></li>
-                                        <li><a class="dropdown-item" href="#">Medium</a></li>
-                                        <li><a class="dropdown-item" href="#">Hard</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <label for="scoreSlider" class="pb-3">Score To Win: <span
-                                        id="scoreDisplay">5</span></label>
-                                <input type="range" id="scoreSlider" name="scoreToWin" class="form-range" min="1"
-                                    max="10" value="5"
-                                    oninput="document.getElementById('scoreDisplay').innerText = this.value">
-                            </div>
-                        </div>
-                    </div>
+                <form id="gameRegisterForm">
+                    <!-- Form input elements will be generated dynamically -->
                 </form>
             </div>
             <div class="modal-footer justify-content-center">
-                <a class="btn btn-secondary spa-link" href="{% url 'home' %}" data-method="GET"
+                <a class="btn btn-secondary spa-link silk-heavy" href="{% url 'home' %}" data-method="GET"
                     data-bs-dismiss="modal">Cancel</a>
-                <button id="registerTournament" type="submit" class="btn btn-accent"
-                    form="tournamentForm">Start</button>
+                <button type="submit" class="btn btn-accent silk-heavy" form="gameRegisterForm">Start</button>
             </div>
         </div>
     </div>
