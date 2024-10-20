@@ -21,7 +21,6 @@ def generate_2fa_qrcode(user, secret):
     )
     file_name = f"{user.username}_qrcode_{uuid.uuid4().hex}.png"
     file_path = os.path.join(settings.MEDIA_ROOT, "qr_codes", file_name)
-    print(file_path)
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     qrcode.make(qrcode_url).save(file_path)
 
@@ -84,7 +83,6 @@ def check_if_logged(func):
         try:
             payload = extract_token(request)
             if payload["is_authenticated"]:
-                print("I was redirected by the decorator")
                 return redirect("home")
         except:
             pass
