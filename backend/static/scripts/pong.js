@@ -1192,13 +1192,6 @@ function gameInit() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get('mode');
-    if (mode === 'test') {
-        // TODO: testing only, remove after done
-        startGame(['test1', 'tanas']); //* 1v1 test
-        // startGame(['test1', 'tanas', 'qqq', 'www']); //* 2v2 test
-        // startGame(['test1', 'tanas', 'qqq', 'www'], true); //* tournament test
-        return;
-    }
 
     const gameModes = [
         { mode: '1v1', loggedIn: true, players: 2 },
@@ -1231,4 +1224,3 @@ function gameInit() {
     else if (selectedMode.mode === 'tournament')
         tournamentInit();
 }
-
