@@ -8,7 +8,7 @@
 
 <!-- Profile -->
 <div class="container-xl d-flex justify-content-center h-75">
-    <div class="main">
+    <div id="userInfo" class="main border">
         <div class="profile-image-wrapper">
             {% if user.profile_image %}
             <img src="{{ user.profile_image.url }}" class="profile-image rounded-circle"
@@ -31,6 +31,7 @@
         </div>
 
         <div class="card-body">
+            {% if user.github or user.twitter %}
             <p class="social-links mt-3">
                 {% if user.github %}
                 <a href="{{user.github}}" target="_blank" class="btn-social"><i class="fa-brands fa-github"></i></a>
@@ -39,12 +40,13 @@
                 <a href="{{user.twitter}}" target="_blank" class="btn-social"><i class="fa-brands fa-twitter"></i></a>
                 {% endif %}
             </p>
+            {% endif %}
 
+            {% if user.email %}
             <div class="email">
-                {% if user.email %}
                 <p class="card-text">Email: <a href="mailto:{{user.email}}">{{user.email}}</a></p>
-                {% endif %}
             </div>
+            {% endif %}
 
             {% if user.bio %}
             <div class="border bio-text p-4">
@@ -56,6 +58,9 @@
             <a class="btn btn-accent mt-3 spa-link" href="{% url 'edit_profile' %}" data-method="GET">Edit
                 Profile</a>
         </div>
+    </div>
+    <div id="userStats" class="">
+        
     </div>
 </div>
 
