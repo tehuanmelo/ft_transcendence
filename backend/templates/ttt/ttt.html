@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}TicTacToe{% endblock %}
+
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<meta name="username" content="{{ user.username }}">
+{% endif %}
+
+
+{% endblock content %}
