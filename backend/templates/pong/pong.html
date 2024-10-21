@@ -192,7 +192,7 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#">Easy</a></li>
-                                <li><a class="dropdown-item active" href="#">Medium</a></li>
+                                <li><a class="dropdown-item" href="#">Medium</a></li>
                                 <li><a class="dropdown-item" href="#">Hard</a></li>
                                 <hr class="dropdown-divider">
                                 <li><a class="dropdown-item" href="#">Custom</a></li>
@@ -209,13 +209,6 @@
                                 <label for="playerspeed" class="form-label">Paddle Speed</label>
                                 <input type="range" class="form-range" id="playerspeed" min="5" max="60" step="1">
                             </div>
-                        </div>
-
-                        <div>
-                            <label id="currentScore" for="score" class="form-label"
-                                style="margin-top: 30px;">Score</label>
-                            <input type="range" class="form-range" id="score" min="1" max="11" step="1"
-                                oninput="this.previousElementSibling.innerHTML = 'Score - ' + this.value">
                         </div>
                     </div>
                 </form>
@@ -241,6 +234,30 @@
                 <form id="gameRegisterForm">
                     <!-- Form input elements will be generated dynamically -->
                 </form>
+                <div id="gameSettings">
+                    <h5 class="text-center mt-2 mb-0 silk-heavy">Game Settings</h5>
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <label for="difficultyDropdownButton" class="form-label silk-heavy">Difficulty*</label>
+                            <div class="dropdown mb-3">
+                                <!-- Dropdown will default to Medium -->
+                                <button class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+                                    id="difficultyDropdownButton">Medium</button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Easy</a></li>
+                                    <li><a class="dropdown-item" href="#">Medium</a></li>
+                                    <li><a class="dropdown-item" href="#">Hard</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="scoreSlider" class="form-label silk-heavy">Score To Win: <span
+                                    id="scoreDisplay">5</span></label>
+                            <input type="range" id="scoreSlider" name="scoreToWin" class="form-range" min="1" max="10"
+                                value="5" oninput="document.getElementById('scoreDisplay').innerText = this.value">
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer justify-content-center">
                 <a class="btn btn-secondary spa-link silk-heavy" href="{% url 'home' %}" data-method="GET"

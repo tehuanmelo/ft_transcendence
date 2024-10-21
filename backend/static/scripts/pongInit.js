@@ -54,6 +54,10 @@ function handleGameRegisterModal(mode, username, isTournament) {
     const gameRegisterForm = document.getElementById('gameRegisterForm');
     generateGameRegisterForm(gameRegisterForm, playerInputs);
 
+    // Game settings handlers
+    handleDifficultyDropdown();
+    handleScoreSlider();
+
     pongRegisterModal.show();
 
     gameRegisterForm.addEventListener('submit', (event) => {
@@ -84,6 +88,40 @@ function updatePlayerDisplay(playerNames, isNotTournament) {
 
 function truncateName(name) {
     return name.length > 5 ? `${name.slice(0, 5)}.` : name;
+}
+
+function handleDifficultyDropdown() {
+    const difficultyDropdown = document.querySelector('#gameSettings .dropdown-toggle');
+    const dropdownItems = document.querySelectorAll('#gameSettings .dropdown-item');
+
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            const selectedDiff = event.target.textContent;
+
+            if (selectedDiff in gameConfig) {
+                g_PADDLE_SPEED = gameConfig[selectedDiff].paddleSpeed;
+                g_BALL_SPEED = gameConfig[selectedDiff].ballSpeed;
+            }
+            else if (selectedDiff === "Custom")
+                document.getElementById("customConfig").style.display = "block";
+            else {
+                alert('Invalid difficulty level selected');
+                getPage('404');
+            }
+
+            difficultyDropdown.textContent = selectedDiff;
+        });
+    });
+}
+
+function handleScoreSlider() {
+    const scoreSlider = document.getElementById('scoreSlider');
+    scoreSlider.addEventListener('input', (event) => {
+        g_SCORE_TO_WIN = parseInt(event.target.value, 10);
+        document.getElementById('scoreDisplay').innerText = g_SCORE_TO_WIN;
+    });
 }
 
 function generateGameRegisterForm(gameRegisterForm, playerInputs) {

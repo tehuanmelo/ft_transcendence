@@ -844,16 +844,10 @@ function playAgain() {
 function refreshConfig() {
 	document.getElementById('playerspeed').value = g_PADDLE_SPEED;
 	document.getElementById('ballspeed').value = g_BALL_SPEED;
-	document.getElementById('score').value = g_SCORE_TO_WIN;
 	document.getElementById('customSwitch').checked = g_SOUND;
-	document.getElementById('currentScore').innerText = "Score - " + g_SCORE_TO_WIN;
 }
 
 function loadConfiguration() {
-	if (game.isGameRunning() == true)
-		document.getElementById('score').disabled = true;
-	else
-		document.getElementById('score').disabled = false;
 	game.pause();
 	refreshConfig();
 }
@@ -861,7 +855,6 @@ function loadConfiguration() {
 function applyConfiguration() {
 	g_PADDLE_SPEED = parseInt(document.getElementById('playerspeed').value, 10);
 	g_BALL_SPEED = parseInt(document.getElementById('ballspeed').value, 10);
-	g_SCORE_TO_WIN = parseInt(document.getElementById('score').value, 10);
 	g_SOUND = document.getElementById('customSwitch').checked;
 	game.resume();
 	var myModalEl = document.getElementById('configModal');
@@ -1007,7 +1000,6 @@ class Tournament {
 }
 
 function nextGame() {
-
 	game.tournament.nextMatch();
 }
 
@@ -1025,13 +1017,17 @@ function setupDropdownListeners() {
             dropdownButton.textContent = selectedText;
 
             if (selectedText in gameConfig) {
+                document.getElementById("customConfig").style.display = "none";
                 g_PADDLE_SPEED = gameConfig[selectedText].paddleSpeed;
                 g_BALL_SPEED = gameConfig[selectedText].ballSpeed;
+                refreshConfig();
             }
             else if (selectedText === "Custom")
                 document.getElementById("customConfig").style.display = "block";
-            else
-                console.error('Invalid difficulty level selected');
+            else {
+                alert('Invalid difficulty level selected');
+                getPage('404');
+            }
 
             // Hide the dropdown menu after selection
             const dropdown = new bootstrap.Dropdown(dropdownButton);
