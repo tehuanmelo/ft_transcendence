@@ -362,7 +362,7 @@ def accept_friend(request, username):
 
             # Ensure mutual friendship
             reciprocal_friendship, created = Friendship.objects.get_or_create(
-                user=friend, friend=request.user
+                user=request.user, friend=friend
             )
             if created:
                 reciprocal_friendship.status = "accepted"

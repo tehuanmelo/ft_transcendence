@@ -36,12 +36,12 @@ class CustomUser(AbstractUser):
 
     def get_friends(self):
         return CustomUser.objects.filter(
-            friendships__user=self, friendships__status="accepted"
+            friendships__friend=self, friendships__status="accepted"
         )
 
     def get_online_friends(self):
         return CustomUser.objects.filter(
-            friendships__user=self,
+            friendships__friend=self,
             last_activity__gte=timezone.now() - timezone.timedelta(minutes=5),
             friendships__status="accepted",
         )
