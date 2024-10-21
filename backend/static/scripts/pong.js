@@ -61,9 +61,12 @@ class Ball {
 	}
 
 	startBallMovement() {
+		this.prevSpeed = g_BALL_SPEED;
+		this.angleXsign = this.ballRandomSign();
+		this.angleYsign = this.ballRandomSign();
         this.angle = Math.random();
-        this.dx = Math.cos(this.angle) * g_BALL_SPEED * this.ballRandomSign();
-        this.dy = Math.sin(this.angle) * g_BALL_SPEED * this.ballRandomSign();
+        this.dx = Math.cos(this.angle) * g_BALL_SPEED * this.angleXsign;
+        this.dy = Math.sin(this.angle) * g_BALL_SPEED * this.angleYsign;
         this.ballMoving = true;
     }
 
@@ -73,9 +76,10 @@ class Ball {
     }
 
 	resumeBallMovement() {
-		this.dx = Math.cos(this.angle) * g_BALL_SPEED;
-        this.dy = Math.sin(this.angle) * g_BALL_SPEED;
-        this.ballMoving = true;
+		this.dx =  (this.dx/this.prevSpeed) * g_BALL_SPEED;
+		this.dy =  (this.dy/this.prevSpeed) * g_BALL_SPEED;
+		this.prevSpeed = g_BALL_SPEED;
+		this.ballMoving = true;
 	}
 
 	doLinesIntersect(line1, line2) {
@@ -544,7 +548,6 @@ class Pong {
 		const handleEnter = (event) => {
 			if (event.key === 'Enter') {
 				this.countdown.start();
-				this.isGameRunning = true;
 				document.removeEventListener('keydown', handleEnter);
 			}
 		};
@@ -552,16 +555,17 @@ class Pong {
 	}
 
 	startGame() {
+		this.isGameRunning = true;
 		this.score.resetScore();
-        this.ball.ballResetPosition();
+		this.ball.ballResetPosition();
 		document.addEventListener('keydown', this.handleKeyboardEvent.bind(this));
-        document.addEventListener('keyup', this.handleKeyboardEvent.bind(this));
-        this.intervalId = setInterval(this.pongRender.bind(this), 1000 / 60); // 60 FPS (frames per second)
+		document.addEventListener('keyup', this.handleKeyboardEvent.bind(this));
+		this.intervalId = setInterval(this.pongRender.bind(this), 1000 / 60); // 60 FPS (frames per second)
 		this.ball.startBallMovement();
 	}
 
 	pause() {
-		clearInterval(this.intervalId);
+			clearInterval(this.intervalId);
 	}
 
 	resume() {
@@ -572,7 +576,7 @@ class Pong {
 	stop() {
 		clearInterval(this.intervalId);
 		document.removeEventListener('keydown', this.handleKeyboardEvent.bind(this));
-        document.removeEventListener('keyup', this.handleKeyboardEvent.bind(this));
+		document.removeEventListener('keyup', this.handleKeyboardEvent.bind(this));
 		this.isGameRunning = false;
 	}
 
@@ -742,6 +746,15 @@ class Countdown {
 		this.intervalId = setInterval(this.countdown.bind(this), 1000);
 	}
 
+	pause()	{
+		clearInterval(this.intervalId);
+	}
+
+	resume() {
+		this.count = 3;
+		this.intervalId = setInterval(this.countdown.bind(this), 1000);
+	}
+
 	countdown() {
 		if (this.count === 1) {
 			clearInterval(this.intervalId);
@@ -817,9 +830,11 @@ class Game {
 	pause() {
 		if (this.isTournament == true) {
 			this.tournament.pong.pause();
+			this.tournament.pong.countdown.pause();
 		}
 		else {
 			this.pong.pause();
+			this.pong.countdown.pause();
 		}
 	}
 
@@ -830,6 +845,13 @@ class Game {
 			}
 			else {
 				this.pong.resume();
+			}
+		} else {
+			if (this.isTournament == true) {
+				this.tournament.pong.countdown.resume();
+			}
+			else {
+				this.pong.countdown.resume();
 			}
 		}
 	}
