@@ -24,6 +24,8 @@
         {% if friends %}
         {% for friend in friends %}
         <li>{{ friend.username }} {% if friend in online_friends %}(Online){% else %}(Offline){% endif %}
+            <!--TODO:: REMOVE BUTTON AFTER IMPLEMENTATION-->
+            <button onclick="removeFriend('test')" class="btn btn-primary">BUTTON</button>
             <a href="{% url 'remove_friend' friend.username %}">Remove</a>
         </li>
         {% endfor %}
@@ -60,6 +62,39 @@
             errorModal.show();
         }
     });
+
+    function removeFriend(friend) {
+        fetch('/users/remove_friend/' + friend + '/').then(response => {
+            console.log("CALLING    ")
+            if (response.ok) {
+                showSuccessMessage('Friend Removed');
+            } else {
+                return response.text().then(text => {
+                try {
+                    const data = JSON.parse(text);
+                    console.log(data.error_message);
+                    showErrorMessage(data.error_message);
+                } catch (e) {
+                    showErrorMessage('An unexpected error occurred.');
+                }
+            });
+            }
+        });
+    }
+
+    function showSuccessMessage(successMessage) {
+        console.log(successMessage);
+        document.getElementById('successMessage').innerText = successMessage;
+        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
+    }
+
+    function showErrorMessage(errorMessage) {
+        console.log(errorMessage);
+        document.getElementById('errorMessage').innerText = errorMessage;
+        const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+        errorModal.show();
+    }
 </script>
 <!-- Modal for error messages -->
 <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true" data-bs-theme="dark">

@@ -313,6 +313,7 @@ def add_friend(request, username):
 
     return redirect("friend_list")
 
+from django.http import HttpResponse, JsonResponse
 
 @jwt_login_required
 def remove_friend(request, username):
@@ -333,8 +334,8 @@ def remove_friend(request, username):
             friendship.delete()
 
     if error_message:
-        return render(
-            request, "users/friend_list.html", {"error_message": error_message}
+        return JsonResponse(
+            {"error_message": error_message}, status=404
         )
 
     return redirect("friend_list")
