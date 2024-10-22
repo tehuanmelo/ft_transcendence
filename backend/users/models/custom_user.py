@@ -6,6 +6,13 @@ from django.db.models import Q
 
 class CustomUser(AbstractUser):
     username = models.CharField(max_length=20, unique=True)
+    email = models.EmailField(
+        error_messages={"unique": "A user with that email already exists."},
+        blank=True,
+        max_length=254,
+        verbose_name="email address",
+        unique=True,
+    )
     profile_image = models.ImageField(
         upload_to="profile_images/", blank=True, null=True
     )
