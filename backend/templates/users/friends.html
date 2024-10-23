@@ -21,19 +21,6 @@
     </div>
 
     <div class="main">
-        <h2>Online Friends</h2>
-        <ul>
-            {% if online_friends %}
-            {% for friend in online_friends %}
-            <li>{{ friend.username }} (Online)</li>
-            {% endfor %}
-            {% else %}
-            <li>No online friends.</li>
-            {% endif %}
-        </ul>
-    </div>
-
-    <div class="main">
         <h2>All Friends</h2>
         <ul>
             {% if friends %}
@@ -49,22 +36,19 @@
         </ul>
     </div>
 
+    {% if pending_requests %}
     <div class="main">
         <h2>Pending Friend Requests</h2>
         <ul>
-            {% if pending_requests %}
             {% for request in pending_requests %}
-            <li>
-                {{ request.username }} wants to be your friend.
+            <li>{{ request.username }} wants to be your friend.
                 <button onclick="acceptFriend('{{ request.username }}')" class="btn btn-success">Accept</button>
                 <button onclick="rejectFriend('{{ request.username }}')" class="btn btn-danger">Reject</button>
             </li>
             {% endfor %}
-            {% else %}
-            <li>No pending friend requests.</li>
-            {% endif %}
         </ul>
     </div>
+    {% endif %}
 </div>
 
 <script>
