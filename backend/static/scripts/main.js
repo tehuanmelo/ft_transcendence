@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
             backdrop.remove();
         const url = document.location.pathname;
         getPage(url, true);
-        console.log("pop state tiggered")
     });
 
 
@@ -61,7 +60,7 @@ function updateContent(pageHtml, url, isPopstate=false) {
     const page = parser.parseFromString(pageHtml, 'text/html');
     const newContent = page.querySelector('#content').innerHTML;
     document.querySelector('#content').innerHTML = newContent;
-    
+
     if (isPopstate) {
         const pageTitle = page.title;
         if (pageTitle === 'Login') history.replaceState(null, '', '/users/login/');
@@ -71,7 +70,7 @@ function updateContent(pageHtml, url, isPopstate=false) {
         const oldUrl = document.location.pathname;
         if (oldUrl !== url) history.pushState(null, '', url);
     }
-  
+
     const newTitle = page.querySelector('title').innerHTML;
     document.title = '';
     document.title = newTitle;

@@ -156,16 +156,6 @@ def logout_view(request):
         request.user.save()
         response = redirect("home")
         response.delete_cookie("jwt")
-
-        # TODO fix logout
-        # if request.user.is_42:
-        #     user_intra = requests.get(
-        #         "https://api.intra.42.fr/v2/me",
-        #         headers={
-        #             "Authorization": f"Bearer {access_token}",
-        #         },
-        #     )
-
         return response
     else:
         return HttpResponseNotAllowed(["POST"])
