@@ -1,5 +1,7 @@
 from django.urls import path
-from . import views, api_42, friends
+from .views import views
+from .views import api_42
+from .views import friends
 
 urlpatterns = [
     path("login/", views.login_view, name="login"),

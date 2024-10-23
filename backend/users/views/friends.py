@@ -2,8 +2,8 @@ from django.shortcuts import redirect, render
 from django.http import JsonResponse
 from django.db.models import Q
 
-from .models import CustomUser, Friendship
-from .auth import jwt_login_required
+from ..models import CustomUser, Friendship
+from ..auth import jwt_login_required
 
 
 @jwt_login_required
