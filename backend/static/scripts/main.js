@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
             backdrop.remove();
         const url = document.location.pathname;
         getPage(url, true);
-        console.log("pop state tiggered")
     });
 
 
