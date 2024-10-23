@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, api_42
+from . import views, api_42, friends
 
 urlpatterns = [
     path("login/", views.login_view, name="login"),
@@ -15,9 +15,9 @@ urlpatterns = [
     path("change_password/", views.change_password_view, name="change_password"),
     path("delete_account/", views.delete_account_view, name="delete_account"),
     ## Friends Paths
-    path("add_friend/", views.add_friend_view, name="add_friend"),
-    path("remove_friend/<str:username>/", views.remove_friend, name="remove_friend"),
-    path("accept_friend/<str:username>/", views.accept_friend, name="accept_friend"),
-    path("reject_friend/<str:username>/", views.reject_friend, name="reject_friend"),
-    path("friends/", views.friend_list, name="friend_list"),
+    path("add_friend/<str:username>/", friends.add_friend, name="add_friend"),
+    path("remove_friend/<str:username>/", friends.remove_friend, name="remove_friend"),
+    path("accept_friend/<str:username>/", friends.accept_friend, name="accept_friend"),
+    path("reject_friend/<str:username>/", friends.reject_friend, name="reject_friend"),
+    path("friends/", friends.friends, name="friends"),
 ]

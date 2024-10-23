@@ -56,12 +56,12 @@ function handleSpaLinkEvent(target) {
         postForm(formSelector, url);
 }
 
-function updateContent(pageHtml, url, isPopstate=false) {
+function updateContent(pageHtml, url, isPopstate = false) {
     const parser = new DOMParser();
     const page = parser.parseFromString(pageHtml, 'text/html');
     const newContent = page.querySelector('#content').innerHTML;
     document.querySelector('#content').innerHTML = newContent;
-    
+
     if (isPopstate) {
         const pageTitle = page.title;
         if (pageTitle === 'Login') history.replaceState(null, '', '/users/login/');
@@ -71,7 +71,7 @@ function updateContent(pageHtml, url, isPopstate=false) {
         const oldUrl = document.location.pathname;
         if (oldUrl !== url) history.pushState(null, '', url);
     }
-  
+
     const newTitle = page.querySelector('title').innerHTML;
     document.title = '';
     document.title = newTitle;
@@ -81,14 +81,14 @@ function updateContent(pageHtml, url, isPopstate=false) {
         initFunctions[urlWithoutParam]();
 }
 
-function getPage(url, isPopstate=false) {
+function getPage(url, isPopstate = false) {
     fetch(url)
-    .then(response => {
-        if (!response.ok && response.status !== 404) throw new Error('Invalid response');
-        return response.text();
-    })
-    .then(pageHtml => updateContent(pageHtml, url, isPopstate))
-    .catch(error => console.error('Error when fetching the page:', error.message));
+        .then(response => {
+            if (!response.ok && response.status !== 404) throw new Error('Invalid response');
+            return response.text();
+        })
+        .then(pageHtml => updateContent(pageHtml, url, isPopstate))
+        .catch(error => console.error('Error when fetching the page:', error.message));
 }
 
 function postForm(formSelector, url) {
@@ -103,11 +103,11 @@ function postForm(formSelector, url) {
         },
         body: formData
     })
-    .then(response => {
-        if (!response.ok) throw new Error('Invalid form post request');
-        if (response.redirected) redirectUrl = response.url;
-        return response.text();
-    })
-    .then(pageHtml => updateContent(pageHtml, redirectUrl))
-    .catch(error => console.error('Error when submitting the form:', error));
+        .then(response => {
+            if (!response.ok) throw new Error('Invalid form post request');
+            if (response.redirected) redirectUrl = response.url;
+            return response.text();
+        })
+        .then(pageHtml => updateContent(pageHtml, redirectUrl))
+        .catch(error => console.error('Error when submitting the form:', error));
 }

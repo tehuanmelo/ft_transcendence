@@ -153,4 +153,3 @@ class FriendshipTests(TestCase):
         self.assertNotIn(
             self.user3, online_friends
         )  # User3 is not accepted and not online
-    

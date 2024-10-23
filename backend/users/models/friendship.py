@@ -1,17 +1,16 @@
 from django.db import models
 from django.utils import timezone
-from .custom_user import CustomUser
 
 
 class Friendship(models.Model):
     user = models.ForeignKey(
-        CustomUser,
+        "users.CustomUser",
         related_name="friendships",
         on_delete=models.CASCADE,
         to_field="username",
     )
     friend = models.ForeignKey(
-        CustomUser,
+        "users.CustomUser",
         related_name="friend_of",
         on_delete=models.CASCADE,
         to_field="username",
