@@ -20,15 +20,6 @@
     font-style: normal;
 }
 
-@font-face {
-    font-family: 'Pixellari';
-    src: url('../fonts/Pixellari.ttf') format("truetype");
-}
-
-.pixellari {
-    font-family: 'Pixellari', sans-serif;
-}
-
 .silk {
     font-family: 'Silkscreen', sans-serif;
 }
