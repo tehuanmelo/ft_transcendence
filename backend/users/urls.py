@@ -29,9 +29,5 @@ urlpatterns = [
     path("reject_friend/<str:username>/", friends.reject_friend, name="reject_friend"),
     path("friends/", friends.friends, name="friends"),
     ## Match History Paths
-    path(
-        "save_match_results/",
-        match.save_match_result,
-        name="match_result",
-    ),
+    path("save_match_results/", match.save_match_result, name="match_result"),
 ]
