@@ -492,11 +492,12 @@ class Paddle {
 }
 
 class Pong {
-	constructor(nbPlayers, isTournament = false, notifyWinner = null) {
+	constructor(nbPlayers, playerNames, isTournament = false, notifyWinner = null) {
 		// Get canvas attributes
 		this.width = canvas.width; // Canvas width in pixels
 		this.height = canvas.height; // Canvas height in pixels
 		this.nbPlayers = nbPlayers;
+        this.playerNames = playerNames;
 		this.paddle1 = new Paddle(PaddleTypes.LEFT1);
 		this.paddle2 = new Paddle(PaddleTypes.RIGHT1);
 		this.score = new Score();
@@ -608,20 +609,6 @@ class Pong {
 		lineHeight = fontSize * 0.8; // Space between lines
 		let startY = canvasHeight / 2 - (lineHeight * (textLines.length - 0.8)) / 2;
 		ctx.fillText(line, canvasWidth / 2, startY);
-
-	}
-
-	displayWinner() {
-		var element = document.getElementById('winner');
-
-		if (this.score.scoreL == g_SCORE_TO_WIN) {
-			element.innerText = "Left Player wins!";
-		}
-		else {
-			element.innerText = "Right Player wins!";
-		}
-		var myModal = new bootstrap.Modal('#winnerpopup');
-		myModal.show();
 	}
 
 	render() {
@@ -636,28 +623,98 @@ class Pong {
 		this.ball.drawBall();
 	}
 
-	getWinner() {
-		if (this.score.scoreL == g_SCORE_TO_WIN) {
-			return ("left");
-		}
-		else {
-			return ("right");
-		}
-	}
-
 	pongRender() {
         this.render();
-        this.ball.ballMove(); // Move the ball
-        this.updatePaddles(); // Update the paddles asynchronously
+        this.ball.ballMove();
+        this.updatePaddles();
 
-        if (this.score.checkGameOver() === true) {
-            if (this.isTournament === false)
-                this.displayWinner();
-            else
-                this.notifyWinner(this.getWinner());
-            this.stop();
-            this.render();
+        if (this.score.checkGameOver() === true)
+            this.gameOver();
+    }
+
+    getWinnersAndLosers() {
+        let winners = [];
+        let losers = [];
+        if (this.score.scoreL == g_SCORE_TO_WIN) {
+            // left side won
+            winners.push(this.playerNames[0]);
+            losers.push(this.playerNames[1]);
+            if (this.nbPlayers === 4) {
+                winners.push(this.playerNames[2]);
+                losers.push(this.playerNames[3]);
+            }
         }
+        else {
+            // right side won
+            winners.push(this.playerNames[1]);
+            losers.push(this.playerNames[0]);
+            if (this.nbPlayers === 4) {
+                winners.push(this.playerNames[3]);
+                losers.push(this.playerNames[2]);
+            }
+        }
+        return { winners, losers };
+    }
+
+    gameOver() {
+        const { winners, losers } = this.getWinnersAndLosers();
+        if (this.isTournament === false) {
+            this.displayWinner(winners);
+            this.saveMatchResults(winners, losers);
+        }
+        else {
+            const winner = (this.score.scoreL === g_SCORE_TO_WIN) ? "left" : "right";
+            this.notifyWinner(winner);
+        }
+
+        this.stop();
+        this.render();
+    }
+
+    saveMatchResults(winners, losers) {
+        // send a request to backend
+        const matchData = {
+            game: 'Pong',
+            mode: this.nbPlayers === 4 ? '2v2' : '1v1',
+            winners: winners,
+            losers: losers,
+            score: {
+                left: this.score.scoreL,
+                right: this.score.scoreR
+            }
+        };
+
+        const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        fetch('/users/save_match_results/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify(matchData)
+        })
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to save match results.');
+                return response.json();
+            })
+            .catch(error => {
+                console.error('Error saving match results:', error);
+            });
+    }
+
+    displayWinner(winners) {
+        let winnerText = '';
+        if (winners.length === 1)
+            winnerText = `${winners[0]} wins!`;
+        else if (winners.length === 2)
+            winnerText = `${winners[0]} and ${winners[1]} win!`;
+
+        let element = document.getElementById('winner');
+        element.innerText = winnerText;
+
+        let myModal = new bootstrap.Modal('#winnerpopup');
+        myModal.show();
     }
 
     handleKeyboardEvent(event) {
@@ -783,7 +840,7 @@ class Game {
 		if (this.isTournament == true)
 			this.tournament = new Tournament(players);
 		else
-			this.pong = new Pong(players.length);
+			this.pong = new Pong(players.length, players);
 
 		if (isTournament === true || players.length == 2) {
 			document.getElementById('3rdplayer').style.display = 'none';
@@ -891,9 +948,9 @@ function applyConfiguration() {
 class Tournament {
     constructor(players) {
         this.players = players;
-        this.pong = new Pong(2, true, this.winnerCallback);
+        this.pong = new Pong(2, players, true, this.winnerCallback);
 
-        this.playerArray = (this.players.length == 3)
+        this.playerArray = (this.players.length === 3)
             ? this.getUniqueRandomPlayers(3)
             : this.getUniqueRandomPlayers(4);
 
