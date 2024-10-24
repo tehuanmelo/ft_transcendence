@@ -67,7 +67,7 @@ class CustomUser(AbstractUser):
 
     def get_all_matches(self):
         """Retrieve all matches for this user."""
-        return Match.objects.filter(Q(user=self) | Q(opponent=self))
+        return Match.objects.filter(Q(user=self) | Q(opponent=self.username))
 
     def update_stats(self):
         """Update the win/loss stats for this user based on match history."""
@@ -79,7 +79,7 @@ class CustomUser(AbstractUser):
 
     def create_match(self, opponent, result=Match.MatchResult.LOSS):
         """Create a new match with the specified opponent."""
-        if self == opponent:
+        if self.username == opponent:
             raise ValueError("A user cannot play a match against themselves.")
         match = Match(user=self, opponent=opponent, result=result)
         match.save()
