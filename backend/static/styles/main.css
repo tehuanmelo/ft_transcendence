@@ -3,21 +3,35 @@
 /* ---------------------------------- Font ---------------------------------- */
 @font-face {
     font-family: 'Press Start 2P';
-    src: url('../fonts/PressStart2P-Regular.ttf') format("truetype");
+    src: url('../fonts/PressStart2P-Regular.ttf');
 }
 
 @font-face {
     font-family: 'Silkscreen';
-    src: url('../fonts/Silkscreen-Regular.ttf') format("truetype");
-    font-weight: normal;
-    font-style: normal;
+    src: url('../fonts/Silkscreen-Regular.ttf');
 }
 
 @font-face {
-    font-family: 'Silkscreen';
-    src: url('../fonts/Silkscreen-Bold.ttf') format("truetype");
-    font-weight: bold;
-    font-style: normal;
+    font-family: 'Silkscreen-Bold';
+    src: url('../fonts/Silkscreen-Bold.ttf');
+}
+
+@font-face {
+    font-family: 'Pixel-Sans';
+    src: url('../fonts/Pixel-Sans-Serif.ttf');
+}
+
+@font-face {
+    font-family: 'Pixel-Sans-Condensed';
+    src: url('../fonts/Pixel-Sans-Serif-Condensed.ttf');
+}
+
+.pixel-sans {
+    font-family: 'Pixel-Sans', sans-serif;
+}
+
+.pixel-sans-condensed {
+    font-family: 'Pixel-Sans-Condensed', sans-serif;
 }
 
 .silk {
@@ -25,8 +39,7 @@
 }
 
 .silk-heavy {
-    font-family: 'Silkscreen', sans-serif;
-    font-weight: bold;
+    font-family: 'Silkscreen-Bold', sans-serif;
 }
 
 /* --------------------------------- General -------------------------------- */
@@ -408,10 +421,14 @@ header {
 }
 
 /* -------------------------------- About --------------------------------- */
-.about-card {
-    transition: transform 0.1s ease;
+.card {
+    transition: transform 0.2s ease;
     background-color: var(--navbar);
     color: var(--text);
+}
+
+.about-card .btn:hover {
+    transform: none;
 }
 
 .about-card:hover {
@@ -434,20 +451,21 @@ header {
 }
 
 .btn-accent {
-    color: white;
+    color: var(--text);
     background-color: var(--accent);
     border: solid 2px var(--accent);
     transition: background-color 0.3s ease;
 }
 
 .btn-accent:hover {
-    color: white;
+    color: var(--text);
     background-color: var(--light-accent);
 }
 
 .btn-accent:focus {
-    color: white;
+    color: var(--text);
     border: solid 2px var(--accent);
+    outline: none;
 }
 
 /* ------------------------------- Modal ---------------------------------- */
