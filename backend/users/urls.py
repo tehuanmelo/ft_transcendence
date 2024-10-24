@@ -1,5 +1,7 @@
 from django.urls import path
-from . import views, api_42
+from .views import views
+from .views import api_42
+from .views import friends
 
 urlpatterns = [
     path("login/", views.login_view, name="login"),
@@ -14,4 +16,10 @@ urlpatterns = [
     path("login_42/", api_42.login_42, name="login_42"),
     path("change_password/", views.change_password_view, name="change_password"),
     path("delete_account/", views.delete_account_view, name="delete_account"),
+    ## Friends Paths
+    path("add_friend/<str:username>/", friends.add_friend, name="add_friend"),
+    path("remove_friend/<str:username>/", friends.remove_friend, name="remove_friend"),
+    path("accept_friend/<str:username>/", friends.accept_friend, name="accept_friend"),
+    path("reject_friend/<str:username>/", friends.reject_friend, name="reject_friend"),
+    path("friends/", friends.friends, name="friends"),
 ]

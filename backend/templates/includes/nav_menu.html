@@ -35,6 +35,12 @@
                         </li>
                     </ul>
                 </div>
+                <a class="{% if request.path == '/users/friends' %}active-link{% endif %} nav-link spa-link px-4" href="{% url 'friends' %}" data-method="GET">
+                    Friends
+                    {% if pending_requests|length > 0 %}
+                        <span class="badge bg-danger">{{ pending_requests|length }}</span>
+                    {% endif %}
+                </a>
             </div>
             <div class="navbar-nav">
                 <div class="nav-item dropdown">

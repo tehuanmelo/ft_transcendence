@@ -6,8 +6,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseNotAllowed
 
-from .models import CustomUser
-from .auth import (
+from ..auth import (
     jwt_fetch_user,
     jwt_login_required,
     check_if_logged,
@@ -15,8 +14,8 @@ from .auth import (
     generate_2fa_qrcode,
     extract_token,
 )
-from .forms import CustomUserCreationForm, UserProfileForm
-from .token import (
+from ..forms import CustomUserCreationForm, UserProfileForm
+from ..token import (
     generate_token,
     set_token_property,
     set_request_token_property,
@@ -176,7 +175,8 @@ def register_view(request):
 
 @jwt_login_required
 def profile_view(request):
-    return render(request, "users/profile.html")
+    matches = request.user.get_all_matches()
+    return render(request, "users/profile.html", {"matches": matches})
 
 
 @jwt_login_required

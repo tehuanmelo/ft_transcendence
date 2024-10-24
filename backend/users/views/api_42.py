@@ -4,8 +4,8 @@ from django.shortcuts import redirect
 from django.utils import timezone
 
 
-from .models import CustomUser
-from .token import generate_token
+from ..models import CustomUser
+from ..token import generate_token
 
 
 def make_request(url, method="GET", headers=None, data=None):

@@ -293,6 +293,11 @@ header {
     outline: 0;
 }
 
+.form-control::placeholder {
+    color: var(--text);
+    opacity: 0.5;
+}
+
 .invalid-feedback {
     color: #dc3545;
     font-size: 0.6rem;
