@@ -1,13 +1,12 @@
 from django.db import models
 from .custom_user import CustomUser
 
-
 class Match(models.Model):
     user = models.ForeignKey(
         CustomUser, related_name="matches", on_delete=models.CASCADE
     )
-    opponent = models.ForeignKey(
-        CustomUser, related_name="opponent_matches", on_delete=models.CASCADE
+    opponent = models.CharField(
+        max_length=255
     )
     date = models.DateTimeField(
         auto_now_add=True
@@ -29,7 +28,6 @@ class Match(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         self.user.update_stats()
-        self.opponent.update_stats()
 
     def __str__(self):
-        return f"{self.user.username} vs {self.opponent.username} on {self.date}"
+        return f"{self.user.username} vs {self.opponent} on {self.date}"
