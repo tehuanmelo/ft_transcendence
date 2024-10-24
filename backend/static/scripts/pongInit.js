@@ -52,7 +52,7 @@ function handleGameRegisterModal(mode, username, isTournament) {
         playerNames.push(username);
 
     const gameRegisterForm = document.getElementById('gameRegisterForm');
-    generateGameRegisterForm(gameRegisterForm, playerInputs);
+    generateGameRegisterForm(gameRegisterForm, playerInputs, isTournament);
 
     // Game settings handlers
     handleDifficultyDropdown();
@@ -124,7 +124,7 @@ function handleScoreSlider() {
     });
 }
 
-function generateGameRegisterForm(gameRegisterForm, playerInputs) {
+function generateGameRegisterForm(gameRegisterForm, playerInputs, isTournament) {
     gameRegisterForm.innerHTML = '';
 
     // Create fields depending on visibility
@@ -139,7 +139,9 @@ function generateGameRegisterForm(gameRegisterForm, playerInputs) {
             const label = document.createElement('label');
             label.htmlFor = inputId;
             label.className = 'form-label silk-heavy';
-            label.textContent = `${inputId[0].toUpperCase() + inputId.slice(1, -6)} ${inputId.slice(6, -5)}*`;
+            label.textContent = `${inputId[0].toUpperCase() + inputId.slice(1, -6)} ${inputId.slice(6, -5)}`;
+            if (!(isTournament && divId === 'player4Div'))
+                label.textContent += '*';
 
             // Create the input field
             const input = document.createElement('input');
@@ -150,6 +152,8 @@ function generateGameRegisterForm(gameRegisterForm, playerInputs) {
             input.pattern = '[a-zA-Z0-9_]+';
             input.maxLength = 20;
             input.placeholder = 'Enter your name here';
+            if (isTournament && divId === 'player4Div')
+                input.placeholder += ' (Optional)';
 
             // Append elements to the div
             playerDiv.appendChild(label);
