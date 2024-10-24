@@ -4,6 +4,7 @@ from django.utils import timezone
 from datetime import timedelta
 from users.models import CustomUser, Match
 
+
 class CustomUserTests(TestCase):
 
     def test_create_user(self):
@@ -159,12 +160,16 @@ class MatchModelTest(TestCase):
 
     def setUp(self):
         # Create a user for testing
-        self.user1 = CustomUser.objects.create_user(username='user1', email='user1@example.com', password='password123')
-        self.opponent_name = 'opponent_user'  # Use a string for the opponent
+        self.user1 = CustomUser.objects.create_user(
+            username="user1", email="user1@example.com", password="password123"
+        )
+        self.opponent_name = "opponent_user"  # Use a string for the opponent
 
     def test_create_match(self):
         # Test creating a match
-        match = self.user1.create_match(opponent=self.opponent_name, result=Match.MatchResult.WIN)
+        match = self.user1.create_match(
+            opponent=self.opponent_name, result=Match.MatchResult.WIN
+        )
         self.assertEqual(match.user, self.user1)
         self.assertEqual(match.opponent, self.opponent_name)
         self.assertEqual(match.result, Match.MatchResult.WIN)
@@ -172,7 +177,9 @@ class MatchModelTest(TestCase):
 
     def test_update_stats_on_match_creation(self):
         # Test that stats are updated when a match is created
-        self.user1.create_match(opponent=self.opponent_name, result=Match.MatchResult.WIN)
+        self.user1.create_match(
+            opponent=self.opponent_name, result=Match.MatchResult.WIN
+        )
         self.user1.refresh_from_db()
         self.assertEqual(self.user1.wins, 1)
         self.assertEqual(self.user1.losses, 0)
@@ -184,8 +191,12 @@ class MatchModelTest(TestCase):
 
     def test_get_all_matches(self):
         # Test retrieving all matches for a user
-        match1 = self.user1.create_match(opponent=self.opponent_name, result=Match.MatchResult.WIN)
-        match2 = self.user1.create_match(opponent='another_opponent', result=Match.MatchResult.LOSS)
+        match1 = self.user1.create_match(
+            opponent=self.opponent_name, result=Match.MatchResult.WIN
+        )
+        match2 = self.user1.create_match(
+            opponent="another_opponent", result=Match.MatchResult.LOSS
+        )
         matches_user1 = self.user1.get_all_matches()
         self.assertIn(match1, matches_user1)
         self.assertIn(match2, matches_user1)

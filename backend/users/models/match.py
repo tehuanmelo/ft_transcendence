@@ -1,29 +1,33 @@
 from django.db import models
-from .custom_user import CustomUser
+
 
 class Match(models.Model):
     user = models.ForeignKey(
-        CustomUser, related_name="matches", on_delete=models.CASCADE
+        "users.CustomUser", related_name="matches", on_delete=models.CASCADE
     )
-    opponent = models.CharField(
-        max_length=255
-    )
-    date = models.DateTimeField(
-        auto_now_add=True
-    )  # Automatically set the date when the match is created
+    opponent = models.CharField(max_length=20)
+    date = models.DateTimeField(auto_now_add=True)
+
     class MatchResult(models.TextChoices):
-        WIN = 'win', 'Win'
-        LOSS = 'loss', 'Loss'
+        WIN = "win", "Win"
+        LOSS = "loss", "Loss"
 
     result = models.CharField(
-        max_length=10,
-        choices=MatchResult.choices,
-        default=MatchResult.LOSS,
+        max_length=10, choices=MatchResult.choices, default=MatchResult.LOSS
+    )
+
+    class GameMode(models.TextChoices):
+        PONG_1V1 = "pong_1v1", "Pong 1v1"
+        PONG_2V2 = "pong_2v2", "Pong 2v2"
+        TICTACTOE = "tictactoe", "Tic Tac Toe"
+
+    mode = models.CharField(
+        max_length=20, choices=GameMode.choices, default=GameMode.PONG_1V1
     )
 
     @property
     def is_win(self):
-        return self.MatchResult(self.result) == MatchResult.WIN
+        return self.MatchResult(self.result) == self.MatchResult.WIN
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

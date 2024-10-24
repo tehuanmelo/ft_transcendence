@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.db.models import Q
 
 from .friendship import Friendship
+from .match import Match
 
 
 class CustomUser(AbstractUser):
@@ -85,4 +86,3 @@ class CustomUser(AbstractUser):
         match.save()
         self.update_stats()
         return match
-

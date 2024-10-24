@@ -672,10 +672,8 @@ class Pong {
     }
 
     saveMatchResults(winners, losers) {
-        // send a request to backend
         const matchData = {
-            game: 'Pong',
-            mode: this.nbPlayers === 4 ? '2v2' : '1v1',
+            mode: this.nbPlayers === 4 ? 'pong_2v2' : 'pong_1v1',
             winners: winners,
             losers: losers,
             score: {

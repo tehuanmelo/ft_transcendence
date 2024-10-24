@@ -70,8 +70,7 @@
                 <h2>Match History</h2>
                 <ul>
                     {% for match in matches %}
-                    <li>{{ match.date|date:"F j, Y, g:i a" }} - Opponent: {{ match.opponent }} - Result: {{ match.result
-                        }}</li>
+                    <li>{{ match.date|date:"F j, Y, g:i a" }} - Opponent: {{ match.opponent }} - Result: {{ match.result }}</li>
                     {% empty %}
                     <li>No matches found.</li>
                     {% endfor %}
@@ -80,7 +79,7 @@
         </div>
     </div>
     <div id="userStats" class="">
-        
+
     </div>
 </div>
 
