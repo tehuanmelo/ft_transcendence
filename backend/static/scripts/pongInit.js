@@ -15,17 +15,9 @@ function gameInit() {
     ];
 
     const selectedMode = gameModes.find(gameMode => gameMode.mode === mode);
-    if (!selectedMode) {
-        getPage('404');
-        return;
-    }
-
     const isLoggedIn = (username !== null);
-    if (selectedMode.isLoggedIn && !isLoggedIn) {
-        getPage('404');
-        return;
-    }
-    else if (!selectedMode.isLoggedIn && isLoggedIn) {
+
+    if (!selectedMode || (selectedMode.isLoggedIn && !isLoggedIn) || (!selectedMode.isLoggedIn && isLoggedIn)) {
         getPage('404');
         return;
     }
@@ -63,17 +55,42 @@ function handleGameRegisterModal(mode, username, isTournament) {
     gameRegisterForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
+        const submittedPlayerNames = new Set(playerNames);
+        let duplicateDetected = false;
+
         playerInputs.forEach(({ inputId, visible }) => {
             if (visible) {
                 const playerName = document.getElementById(inputId).value.trim();
-                if (playerName) playerNames.push(playerName);
+                if (playerName) {
+                    if (submittedPlayerNames.has(playerName)) {
+                        duplicateDetected = true;
+                        document.getElementById(inputId).classList.add('is-invalid');
+                    }
+                    else {
+                        submittedPlayerNames.add(playerName);
+                        document.getElementById(inputId).classList.remove('is-invalid');
+                    }
+                }
             }
         });
 
+        if (duplicateDetected) { // Show an error message to the user
+            const errorMessage = document.getElementById('duplicateError');
+            if (!errorMessage) {
+                const errorDiv = document.createElement('div');
+                errorDiv.id = 'duplicateError';
+                errorDiv.className = 'alert alert-danger';
+                errorDiv.textContent = 'Duplicate names detected. Please enter unique names for all players.';
+                gameRegisterForm.prepend(errorDiv);
+            }
+            return;
+        }
+
         pongRegisterModal.hide();
 
-        updatePlayerDisplay(playerNames, !isTournament);
-        launchGame(playerNames, isTournament);
+        const finalPlayerNames = Array.from(submittedPlayerNames);
+        updatePlayerDisplay(finalPlayerNames, !isTournament);
+        launchGame(finalPlayerNames, isTournament);
     });
 }
 
