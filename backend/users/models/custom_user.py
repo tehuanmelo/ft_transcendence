@@ -67,4 +67,4 @@ class CustomUser(AbstractUser):
 
     def get_all_matches(self):
         """Retrieve all matches for this user."""
-        return self.matches.all()  # Access matches through the related name
+        return Match.objects.filter(Q(user=self) | Q(opponent=self))
