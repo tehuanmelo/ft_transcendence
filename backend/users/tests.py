@@ -158,40 +158,34 @@ class FriendshipTests(TestCase):
 class MatchModelTest(TestCase):
 
     def setUp(self):
-        # Create two users for testing
+        # Create a user for testing
         self.user1 = CustomUser.objects.create_user(username='user1', email='user1@example.com', password='password123')
-        self.user2 = CustomUser.objects.create_user(username='user2', email='user2@example.com', password='password123')
+        self.opponent_name = 'opponent_user'  # Use a string for the opponent
 
     def test_create_match(self):
         # Test creating a match
-        match = self.user1.create_match(opponent=self.user2, result=Match.MatchResult.WIN)
+        match = self.user1.create_match(opponent=self.opponent_name, result=Match.MatchResult.WIN)
         self.assertEqual(match.user, self.user1)
-        self.assertEqual(match.opponent, self.user2)
+        self.assertEqual(match.opponent, self.opponent_name)
         self.assertEqual(match.result, Match.MatchResult.WIN)
         self.assertTrue(match.date <= timezone.now())
 
     def test_update_stats_on_match_creation(self):
         # Test that stats are updated when a match is created
-        self.user1.create_match(opponent=self.user2, result=Match.MatchResult.WIN)
+        self.user1.create_match(opponent=self.opponent_name, result=Match.MatchResult.WIN)
         self.user1.refresh_from_db()
-        self.user2.refresh_from_db()
         self.assertEqual(self.user1.wins, 1)
         self.assertEqual(self.user1.losses, 0)
-        self.assertEqual(self.user2.wins, 0)
-        self.assertEqual(self.user2.losses, 1)
 
     def test_create_match_against_self(self):
         # Test that a user cannot create a match against themselves
         with self.assertRaises(ValueError):
-            self.user1.create_match(opponent=self.user1)
+            self.user1.create_match(opponent=self.user1.username)
 
     def test_get_all_matches(self):
         # Test retrieving all matches for a user
-        match1 = self.user1.create_match(opponent=self.user2, result=Match.MatchResult.WIN)
-        match2 = self.user2.create_match(opponent=self.user1, result=Match.MatchResult.LOSS)
+        match1 = self.user1.create_match(opponent=self.opponent_name, result=Match.MatchResult.WIN)
+        match2 = self.user1.create_match(opponent='another_opponent', result=Match.MatchResult.LOSS)
         matches_user1 = self.user1.get_all_matches()
-        matches_user2 = self.user2.get_all_matches()
         self.assertIn(match1, matches_user1)
         self.assertIn(match2, matches_user1)
-        self.assertIn(match1, matches_user2)
-        self.assertIn(match2, matches_user2)
