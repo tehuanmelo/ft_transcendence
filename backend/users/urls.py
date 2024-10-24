@@ -2,6 +2,7 @@ from django.urls import path
 from .views import views
 from .views import api_42
 from .views import friends
+from .views import match
 
 urlpatterns = [
     ## Authorization Paths
@@ -27,4 +28,10 @@ urlpatterns = [
     path("accept_friend/<str:username>/", friends.accept_friend, name="accept_friend"),
     path("reject_friend/<str:username>/", friends.reject_friend, name="reject_friend"),
     path("friends/", friends.friends, name="friends"),
+    ## Match History Paths
+    path(
+        "save_match_results/",
+        match.save_match_result,
+        name="match_result",
+    ),
 ]
