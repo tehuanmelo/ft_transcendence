@@ -121,8 +121,6 @@ function handleDifficultyDropdown() {
                 g_PADDLE_SPEED = gameConfig[selectedDiff].paddleSpeed;
                 g_BALL_SPEED = gameConfig[selectedDiff].ballSpeed;
             }
-            else if (selectedDiff === "Custom")
-                document.getElementById("customConfig").style.display = "block";
             else {
                 alert('Invalid difficulty level selected');
                 getPage('404');

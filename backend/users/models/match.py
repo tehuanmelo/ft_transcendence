@@ -5,7 +5,10 @@ class Match(models.Model):
     user = models.ForeignKey(
         "users.CustomUser", related_name="matches", on_delete=models.CASCADE
     )
-    opponent = models.CharField(max_length=20)
+    opponent1 = models.CharField(max_length=20)
+    opponent2 = models.CharField(max_length=20, blank=True, null=True)
+    teammate = models.CharField(max_length=20, blank=True, null=True)
+    score = models.CharField(max_length=20)
     date = models.DateTimeField(auto_now_add=True)
 
     class MatchResult(models.TextChoices):
@@ -30,8 +33,18 @@ class Match(models.Model):
         return self.MatchResult(self.result) == self.MatchResult.WIN
 
     def save(self, *args, **kwargs):
+        # Ensure opponent2 and teammate are only set for pong_2v2
+        if self.mode != self.GameMode.PONG_2V2:
+            self.opponent2 = None
+            self.teammate = None
+
         super().save(*args, **kwargs)
         self.user.update_stats()
 
     def __str__(self):
-        return f"{self.user.username} vs {self.opponent} on {self.date}"
+        if self.mode == self.GameMode.PONG_2V2:
+            return f"{self.user.username} and {self.teammate} vs {self.opponent1} and {self.opponent2} on {self.date}"
+        elif (
+            self.mode == self.GameMode.PONG_1V1 or self.mode == self.GameMode.TICTACTOE
+        ):
+            return f"{self.user.username} vs {self.opponent1} on {self.date}"

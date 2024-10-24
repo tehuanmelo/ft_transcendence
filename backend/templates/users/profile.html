@@ -65,19 +65,53 @@
                 <p>Losses: {{ user.losses }}</p>
             </div>
         </div>
-        <div class="main border">
+        <div class="main border mt-4">
             <div class="card-body">
                 <h2>Match History</h2>
-                <ul>
-                    {% for match in matches %}
-                    <li>{{ match.date|date:"F j, Y, g:i a" }} - Opponent: {{ match.opponent }} - Result: {{ match.result }}</li>
-                    {% empty %}
-                    <li>No matches found.</li>
-                    {% endfor %}
-                </ul>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Mode</th>
+                            <th>Match Details</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for match in matches %}
+                        <tr>
+                            <td>{{ match.date|date:"d-M-Y" }}</td>
+                            <td>
+                                {% if match.mode == 'pong_1v1' %}
+                                Pong 1v1
+                                {% elif match.mode == 'pong_2v2' %}
+                                Pong 2v2
+                                {% elif match.mode == 'tictactoe' %}
+                                Tic Tac Toe
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if match.mode == 'pong_1v1' %}
+                                You vs {{ match.opponent1 }}
+                                {% elif match.mode == 'pong_2v2' %}
+                                You and {{ match.teammate }} vs {{ match.opponent1 }} and {{ match.opponent2 }}
+                                {% elif match.mode == 'tictactoe' %}
+                                You vs {{ match.opponent1 }}
+                                {% endif %}
+                            </td>
+                            <td>{{ match.result|title }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">No matches found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+
     <div id="userStats" class="">
 
     </div>

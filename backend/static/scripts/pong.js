@@ -633,34 +633,32 @@ class Pong {
     }
 
     getWinnersAndLosers() {
-        let winners = [];
-        let losers = [];
+        let winners, losers;
+
         if (this.score.scoreL == g_SCORE_TO_WIN) {
-            // left side won
-            winners.push(this.playerNames[0]);
-            losers.push(this.playerNames[1]);
-            if (this.nbPlayers === 4) {
-                winners.push(this.playerNames[2]);
-                losers.push(this.playerNames[3]);
-            }
+            // Left side won
+            winners = this.nbPlayers === 4 ? [this.playerNames[0], this.playerNames[2]] : this.playerNames[0];
+            losers = this.nbPlayers === 4 ? [this.playerNames[1], this.playerNames[3]] : this.playerNames[1];
         }
         else {
-            // right side won
-            winners.push(this.playerNames[1]);
-            losers.push(this.playerNames[0]);
-            if (this.nbPlayers === 4) {
-                winners.push(this.playerNames[3]);
-                losers.push(this.playerNames[2]);
-            }
+            // Right side won
+            winners = this.nbPlayers === 4 ? [this.playerNames[1], this.playerNames[3]] : this.playerNames[1];
+            losers = this.nbPlayers === 4 ? [this.playerNames[0], this.playerNames[2]] : this.playerNames[0];
         }
+
         return { winners, losers };
     }
 
     gameOver() {
         const { winners, losers } = this.getWinnersAndLosers();
+
         if (this.isTournament === false) {
             this.displayWinner(winners);
-            this.saveMatchResults(winners, losers);
+
+            // Not saving results for guest mode
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('mode') !== 'guest')
+                this.saveMatchResults(winners, losers);
         }
         else {
             const winner = (this.score.scoreL === g_SCORE_TO_WIN) ? "left" : "right";
@@ -676,7 +674,7 @@ class Pong {
             mode: this.nbPlayers === 4 ? 'pong_2v2' : 'pong_1v1',
             winners: winners,
             losers: losers,
-            score: {
+            scores: {
                 left: this.score.scoreL,
                 right: this.score.scoreR
             }
@@ -703,10 +701,10 @@ class Pong {
 
     displayWinner(winners) {
         let winnerText = '';
-        if (winners.length === 1)
-            winnerText = `${winners[0]} wins!`;
-        else if (winners.length === 2)
+        if (Array.isArray(winners) && winners.length === 2)
             winnerText = `${winners[0]} and ${winners[1]} win!`;
+        else
+            winnerText = `${winners} wins!`;
 
         let element = document.getElementById('winner');
         element.innerText = winnerText;
