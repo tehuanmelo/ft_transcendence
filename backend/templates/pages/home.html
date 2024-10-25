@@ -9,12 +9,11 @@
 <!-- Home -->
 {% if user.is_authenticated %}
 
-<div class="container d-flex flex-column py-5 text-center">
+<div class="container-xl d-flex flex-column justify-content-center text-center h-75">
     <h1 class="mb-5 silk">Welcome back, <span class="username silk-heavy">{{ user.username }}</span>!</h1>
 
     <a class="menu-btn py-3 spa-link" href="{% url 'pong' %}?mode=1v1" data-method="GET">Play Pong 1v1</a>
     <a class="menu-btn py-3 spa-link" href="{% url 'pong' %}?mode=2v2" data-method="GET">Play Pong 2v2</a>
-    <a class="menu-btn py-3 spa-link" href="{% url 'pong' %}?mode=test" data-method="GET">Play Pong TEST</a>
     <a class="menu-btn py-3 spa-link" href="{% url 'pong' %}?mode=tournament" data-method="GET">Play Tournament</a>
 </div>
 

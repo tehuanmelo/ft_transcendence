@@ -48,7 +48,7 @@ down: check_docker
 
 nuke: check_docker
 	@echo "$(RED)Nuking docker files... ☢️$(RESET)";
-	docker system prune -a -f
+	$(DOCKER_COMPOSE) down --rmi all --volumes --remove-orphans
 
 clean: check_docker
 	@echo "$(RED)Initiating clean... 🧹$(RESET)";
@@ -68,7 +68,7 @@ clean: check_docker
 		echo "$(RED)Deleting SQLite database...$(RESET)"; \
 		rm -rf ./backend/db.sqlite3; \
 	fi
-	$(DOCKER_COMPOSE) down --rmi all --volumes
+	$(DOCKER_COMPOSE) down --rmi local --volumes --remove-orphans
 
 fclean: clean nuke
 	@echo "$(RED)Clean complete 🧼$(RESET)";

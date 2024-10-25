@@ -61,9 +61,12 @@ class Ball {
 	}
 
 	startBallMovement() {
+		this.prevSpeed = g_BALL_SPEED;
+		this.angleXsign = this.ballRandomSign();
+		this.angleYsign = this.ballRandomSign();
         this.angle = Math.random();
-        this.dx = Math.cos(this.angle) * g_BALL_SPEED * this.ballRandomSign();
-        this.dy = Math.sin(this.angle) * g_BALL_SPEED * this.ballRandomSign();
+        this.dx = Math.cos(this.angle) * g_BALL_SPEED * this.angleXsign;
+        this.dy = Math.sin(this.angle) * g_BALL_SPEED * this.angleYsign;
         this.ballMoving = true;
     }
 
@@ -73,9 +76,10 @@ class Ball {
     }
 
 	resumeBallMovement() {
-		this.dx = Math.cos(this.angle) * g_BALL_SPEED;
-        this.dy = Math.sin(this.angle) * g_BALL_SPEED;
-        this.ballMoving = true;
+		this.dx =  (this.dx/this.prevSpeed) * g_BALL_SPEED;
+		this.dy =  (this.dy/this.prevSpeed) * g_BALL_SPEED;
+		this.prevSpeed = g_BALL_SPEED;
+		this.ballMoving = true;
 	}
 
 	doLinesIntersect(line1, line2) {
@@ -544,7 +548,6 @@ class Pong {
 		const handleEnter = (event) => {
 			if (event.key === 'Enter') {
 				this.countdown.start();
-				this.isGameRunning = true;
 				document.removeEventListener('keydown', handleEnter);
 			}
 		};
@@ -552,16 +555,17 @@ class Pong {
 	}
 
 	startGame() {
+		this.isGameRunning = true;
 		this.score.resetScore();
-        this.ball.ballResetPosition();
+		this.ball.ballResetPosition();
 		document.addEventListener('keydown', this.handleKeyboardEvent.bind(this));
-        document.addEventListener('keyup', this.handleKeyboardEvent.bind(this));
-        this.intervalId = setInterval(this.pongRender.bind(this), 1000 / 60); // 60 FPS (frames per second)
+		document.addEventListener('keyup', this.handleKeyboardEvent.bind(this));
+		this.intervalId = setInterval(this.pongRender.bind(this), 1000 / 60); // 60 FPS (frames per second)
 		this.ball.startBallMovement();
 	}
 
 	pause() {
-		clearInterval(this.intervalId);
+			clearInterval(this.intervalId);
 	}
 
 	resume() {
@@ -572,7 +576,7 @@ class Pong {
 	stop() {
 		clearInterval(this.intervalId);
 		document.removeEventListener('keydown', this.handleKeyboardEvent.bind(this));
-        document.removeEventListener('keyup', this.handleKeyboardEvent.bind(this));
+		document.removeEventListener('keyup', this.handleKeyboardEvent.bind(this));
 		this.isGameRunning = false;
 	}
 
@@ -742,6 +746,15 @@ class Countdown {
 		this.intervalId = setInterval(this.countdown.bind(this), 1000);
 	}
 
+	pause()	{
+		clearInterval(this.intervalId);
+	}
+
+	resume() {
+		this.count = 3;
+		this.intervalId = setInterval(this.countdown.bind(this), 1000);
+	}
+
 	countdown() {
 		if (this.count === 1) {
 			clearInterval(this.intervalId);
@@ -817,9 +830,11 @@ class Game {
 	pause() {
 		if (this.isTournament == true) {
 			this.tournament.pong.pause();
+			this.tournament.pong.countdown.pause();
 		}
 		else {
 			this.pong.pause();
+			this.pong.countdown.pause();
 		}
 	}
 
@@ -830,6 +845,13 @@ class Game {
 			}
 			else {
 				this.pong.resume();
+			}
+		} else {
+			if (this.isTournament == true) {
+				this.tournament.pong.countdown.resume();
+			}
+			else {
+				this.pong.countdown.resume();
 			}
 		}
 	}
@@ -844,16 +866,10 @@ function playAgain() {
 function refreshConfig() {
 	document.getElementById('playerspeed').value = g_PADDLE_SPEED;
 	document.getElementById('ballspeed').value = g_BALL_SPEED;
-	document.getElementById('score').value = g_SCORE_TO_WIN;
 	document.getElementById('customSwitch').checked = g_SOUND;
-	document.getElementById('currentScore').innerText = "Score - " + g_SCORE_TO_WIN;
 }
 
 function loadConfiguration() {
-	if (game.isGameRunning() == true)
-		document.getElementById('score').disabled = true;
-	else
-		document.getElementById('score').disabled = false;
 	game.pause();
 	refreshConfig();
 }
@@ -861,7 +877,6 @@ function loadConfiguration() {
 function applyConfiguration() {
 	g_PADDLE_SPEED = parseInt(document.getElementById('playerspeed').value, 10);
 	g_BALL_SPEED = parseInt(document.getElementById('ballspeed').value, 10);
-	g_SCORE_TO_WIN = parseInt(document.getElementById('score').value, 10);
 	g_SOUND = document.getElementById('customSwitch').checked;
 	game.resume();
 	var myModalEl = document.getElementById('configModal');
@@ -1007,7 +1022,6 @@ class Tournament {
 }
 
 function nextGame() {
-
 	game.tournament.nextMatch();
 }
 
@@ -1025,13 +1039,17 @@ function setupDropdownListeners() {
             dropdownButton.textContent = selectedText;
 
             if (selectedText in gameConfig) {
+                document.getElementById("customConfig").style.display = "none";
                 g_PADDLE_SPEED = gameConfig[selectedText].paddleSpeed;
                 g_BALL_SPEED = gameConfig[selectedText].ballSpeed;
+                refreshConfig();
             }
             else if (selectedText === "Custom")
                 document.getElementById("customConfig").style.display = "block";
-            else
-                console.error('Invalid difficulty level selected');
+            else {
+                alert('Invalid difficulty level selected');
+                getPage('404');
+            }
 
             // Hide the dropdown menu after selection
             const dropdown = new bootstrap.Dropdown(dropdownButton);
@@ -1095,74 +1113,7 @@ function visual() {
     game.forceRefresh();
 }
 
-function askForPlayerNames(numOfPlayers, isLoggedIn, loggedInUsername = '') {
-    let playerNames = [];
-    const playerNameModal = new bootstrap.Modal('#playerNameModal');
-    const playerForm = document.getElementById('playerNamesForm');
-
-    const playerInputs = [
-        { divId: 'player1Div', inputId: 'player1', visible: !isLoggedIn },
-        { divId: 'player2Div', inputId: 'player2', visible: true },
-        { divId: 'player3Div', inputId: 'player3', visible: numOfPlayers === 4 },
-        { divId: 'player4Div', inputId: 'player4', visible: numOfPlayers === 4 },
-    ];
-    playerInputs.forEach(({ divId, visible }) => {
-        document.getElementById(divId).style.display = visible ? 'block' : 'none';
-    });
-
-    if (isLoggedIn) {
-        document.getElementById('player1').value = loggedInUsername;
-        playerNames.push(loggedInUsername);
-    }
-
-    playerNameModal.show();
-
-    document.getElementById('startGameButton').addEventListener('click', (event) => {
-        event.preventDefault();
-
-        playerForm.classList.remove('was-validated');
-
-        let allValid = true;
-        playerInputs.forEach(({ inputId, visible }) => {
-            if (visible) {
-                const inputField = document.getElementById(inputId);
-                if (inputField.checkValidity()) {
-                    inputField.classList.remove('is-invalid');
-                    inputField.classList.add('is-valid');
-                }
-                else {
-                    allValid = false;
-                    inputField.classList.add('is-invalid');
-                }
-            }
-        });
-
-        playerForm.classList.add('was-validated');
-
-        if (!allValid)
-            return;
-
-        playerInputs.forEach(({ inputId, visible }) => {
-            if (visible) {
-                const playerName = document.getElementById(inputId).value.trim();
-                if (playerName) playerNames.push(playerName);
-            }
-        });
-
-        playerNameModal.hide();
-
-        document.getElementById('player1name').innerText = playerNames[0].length > 5 ? playerNames[0].slice(0, 5) + '.' : playerNames[0];
-        document.getElementById('player2name').innerText = playerNames[1].length > 5 ? playerNames[1].slice(0, 5) + '.' : playerNames[1];
-        if (playerNames.length === 4) {
-            document.getElementById('player3name').innerText = playerNames[2].length > 5 ? playerNames[2].slice(0, 5) + '.' : playerNames[2];
-            document.getElementById('player4name').innerText = playerNames[3].length > 5 ? playerNames[3].slice(0, 5) + '.' : playerNames[3];
-        }
-
-        startGame(playerNames);
-    });
-}
-
-function startGame(playerNames, isTournament = false) {
+function launchGame(playerNames, isTournament = false) {
     canvas = document.getElementById('ponggame');
     ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
@@ -1185,50 +1136,3 @@ function startGame(playerNames, isTournament = false) {
             console.error("Error loading font:", error);
         });
 }
-
-function gameInit() {
-    const usernameElement = document.querySelector('meta[name="username"]');
-    const loggedInUsername = usernameElement ? usernameElement.getAttribute('content') : null;
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const mode = urlParams.get('mode');
-    if (mode === 'test') {
-        // TODO: testing only, remove after done
-        startGame(['test1', 'tanas']); //* 1v1 test
-        // startGame(['test1', 'tanas', 'qqq', 'www']); //* 2v2 test
-        // startGame(['test1', 'tanas', 'qqq', 'www'], true); //* tournament test
-        return;
-    }
-
-    const gameModes = [
-        { mode: '1v1', loggedIn: true, players: 2 },
-        { mode: '2v2', loggedIn: true, players: 4 },
-        { mode: 'guest', loggedIn: false, players: 2 },
-        { mode: 'tournament', loggedIn: true },
-    ];
-
-    const selectedMode = gameModes.find(gameMode => gameMode.mode === mode);
-    if (!selectedMode) {
-        alert('Invalid mode selected');
-        getPage('/');
-        return;
-    }
-
-    const isLoggedIn = (loggedInUsername !== null);
-    if (selectedMode.loggedIn && !isLoggedIn) {
-        alert('You must be logged in to access this mode');
-        return;
-    }
-    else if (!selectedMode.loggedIn && isLoggedIn) {
-        alert('You are already logged in, you cannot play as guest');
-        return;
-    }
-
-    if (selectedMode.mode === '1v1' || selectedMode.mode === '2v2')
-        askForPlayerNames(selectedMode.players, true, loggedInUsername);
-    else if (selectedMode.mode === 'guest')
-        askForPlayerNames(selectedMode.players, false);
-    else if (selectedMode.mode === 'tournament')
-        tournamentInit();
-}
-

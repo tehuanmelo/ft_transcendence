@@ -118,6 +118,10 @@ header {
     color: var(--accent);
 }
 
+.nav-link.active-link {
+    color: var(--accent);
+}
+
 .navbar-nav .dropdown-menu {
     background-color: var(--background);
     border-color: var(--navbar);
@@ -147,13 +151,38 @@ header {
     border-color: var(--text);
 }
 
-.navbar-nav .dropdown-toggle::after {
+.navbar-nav .dropdown .nav-link img {
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    max-width: 35px;
+    border: 2px solid transparent;
+}
+
+.navbar-nav .dropdown .nav-link:hover img,
+.navbar-nav .dropdown .nav-link:focus img {
+    transform: scale(1.2);
+    border-color: var(--accent);
+}
+
+.navbar-nav .dropdown-toggle[id="user"]::after {
     border-top-color: var(--accent);
     border-left-color: transparent;
     border-right-color: transparent;
     margin-left: -0.5rem;
 }
 
+.navbar-nav .dropdown-toggle[id="pongModes"]::after {
+    border-left-color: transparent;
+    border-right-color: transparent;
+    margin-left: -0.5rem;
+}
+
+.navbar-nav .dropdown-toggle:hover,
+.navbar-nav .dropdown-toggle:focus {
+    color: var(--accent);
+}
+
+/* TODO */
 @media (max-width: 991.98px) {
     #navbarMenu {
         transition: height 0.3s ease-in-out, opacity 0.1s ease-in-out;
@@ -177,8 +206,7 @@ header {
 }
 
 .logo:hover {
-    transform: scale(1.2);
-    filter: drop-shadow(0 0 5px rgba(243, 156, 18, 0.8)) drop-shadow(0 0 10px rgba(243, 156, 18, 0.5));
+    transform: scale(1.1);
 }
 
 /* ---------------------------------- Home ---------------------------------- */
@@ -265,15 +293,18 @@ header {
 .form-control:focus,
 .form-control:hover {
     color: var(--text);
-    border-color: var(--primary);
     background-color: rgba(0, 0, 0, 0.5);
 }
 
 .form-control:focus {
     background-color: rgba(0, 0, 0, 0.5);
-    border-color: none;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     outline: 0;
+}
+
+.form-control::placeholder {
+    color: var(--text);
+    opacity: 0.5;
 }
 
 .invalid-feedback {
@@ -337,7 +368,6 @@ header {
     background-color: var(--navbar);
     border: none;
     border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .profile-image-wrapper {
@@ -423,13 +453,7 @@ header {
     border: solid 2px var(--accent);
 }
 
-/* ----------------------------- Tournament ------------------------------- */
-#tournamentModal * {
-    font-family: 'Silkscreen', sans-serif;
-    font-weight: bold;
-    border: none;
-}
-
+/* ------------------------------- Modal ---------------------------------- */
 .modal .modal-content {
     background-color: transparent;
 }
@@ -440,16 +464,28 @@ header {
     background-color: var(--background);
 }
 
-#tournamentModal .modal-header,
-#tournamentModal .modal-footer {
-    background-color: transparent;
+.modal input::placeholder {
+    color: var(--text);
+    opacity: 0.5;
 }
 
-#tournamentModal>.form-label {
+#pongRegisterModal .modal-header,
+#pongRegisterModal .modal-footer {
+    background-color: transparent;
+    border: none;
+}
+
+#pongRegisterModal>.form-label {
     margin: none;
 }
 
-#tournamentModal .dropdown-toggle {
+#pongRegisterModal .dropdown>* {
+    border: none;
+    font-family: 'Silkscreen', sans-serif;
+    font-weight: bold;
+}
+
+#pongRegisterModal .dropdown-toggle {
     color: var(--text);
     text-align: left;
     border-radius: 0;
@@ -462,54 +498,44 @@ header {
     align-items: center;
 }
 
-#tournamentModal .dropdown-toggle:focus,
-#tournamentModal .dropdown-toggle:hover {
+#pongRegisterModal .dropdown-toggle:focus,
+#pongRegisterModal .dropdown-toggle:hover {
     color: var(--text);
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-#tournamentModal .dropdown-toggle:focus {
+#pongRegisterModal .dropdown-toggle:focus {
     border-color: none;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     outline: 0;
 }
 
-#tournamentModal .dropdown-menu {
+#pongRegisterModal .dropdown-menu {
     background-color: var(--background);
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     outline: 0;
 }
 
-#tournamentModal .dropdown-menu:hover,
-#tournamentModal .dropdown-menu:focus {
+#pongRegisterModal .dropdown-menu:hover,
+#pongRegisterModal .dropdown-menu:focus {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     outline: 0;
 }
 
-#tournamentModal input::placeholder {
+#pongRegisterModal .dropdown-item {
     color: var(--text);
-    opacity: 0.5;
+    font-weight: bold;
 }
 
-#tournamentModal #alias1::placeholder,
-#tournamentModal #alias2::placeholder,
-#tournamentModal #alias3::placeholder,
-#tournamentModal #alias4::placeholder {
+#pongRegisterModal .dropdown-item:hover,
+#pongRegisterModal .dropdown-item:focus {
+    background-color: var(--navbar);
     color: var(--text);
+    font-weight: bold;
 }
 
-@media (max-width: 991px) {
-    #playerAliases {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    #tournamentModal .row {
+@media (max-width: 576.9px) {
+    #pongRegisterModal .row {
         flex-direction: column;
-    }
-
-    #tournamentModal .dropdown,
-    #tournamentModal #scoreSlider {
-        margin-bottom: 20px;
     }
 }

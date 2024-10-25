@@ -64,6 +64,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # allauth
     # "allauth.account.middleware.AccountMiddleware",
+    # Users Middlewares
+    "users.middleware.UpdateLastActivityMiddleware",
 ]
 
 ROOT_URLCONF = "admin.urls"
@@ -78,6 +80,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "users.context_processors.pending_requests",
             ],
         },
     },

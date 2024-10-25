@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Settings{% endblock title %}
+{% block title %}Account Settings{% endblock title %}
 
 
 {% block content %}
 
-<!-- Settings -->
+<!-- Account Settings -->
 <div class="container py-5">
-    <h1 class="mb-4">Settings</h1>
+    <h1 class="mb-4">Account Settings</h1>
 
     <div class="list-group" data-bs-theme="dark">
         {% if not user.is_2fa_set %}
@@ -20,7 +20,8 @@
         <a class="list-group-item list-group-item-action spa-link" href="{% url 'reset_2fa' %}" data-method="GET">Reset
             2FA</a>
         {% endif %}
-        <a class="list-group-item list-group-item-action spa-link" href="{% url "change_password" %}" data-method="GET">Change Password</a>
+        <a class="list-group-item list-group-item-action spa-link" href="{% url 'change_password' %}"
+            data-method="GET">Change Password</a>
         <a class="list-group-item list-group-item-action spa-link" href="#" data-bs-toggle="modal"
             data-bs-target="#deleteAccountModal">Delete account</a>
     </div>
@@ -46,24 +47,51 @@
     </div>
 </div>
 
-<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="delete_accountLabel" aria-hidden="true"
-    data-bs-theme="dark">
+<!-- Delete Account Modal -->
+<style>
+    .muted-btn {
+        pointer-events: none;
+        text-decoration: none;
+        opacity: 0.5;
+    }
+</style>
+
+<div id="deleteAccountModal" class="modal fade" tabindex="-1" aria-labelledby="deleteAccountLabel" aria-hidden="true"
+    data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-body text-center">
-                So sad to see you leaving us.
+            <div class="modal-header text-center">
                 Are you sure you want to delete your account?
             </div>
             <div class="modal-footer justify-content-center">
+                <div class="form-check mb-3">
+                    <input id="confirmDeleteCheckbox" class="form-check-input" type="checkbox" required>
+                    <label class="form-check-label" for="confirmDeleteCheckbox">
+                        I understand that deleting my account is <span
+                            class="text-decoration-underline">irreversible</span>.
+                    </label>
+                </div>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 <form id="deleteAccount">
                     {% csrf_token %}
-                    <a class="btn btn-danger spa-link" href="{% url 'delete_account' %}" data-method="POST"
-                        data-form="#deleteAccount" data-bs-dismiss="modal">Delete</a>
+                    <a id="deleteAccountBtn" class="btn btn-danger muted-btn spa-link" href="{% url 'delete_account' %}"
+                        data-method="POST" data-form="#deleteAccount" data-bs-dismiss="modal">Delete Account</a>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+
+<script>
+    // Enable the delete button when the checkbox is checked
+    document.getElementById('confirmDeleteCheckbox').addEventListener('change', function () {
+        const deleteButton = document.getElementById('deleteAccountBtn');
+        if (this.checked)
+            deleteButton.classList.remove('muted-btn');
+        else
+            deleteButton.classList.add('muted-btn');
+    });
+</script>
 
 {% endblock content %}
