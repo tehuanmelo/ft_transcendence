@@ -177,9 +177,7 @@ class MatchModelTest(TestCase):
 
     def test_update_stats_on_match_creation(self):
         # Test that stats are updated when a match is created
-        self.user1.create_match(
-            opponents=self.opponents, result=Match.MatchResult.WIN
-        )
+        self.user1.create_match(opponents=self.opponents, result=Match.MatchResult.WIN)
         self.user1.refresh_from_db()
         self.assertEqual(self.user1.wins, 1)
         self.assertEqual(self.user1.losses, 0)

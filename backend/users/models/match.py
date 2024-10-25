@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
+
 class Match(models.Model):
     user = models.ForeignKey(
         "users.CustomUser", related_name="matches", on_delete=models.CASCADE
@@ -9,7 +10,7 @@ class Match(models.Model):
         models.CharField(max_length=20),
         # SIZE = 2 ; if there is a limit to Maximum opponents
         blank=True,
-        default=list
+        default=list,
     )
     teammate = models.CharField(max_length=20, blank=True, null=True)
     score = models.CharField(max_length=20)

@@ -65,7 +65,9 @@ def save_match_result(request):
             else:  # Handle 1v1 and tictactoe
                 if len(winners) != 1 or len(losers) != 1:
                     return JsonResponse(
-                        {"error": "1v1 and tictactoe modes require 1 winner and 1 loser"},
+                        {
+                            "error": "1v1 and tictactoe modes require 1 winner and 1 loser"
+                        },
                         status=400,
                     )
 
@@ -96,4 +98,3 @@ def save_match_result(request):
             return JsonResponse({"error": str(e)}, status=500)
 
     return JsonResponse({"error": "Invalid request method"}, status=400)
-    
