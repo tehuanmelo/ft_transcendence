@@ -111,14 +111,14 @@
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Pong Game</h1>
+            <div class="modal-header justify-content-center">
+                <h1>Game Over!</h1>
             </div>
             <div class="modal-body">
-                <h1>Game Over!</h1>
-                <h2 id="winner"></h2>
+                <meta name="csrf-token" content="{{ csrf_token }}">
+                <h2 id="winner" class="text-center"></h2>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer justify-content-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="playAgain()">Play
                     Again!</button>
                 <a href="{% url 'home' %}" class="btn btn-secondary spa-link" data-toggle="tooltip" data-placement="top"
