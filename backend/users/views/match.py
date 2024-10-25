@@ -41,15 +41,13 @@ def save_match_result(request):
                         if winners[0] == request.user.username
                         else winners[0]
                     )
-                    opponent1 = losers[0]
-                    opponent2 = losers[1]
+                    opponents = losers
                 elif request.user.username in losers:
                     result = Match.MatchResult.LOSS
                     teammate = (
                         losers[1] if losers[0] == request.user.username else losers[0]
                     )
-                    opponent1 = winners[0]
-                    opponent2 = winners[1]
+                    opponents = winners
                 else:
                     return JsonResponse(
                         {"error": "Logged-in user not part of the match"}, status=400
@@ -58,28 +56,33 @@ def save_match_result(request):
                 # Create the match entry
                 Match.objects.create(
                     user=request.user,
-                    opponent1=opponent1,
-                    opponent2=opponent2,
+                    opponents=opponents,
                     teammate=teammate,
                     result=result,
                     score=f"{score_data['left']}-{score_data['right']}",
                     mode=mode,
                 )
             else:  # Handle 1v1 and tictactoe
-                winner_name = winners
-                loser_name = losers
+                if len(winners) != 1 or len(losers) != 1:
+                    return JsonResponse(
+                        {"error": "1v1 and tictactoe modes require 1 winner and 1 loser"},
+                        status=400,
+                    )
+
+                winner_name = winners[0]
+                loser_name = losers[0]
 
                 if request.user.username == winner_name:
                     result = Match.MatchResult.WIN
-                    opponent1 = loser_name
+                    opponents = [loser_name]
                 else:
                     result = Match.MatchResult.LOSS
-                    opponent1 = winner_name
+                    opponents = [winner_name]
 
                 # Create the match entry
                 Match.objects.create(
                     user=request.user,
-                    opponent1=opponent1,
+                    opponents=opponents,
                     result=result,
                     score=f"{score_data['left']}-{score_data['right']}",
                     mode=mode,
@@ -93,3 +96,4 @@ def save_match_result(request):
             return JsonResponse({"error": str(e)}, status=500)
 
     return JsonResponse({"error": "Invalid request method"}, status=400)
+    
