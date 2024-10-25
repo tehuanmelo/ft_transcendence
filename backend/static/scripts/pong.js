@@ -637,13 +637,13 @@ class Pong {
 
         if (this.score.scoreL == g_SCORE_TO_WIN) {
             // Left side won
-            winners = this.nbPlayers === 4 ? [this.playerNames[0], this.playerNames[2]] : this.playerNames[0];
-            losers = this.nbPlayers === 4 ? [this.playerNames[1], this.playerNames[3]] : this.playerNames[1];
+            winners = this.nbPlayers === 4 ? [this.playerNames[0], this.playerNames[2]] : [this.playerNames[0]];
+            losers = this.nbPlayers === 4 ? [this.playerNames[1], this.playerNames[3]] : [this.playerNames[1]];
         }
         else {
             // Right side won
-            winners = this.nbPlayers === 4 ? [this.playerNames[1], this.playerNames[3]] : this.playerNames[1];
-            losers = this.nbPlayers === 4 ? [this.playerNames[0], this.playerNames[2]] : this.playerNames[0];
+            winners = this.nbPlayers === 4 ? [this.playerNames[1], this.playerNames[3]] : [this.playerNames[1]];
+            losers = this.nbPlayers === 4 ? [this.playerNames[0], this.playerNames[2]] : [this.playerNames[0]];
         }
 
         return { winners, losers };

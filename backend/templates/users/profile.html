@@ -91,12 +91,10 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {% if match.mode == 'pong_1v1' %}
-                                You vs {{ match.opponent1 }}
+                                {% if match.mode == 'pong_1v1' or match.mode == 'tictactoe' %}
+                                You vs {{ match.opponents.0 }}
                                 {% elif match.mode == 'pong_2v2' %}
-                                You and {{ match.teammate }} vs {{ match.opponent1 }} and {{ match.opponent2 }}
-                                {% elif match.mode == 'tictactoe' %}
-                                You vs {{ match.opponent1 }}
+                                You and {{ match.teammate }} vs {{ match.opponents.0 }} and {{ match.opponents.1 }}
                                 {% endif %}
                             </td>
                             <td>{{ match.result|title }}</td>
