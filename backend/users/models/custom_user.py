@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.db.models import Q
 
 from .friendship import Friendship
+from .match import Match
 
 
 class CustomUser(AbstractUser):
@@ -67,4 +68,30 @@ class CustomUser(AbstractUser):
 
     def get_all_matches(self):
         """Retrieve all matches for this user."""
-        return self.matches.all()  # Access matches through the related name
+        return Match.objects.filter(
+            Q(user=self) | Q(opponents__contains=[self.username])
+        )
+
+    def update_stats(self):
+        """Update the win/loss stats for this user based on match history."""
+        wins = Match.objects.filter(user=self, result=Match.MatchResult.WIN).count()
+        losses = Match.objects.filter(user=self, result=Match.MatchResult.LOSS).count()
+        self.wins = wins
+        self.losses = losses
+        self.save()
+
+    def create_match(
+        self, opponents, result=Match.MatchResult.LOSS, mode=Match.GameMode.PONG_1V1
+    ):
+        """Create a new match with the specified opponents."""
+        if self.username in opponents:
+            raise ValueError("A user cannot play a match against themselves.")
+        if mode == Match.GameMode.PONG_2V2 and len(opponents) != 2:
+            raise ValueError("2v2 mode requires exactly 2 opponents.")
+        if mode != Match.GameMode.PONG_2V2 and len(opponents) != 1:
+            raise ValueError("1v1 and tictactoe modes require exactly 1 opponent.")
+
+        match = Match(user=self, opponents=opponents, result=result, mode=mode)
+        match.save()
+        self.update_stats()
+        return match
