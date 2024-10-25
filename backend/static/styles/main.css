@@ -113,6 +113,7 @@ header {
 .nav-link {
     outline: none;
     color: var(--text);
+    line-height: 2;
 }
 
 .nav-link:hover,
@@ -169,7 +170,6 @@ header {
 }
 
 .navbar-nav .dropdown-toggle[id="user"]::after {
-    border-top-color: var(--accent);
     border-left-color: transparent;
     border-right-color: transparent;
     margin-left: -0.5rem;
@@ -186,22 +186,12 @@ header {
     color: var(--accent);
 }
 
-/* TODO */
-@media (max-width: 991.98px) {
-    #navbarMenu {
-        transition: height 0.3s ease-in-out, opacity 0.1s ease-in-out;
-    }
+.offcanvas {
+    background-color: var(--navbar);
+}
 
-    .navbar-collapse {
-        /* opacity: 0; */
-        height: 0;
-        overflow: hidden;
-    }
-
-    .navbar-collapse.show {
-        /* opacity: 1; */
-        height: auto;
-    }
+.offcanvas-title {
+    color: var(--text);
 }
 
 /* ---------------------------------- Logo ---------------------------------- */
