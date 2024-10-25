@@ -21,5 +21,5 @@ urlpatterns = [
     path("remove_friend/<str:username>/", friends.remove_friend, name="remove_friend"),
     path("accept_friend/<str:username>/", friends.accept_friend, name="accept_friend"),
     path("reject_friend/<str:username>/", friends.reject_friend, name="reject_friend"),
-    path("friends/", friends.friends, name="friends"),
+    path("friends/", friends.friends_list, name="friends"),
 ]
