@@ -68,7 +68,7 @@ class CustomUser(AbstractUser):
 
     def get_all_matches(self):
         """Retrieve all matches for this user."""
-        return Match.objects.filter(Q(user=self) | Q(opponent1=self.username))
+        return Match.objects.filter(Q(user=self) | Q(opponents__contains=[self.username]))
 
     def update_stats(self):
         """Update the win/loss stats for this user based on match history."""
@@ -78,11 +78,16 @@ class CustomUser(AbstractUser):
         self.losses = losses
         self.save()
 
-    def create_match(self, opponent1, result=Match.MatchResult.LOSS):
-        """Create a new match with the specified opponent."""
-        if self.username == opponent1:
+    def create_match(self, opponents, result=Match.MatchResult.LOSS, mode=Match.GameMode.PONG_1V1):
+        """Create a new match with the specified opponents."""
+        if self.username in opponents:
             raise ValueError("A user cannot play a match against themselves.")
-        match = Match(user=self, opponent1=opponent1, result=result)
+        if mode == Match.GameMode.PONG_2V2 and len(opponents) != 2:
+            raise ValueError("2v2 mode requires exactly 2 opponents.")
+        if mode != Match.GameMode.PONG_2V2 and len(opponents) != 1:
+            raise ValueError("1v1 and tictactoe modes require exactly 1 opponent.")
+
+        match = Match(user=self, opponents=opponents, result=result, mode=mode)
         match.save()
         self.update_stats()
         return match
