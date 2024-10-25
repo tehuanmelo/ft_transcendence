@@ -57,3 +57,17 @@ function showErrorMessage(errorMessage) {
     const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
     errorModal.show();
 }
+
+function showTab(tabName, event) {
+    // Hide all tabs
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => tab.classList.remove('active'));
+
+    // Show selected tab
+    document.getElementById(tabName).classList.add('active');
+
+    // Update tab button state
+    const tabLinks = document.querySelectorAll('.tab-link');
+    tabLinks.forEach(link => link.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+}

@@ -438,6 +438,61 @@ header {
     }
 }
 
+/* ------------------------------ Friends --------------------------------- */
+#friendsMenu {
+    background-color: var(--navbar);
+    color: var(--text);
+    height: 500px;
+    max-height: 500px;
+}
+
+.tab-link {
+    background-color: var(--background);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 0;
+    color: var(--text);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tab-link:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+.tab-link:focus {
+    outline: none;
+}
+
+.tab-link:focus-visible {
+    outline: solid 1px white;
+}
+
+.tab-link i {
+    margin-right: 0.5rem;
+}
+
+.tab-link.active {
+    background-color: var(--accent);
+}
+
+@media (max-width: 576px) {
+    .tab-text {
+        display: none;
+    }
+}
+
+.tab-content {
+    display: none;
+    padding: 1rem;
+}
+
+.tab-content.active {
+    display: block;
+}
+
 /* ------------------------------ Settings -------------------------------- */
 .card-text {
     font-size: 0.8rem;

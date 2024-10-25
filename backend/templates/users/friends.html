@@ -6,49 +6,80 @@
 
 {% block content %}
 <!-- Friends -->
-<div class="container-xl py-5">
-    <h1>Friends</h1>
-    <div class="mb-5">
-        <form id="addFriendForm" onsubmit="handleAddFriend(event)">
-            {% csrf_token %}
-            <label for="friendUsername" class="form-label">Send Friend Request</label>
-            <div class="input-group">
-                <input type="text" id="friendUsername" name="username" class="form-control" placeholder="Enter username"
-                    required>
-                <button type="submit" class="btn btn-accent">Add Friend</button>
+<div class="container-xl d-flex flex-column justify-content-center text-center h-75">
+    <h1 class="text-center">Friends</h1>
+    <div id="friendsMenu" class="p-2 w-100">
+        <div id="tabs" class="d-flex">
+            <button class="tab-link active" onclick="showTab('all', event)"><i class="fas fa-user-friends"></i> <span class="tab-text">All</span></button>
+            <button class="tab-link" onclick="showTab('requests', event)"><i class="fas fa-user-plus"></i> <span class="tab-text">Requests</span></button>
+            <button class="tab-link" onclick="showTab('add', event)"><i class="fas fa-search"></i> <span class="tab-text">Add</span></button>
+        </div>
+
+        <!-- All Friends Tab -->
+        <div id="all" class="tab-content active">
+            <div class="friend-list">
+                {% if friends %}
+                {% for friend in friends %}
+                <div class="friend-card">
+                    <div class="friend-info">
+                        <div class="friend-avatar"></div>
+                        <div>
+                            <span class="friend-username">{{ friend.username }}</span>
+                            <span
+                                class="friend-status {% if friend in online_friends %}online{% else %}offline{% endif %}">
+                                {% if friend in online_friends %}Online{% else %}Offline{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    <button type="button" class="friend-action" onclick="removeFriend('{{ friend.username }}')">
+                        <i class="fa fa-remove"></i>
+                    </button>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="no-friends">No friends.</div>
+                {% endif %}
             </div>
-        </form>
-    </div>
+        </div>
 
-    <div class="main">
-        <h2>All Friends</h2>
-        <ul>
-            {% if friends %}
-            {% for friend in friends %}
-            <li>{{ friend.username }} {% if friend in online_friends %}(Online){% else %}(Offline){% endif %}
-                <button type="button" onclick="removeFriend('{{ friend.username }}')"
-                    class="btn btn-primary">Remove</button>
-            </li>
-            {% endfor %}
-            {% else %}
-            <li>No friends.</li>
-            {% endif %}
-        </ul>
-    </div>
+        <!-- Friend Requests Tab -->
+        <div id="requests" class="tab-content">
+            <div class="friend-list">
+                {% if pending_requests %}
+                <div class="friend-card">
+                    <div class="friend-info">
+                        <div class="friend-avatar"></div>
+                        <div>
+                            <span class="friend-username">{{ request.username }}</span>
+                            <span class="friend-status request">Friend Request</span>
+                        </div>
+                    </div>
+                    <button class="friend-action" onclick="acceptFriend('{{ request.username }}')">
+                        <i class="fas fa-user-check"></i>
+                    </button>
+                    <button class="friend-action" onclick="rejectFriend('{{ request.username }}')">
+                        <i class="fas fa-user-minus"></i>
+                    </button>
+                </div>
+                {% else %}
+                <div class="no-friends">No pending requests.</div>
+                {% endif %}
+            </div>
+        </div>
 
-    {% if pending_requests %}
-    <div class="main">
-        <h2>Pending Friend Requests</h2>
-        <ul>
-            {% for request in pending_requests %}
-            <li>{{ request.username }} wants to be your friend.
-                <button onclick="acceptFriend('{{ request.username }}')" class="btn btn-success">Accept</button>
-                <button onclick="rejectFriend('{{ request.username }}')" class="btn btn-danger">Reject</button>
-            </li>
-            {% endfor %}
-        </ul>
+        <!-- Add Friend Tab -->
+        <div id="add" class="tab-content">
+            <form id="addFriendForm" onsubmit="handleAddFriend(event)">
+                {% csrf_token %}
+                <label for="friendUsername" class="form-label">Enter Username</label>
+                <div class="input-group">
+                    <input type="text" id="friendUsername" name="username" class="form-control"
+                        placeholder="Enter username" required>
+                    <button type="submit" class="btn btn-accent">Add Friend</button>
+                </div>
+            </form>
+        </div>
     </div>
-    {% endif %}
 </div>
 
 <script>
