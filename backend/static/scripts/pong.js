@@ -6,7 +6,7 @@ let game = null;
 const gameConfig = {
     "Easy": { paddleSpeed: 15, ballSpeed: 7 },
     "Medium": { paddleSpeed: 30, ballSpeed: 15 },
-    "Hard": { paddleSpeed: 66, ballSpeed: 33 },
+    "Hard": { paddleSpeed: 60, ballSpeed: 30 },
 };
 
 var g_PADDLE_SPEED = 10;
@@ -1060,7 +1060,8 @@ function setupDropdownListeners() {
 
 function visual() {
     if (game.isGameRunning() == true) {
-        var myModal = new bootstrap.Modal('#visualmodal');
+        game.pause();
+        let myModal = new bootstrap.Modal('#visualmodal');
         myModal.show();
         return;
     }
