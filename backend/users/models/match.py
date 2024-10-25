@@ -1,12 +1,16 @@
 from django.db import models
-
+from django.contrib.postgres.fields import ArrayField
 
 class Match(models.Model):
     user = models.ForeignKey(
         "users.CustomUser", related_name="matches", on_delete=models.CASCADE
     )
-    opponent1 = models.CharField(max_length=20)
-    opponent2 = models.CharField(max_length=20, blank=True, null=True)
+    opponents = ArrayField(
+        models.CharField(max_length=20),
+        # SIZE = 2 ; if there is a limit to Maximum opponents
+        blank=True,
+        default=list
+    )
     teammate = models.CharField(max_length=20, blank=True, null=True)
     score = models.CharField(max_length=20)
     date = models.DateTimeField(auto_now_add=True)
@@ -33,9 +37,8 @@ class Match(models.Model):
         return self.MatchResult(self.result) == self.MatchResult.WIN
 
     def save(self, *args, **kwargs):
-        # Ensure opponent2 and teammate are only set for pong_2v2
+        # Ensure teammate is only set for pong_2v2
         if self.mode != self.GameMode.PONG_2V2:
-            self.opponent2 = None
             self.teammate = None
 
         super().save(*args, **kwargs)
@@ -43,8 +46,8 @@ class Match(models.Model):
 
     def __str__(self):
         if self.mode == self.GameMode.PONG_2V2:
-            return f"{self.user.username} and {self.teammate} vs {self.opponent1} and {self.opponent2} on {self.date}"
+            return f"{self.user.username} and {self.teammate} vs {self.opponents[0]} and {self.opponents[1]} on {self.date}"
         elif (
             self.mode == self.GameMode.PONG_1V1 or self.mode == self.GameMode.TICTACTOE
         ):
-            return f"{self.user.username} vs {self.opponent1} on {self.date}"
+            return f"{self.user.username} vs {self.opponents[0]} on {self.date}"
