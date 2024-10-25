@@ -427,13 +427,25 @@ header {
     color: var(--text);
 }
 
+.about-card {
+    max-width: 250px;
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
 .about-card .btn:hover {
     transform: none;
 }
 
 .about-card:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 576px) {
+    .about-card {
+        padding: 15px;
+    }
 }
 
 /* ------------------------------ Settings -------------------------------- */
