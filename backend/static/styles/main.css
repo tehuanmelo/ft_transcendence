@@ -81,12 +81,9 @@ li::marker {
     content: "·";
 }
 
-kbd {
+#helpModal kbd {
     font-family: 'Press Start 2P', sans-serif;
     border-radius: 10px;
-}
-
-#helpModal kbd {
     padding: 5px 10px;
     margin: 0 3px;
     display: inline-block;
@@ -491,6 +488,68 @@ header {
 
 .tab-content.active {
     display: block;
+}
+
+.friend-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.friend-card {
+    background-color: #2c241b;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.friend-info {
+    display: flex;
+    align-items: center;
+}
+
+.friend-avatar {
+    width: 50px;
+    height: 50px;
+    background-color: #fff;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.friend-username {
+    font-size: 20px;
+}
+
+.friend-status {
+    color: #888;
+    font-size: 14px;
+}
+
+.friend-status.online {
+    color: #f3903f;
+}
+
+.friend-status.offline {
+    color: #888;
+}
+
+.friend-action {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.friend-action img {
+    width: 25px;
+    height: 25px;
+}
+
+.no-friends {
+    text-align: center;
+    font-size: 18px;
+    color: #888;
 }
 
 /* ------------------------------ Settings -------------------------------- */
