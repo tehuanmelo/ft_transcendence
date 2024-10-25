@@ -1013,9 +1013,11 @@ class Game {
 	forceRefresh() {
 		if (this.isTournament == true) {
 			this.tournament.pong.render();
+			this.tournament.displayGameAnnouncement();
 		}
 		else {
 			this.pong.render();
+			this.pong.initialDisplay();
 		}
 	}
 
@@ -1296,6 +1298,8 @@ function visual() {
     }
 
     game.forceRefresh();
+	game.pong.displayGameAnnouncement();
+
 }
 
 function launchGame(playerNames, isTournament = false) {
