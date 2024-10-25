@@ -7,7 +7,7 @@ from ..auth import jwt_login_required
 
 
 @jwt_login_required
-def friends(request):
+def friends_list(request):
     friends = request.user.get_friends()
     online_friends = request.user.get_online_friends()
     pending_requests = request.user.get_pending_requests()
