@@ -51,6 +51,7 @@
     --secondary: #dabd89;
     --accent: #f39c12;
     --light-accent: #ffb641;
+    --muted: #888;
 }
 
 * {
@@ -457,6 +458,8 @@ header {
     color: var(--text);
     height: 500px;
     max-height: 500px;
+    width: 80%;
+    overflow-y: hidden;
 }
 
 .tab-link {
@@ -491,6 +494,19 @@ header {
     background-color: var(--accent);
 }
 
+.badge {
+    border-radius: 0;
+    padding: 5px;
+}
+
+.tab-link.refresh {
+    width: 10%;
+}
+
+.tab-link.refresh i {
+    margin: 0;
+}
+
 @media (max-width: 576px) {
     .tab-text {
         display: none;
@@ -500,25 +516,50 @@ header {
 .tab-content {
     display: none;
     padding: 1rem;
+    height: 100%;
+    overflow-y: auto;
+}
+
+/* Scrollbar styles for WebKit (Chrome, Safari) */
+.tab-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.tab-content::-webkit-scrollbar-track {
+    background: var(--navbar);
+}
+
+.tab-content::-webkit-scrollbar-thumb {
+    background-color: var(--accent);
+    border-radius: 10px;
+    border: 2px solid var(--navbar);
+}
+
+/* Additional scrollbar styling for Firefox */
+.tab-content {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) var(--navbar);
 }
 
 .tab-content.active {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.friend-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
+.tab-content i {
+    color: var(--text);
 }
 
 .friend-card {
-    background-color: #2c241b;
-    padding: 15px;
+    background-color: var(--background);
+    width: 75%;
+    padding: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 10px;
+    border-radius: 0;
+    margin-bottom: 5px;
 }
 
 .friend-info {
@@ -538,23 +579,28 @@ header {
     font-size: 20px;
 }
 
+.friend-details {
+    display: flex;
+    flex-direction: column;
+}
+
 .friend-status {
-    color: #888;
-    font-size: 14px;
+    color: var(--muted);
+    font-size: 0.8rem;
 }
 
 .friend-status.online {
-    color: #f3903f;
+    color: var(--accent);
 }
 
 .friend-status.offline {
-    color: #888;
+    color: var(--muted);
 }
 
 .friend-action {
-    background-color: transparent;
+    background-color: var(--navbar);
     border: none;
-    cursor: pointer;
+    padding: 2rem;
 }
 
 .friend-action img {
@@ -563,9 +609,7 @@ header {
 }
 
 .no-friends {
-    text-align: center;
-    font-size: 18px;
-    color: #888;
+    color: var(--muted);
 }
 
 /* ------------------------------ Settings -------------------------------- */

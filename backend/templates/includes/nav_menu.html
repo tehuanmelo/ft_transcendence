@@ -36,7 +36,7 @@
                     href="{% url 'friends' %}" data-method="GET">
                     <i class="fas fa-user-friends"></i> Friends
                     {% if pending_requests|length > 0 %}
-                    <span class="badge bg-danger">{{ pending_requests|length }}</span>
+                    <span class="badge bg-danger">!</span>
                     {% endif %}
                 </a>
             </div>
