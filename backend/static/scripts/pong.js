@@ -4,9 +4,9 @@ let game = null;
 
 // Global variables for the game configuration
 const gameConfig = {
-    "Easy": { paddleSpeed: 15, ballSpeed: 7 },
-    "Medium": { paddleSpeed: 30, ballSpeed: 15 },
-    "Hard": { paddleSpeed: 66, ballSpeed: 33 },
+    "Easy": { paddleSpeed: 10, ballSpeed: 5 },
+    "Medium": { paddleSpeed: 20, ballSpeed: 10 },
+    "Hard": { paddleSpeed: 30, ballSpeed: 15 },
 };
 
 var g_PADDLE_SPEED = 10;
@@ -103,6 +103,21 @@ class Ball {
 		return (0 < lambda && lambda < 1) && (0 < gamma && gamma < 1);
 	}
 
+
+
+	drawLine(color, x1, y1, x2, y2){
+		ctx.beginPath(); // Begin a new path
+        ctx.moveTo(x1, y1); // Starting point (x1, y1)
+
+        // Set the ending point of the line
+        ctx.lineTo(x2, y2); // Ending point (x2, y2)
+
+        // Set the line style (optional)
+        ctx.strokeStyle = color; // Line color
+        ctx.lineWidth = 5;        // Line thickness
+		ctx.stroke();
+	}
+
     //  Left Paddel
     //               ***
     //   ###       *  |   *
@@ -113,18 +128,27 @@ class Ball {
     //   ***
     //      Top line of the paddel
 	ballColisionLeftPaddelTopLine(paddle) {
-		var ballPositionDown = [{ x: this.ballX, y: this.ballY }, { x: this.ballX, y: this.ballY + this.dy + this.ballRadius }];
+		for(var angle = 91; angle < 180; angle++){
+			let angleRadians = angle * (Math.PI / 180);
+			var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX - Math.sin(angleRadians) * this.ballRadius - this.dx , y: this.ballY - Math.cos(angleRadians) * this.ballRadius - this.dy }];
+		//var ballPositionDown = [{ x: this.ballX, y: this.ballY }, { x: this.ballX, y: this.ballY + this.dy + this.ballRadius }];
 		//TOP line of the paddle
 		var line1 = [{ x: paddle.x, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y }];
-		//this.drawLine(line1[0].x, line1[0].y,line1[1].x, line1[1].y)
-		//this.drawLine('red',ballPositionDown[0].x, ballPositionDown[0].y,ballPositionDown[1].x, ballPositionDown[1].y)
+		//this.drawLine('black',line1[0].x, line1[0].y,line1[1].x, line1[1].y)
+		//this.drawLine('red',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 		//this.drawLine('red',line1[0].x, line1[0].y,line1[1].x, line1[1].y)
-		if (this.doLinesIntersect(ballPositionDown, line1)) {
-			console.log("intercept paddel1 TOP line");
-			this.dy = -this.dy;
+		if (this.doLinesIntersect(ballPosition, line1)) {
+			console.log("intercept paddel1 TOP line DL");
+			if(this.dx < 0){
+				this.dx = -this.dx;
+			}
+			if(this.dy > 0) {
+				this.dy = -this.dy;
+			}
 			this.sound.play();
 			return true;
 		}
+	}
 		return false;
 	}
 
@@ -138,19 +162,53 @@ class Ball {
     //   **#
     //      Right line of the paddel
 	ballColisionLeftPaddelRightLineInDownLeftPartOfBall(paddle) {
-		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX - Math.sin(45) * this.ballRadius + this.dx, y: this.ballY + Math.cos(45) * this.ballRadius + this.dy }];
+		for(var angle = 91; angle < 180; angle++){
+			let angleRadians = angle * (Math.PI / 180);
+			var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX - Math.sin(angleRadians) * this.ballRadius - this.dx , y: this.ballY - Math.cos(angleRadians) * this.ballRadius - this.dy }];
+			var linePaddelRight = [{ x: paddle.x + paddle.paddleWidth, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
+			//this.drawLine('gray',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
+			//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
+			if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
+				console.log("intercept paddel1 RIGHT line DL dx " + this.dx + " dy " + this.dy);
+				if(this.dx < 0){
+					this.dx = -this.dx;
+				}
+				if(this.dy < 0) {
+					this.dy = -this.dy;
+				}
+				this.sound.play();
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	//  Left Paddel
+    //               ***
+    //   **#       *  |   *
+    //   * #  __  *______ *
+    //   * #       *  |  *
+    //   * #         ***
+    //   * #
+    //   **#
+    //      Right line of the paddel
+	ballColisionLeftPaddelRightLineInLeftPartOfBall(paddle) {
+		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX - this.ballRadius - this.dx  , y: this.ballY }];
 		var linePaddelRight = [{ x: paddle.x + paddle.paddleWidth, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
-		//this.drawLine('gray',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
+		//this.drawLine('pink',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 		//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
 		if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
-			console.log("intercept paddel1 RIGHT line DL dx " + this.dx + " dy " + this.dy);
-			this.dx = -this.dx;
-			this.dy = -this.dy;
+			console.log("intercept paddel1 RIGHT line L dx " + this.dx + " dy " + this.dy);
+			if(this.dx < 0){
+				this.dx = -this.dx;
+			}
 			this.sound.play();
 			return true;
 		}
 		return false;
 	}
+
 
     //  Left Paddel
     //               ***
@@ -162,16 +220,23 @@ class Ball {
     //   **#
     //      Right line of the paddel
 	ballColisionLeftPaddelRightLineInUpLeftPartOfBall(paddle) {
-		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX - Math.sin(45) * this.ballRadius + this.dx, y: this.ballY - Math.cos(45) * this.ballRadius + this.dy }];
-		var linePaddelRight = [{ x: paddle.x + paddle.paddleWidth, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
-		//this.drawLine('green',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
-		//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
-		if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
-			console.log("intercept paddel1 RIGHT line UL dx " + this.dx + " dy " + this.dy);
-			this.dx = -this.dx;
-			this.dy = -this.dy;
-			this.sound.play();
-			return true;
+		for(var angle = 1; angle < 90; angle++){
+			let angleRadians = angle * (Math.PI / 180);
+			var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX - Math.sin(angleRadians) * this.ballRadius - this.dx , y: this.ballY - Math.cos(angleRadians) * this.ballRadius - this.dy }];
+
+
+
+			var linePaddelRight = [{ x: paddle.x + paddle.paddleWidth, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
+			//this.drawLine('green',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
+			//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
+			if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
+				console.log("intercept paddel1 RIGHT line UL dx " + this.dx + " dy " + this.dy + " at angle " + angle);
+				if(this.dx < 0){
+					this.dx = -this.dx;
+				}
+				this.sound.play();
+				return true;
+			}
 		}
 		return false;
 	}
@@ -186,18 +251,22 @@ class Ball {
     //   #**
     //      Left line of the paddel
 	ballColisionLeftPaddelLeftLineInUpRightPartOfBall(paddle) {
-		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX + Math.sin(45) * this.ballRadius + this.dx, y: this.ballY - Math.cos(45) * this.ballRadius + this.dy }];
-		var linePaddelRight = [{ x: paddle.x + paddle.paddleWidth, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
-		//this.drawLine('brown',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
-		//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
-		if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
-			console.log("intercept paddel1 RIGHT line UL dx " + this.dx + " dy " + this.dy);
-			this.dx = -this.dx;
-			this.dy = -this.dy;
-			this.sound.play();
-			return true;
+		for(var angle = 271; angle < 360; angle++){
+			let angleRadians = angle * (Math.PI / 180);
+			var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX - Math.sin(angleRadians) * this.ballRadius - this.dx , y: this.ballY - Math.cos(angleRadians) * this.ballRadius - this.dy }];
+			var linePaddelRight = [{ x: paddle.x + paddle.paddleWidth, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
+			//this.drawLine('brown',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
+			//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
+			if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
+				console.log("intercept paddel1 RIGHT line UL dx " + this.dx + " dy " + this.dy);
+				if(this.dx > 0){
+					this.dx = -this.dx;
+				}
+				this.sound.play();
+				return true;
+			}
 		}
-		return false;
+			return false;
 	}
 
     //  Left Paddel
@@ -210,17 +279,21 @@ class Ball {
     //   ###
     //      Bottom line of the paddel
 	ballColisionLeftPaddelBottomLineInUpRightPartOfBall(paddle) {
-		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX + Math.sin(45) * this.ballRadius + this.dx, y: this.ballY - Math.cos(45) * this.ballRadius + this.dy }];
-		var linePaddelBottom = [{ x: paddle.x, y: paddle.y + paddle.paddleHeight }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
-		//this.drawLine('brown',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
+		for(var angle = 181; angle < 270; angle++){
+			let angleRadians = angle * (Math.PI / 180);
+			var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX - Math.sin(angleRadians) * this.ballRadius - this.dx , y: this.ballY - Math.cos(angleRadians) * this.ballRadius - this.dy }];
+			var linePaddelBottom = [{ x: paddle.x, y: paddle.y + paddle.paddleHeight }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
+		//	this.drawLine('BlueViolet',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 		//this.drawLine('gray', linePaddelBottom[0].x, linePaddelBottom[0].y, linePaddelBottom[1].x, linePaddelBottom[1].y)
 		if (this.doLinesIntersect(ballPosition, linePaddelBottom)) {
 			console.log("intercept paddel1 BOTTOM line UR dx " + this.dx + " dy " + this.dy);
-			this.dx = -this.dx;
-			this.dy = -this.dy;
+			if(this.dy < 0) {
+				this.dy = -this.dy;
+			}
 			this.sound.play();
 			return true;
 		}
+	}
 		return false;
 	}
 
@@ -235,17 +308,22 @@ class Ball {
     //   #**
     //      Right line of the paddel
 	ballColisionLeftPaddelLeftLineInDownRightPartOfBall(paddle) {
-		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX + Math.sin(45) * this.ballRadius + this.dx, y: this.ballY + Math.cos(45) * this.ballRadius + this.dy }];
+		for(var angle = 181; angle < 270; angle++){
+			let angleRadians = angle * (Math.PI / 180);
+			var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX - Math.sin(angleRadians) * this.ballRadius - this.dx , y: this.ballY - Math.cos(angleRadians) * this.ballRadius - this.dy }];
 		var linePaddelRight = [{ x: paddle.x, y: paddle.y }, { x: paddle.x, y: paddle.y + paddle.paddleHeight }];
-		//this.drawLine('red',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
+		//this.drawLine('Chocolate',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 		//this.drawLine('green', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
 		if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
 			console.log("intercept paddel1 LEFT line DR dx " + this.dx + " dy " + this.dy);
-			this.dx = -this.dx;
+			if(this.dx > 0){
+				this.dx = -this.dx;
+			}
 			// this.dy = -this.dy;
 			this.sound.play();
 			return true;
 		}
+	}
 		return false;
 	}
 
@@ -260,17 +338,22 @@ class Ball {
     //   ***
     //      Top line of the paddel
 	ballColisionLeftPaddelTopLineInDownRightPartOfBall(paddle) {
-		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX + Math.sin(45) * this.ballRadius + this.dx, y: this.ballY + Math.cos(45) * this.ballRadius + this.dy }];
+		for(var angle = 181; angle < 270; angle++){
+			let angleRadians = angle * (Math.PI / 180);
+			var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX - Math.sin(angleRadians) * this.ballRadius - this.dx , y: this.ballY - Math.cos(angleRadians) * this.ballRadius - this.dy }];
+		//var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX + Math.sin(45) * this.ballRadius + this.dx, y: this.ballY + Math.cos(45) * this.ballRadius + this.dy }];
 		var linePaddelTop = [{ x: paddle.x, y: paddle.y }, { x: paddle.x, y: paddle.y + paddle.paddleHeight }];
-		//this.drawLine('red',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
+	//	this.drawLine('red',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 		//this.drawLine('green', linePaddelTop[0].x, linePaddelTop[0].y, linePaddelTop[1].x, linePaddelTop[1].y)
 		if (this.doLinesIntersect(ballPosition, linePaddelTop)) {
 			console.log("intercept paddel1 TOP line DR dx " + this.dx + " dy " + this.dy);
-			this.dx = -this.dx;
-			this.dy = -this.dy;
+			if(this.dy > 0) {
+				this.dy = -this.dy;
+			}
 			this.sound.play();
 			return true;
 		}
+	}
 		return false;
 	}
 
@@ -279,11 +362,13 @@ class Ball {
 		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX + this.dx - this.ballRadius, y: this.ballY + this.dy - this.ballRadius }];
 		//Right line of the paddle
 		var linePaddelRight = [{ x: paddle.x + paddle.paddleWidth, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
-		//this.drawLine('yellow',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
-		//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
+	//	this.drawLine('yellow',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
+	//	this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
 		if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
-			console.log("intercept paddel1 RIGHT line");
-			this.dx = -this.dx;
+			console.log("intercept paddel1 RIGHT line B");
+			if(this.dx < 0) {
+				this.dx = -this.dx;
+			}
 			this.sound.play();
 			return true;
 		}
@@ -295,25 +380,68 @@ class Ball {
 		//Right line of the paddle
 		var linePaddelLeft = [{ x: paddle.x, y: paddle.y }, { x: paddle.x, y: paddle.y + paddle.paddleHeight }];
 		// this.drawLine('pink',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
-		//this.drawLine('gray', linePaddelLeft[0].x, linePaddelLeft[0].y, linePaddelLeft[1].x, linePaddelLeft[1].y)
+	//	this.drawLine('gray', linePaddelLeft[0].x, linePaddelLeft[0].y, linePaddelLeft[1].x, linePaddelLeft[1].y)
 		if (this.doLinesIntersect(ballPosition, linePaddelLeft)) {
-			console.log("intercept paddel1 RIGHT line");
-			this.dx = -this.dx;
+			console.log("intercept paddel1 RIGHT line C");
+			if(this.dx > 0) {
+				this.dx = -this.dx;
+			}
 			this.sound.play();
 			return true;
 		}
 		return false;
 	}
 
-	ballCollisionLeftPaddelBottomLine(paddle) {
-		var ballPositionUp = [{ x: this.ballX, y: this.ballY }, { x: this.ballX, y: this.ballY + this.dy - this.ballRadius }];
+
+    // Top of Paddel ******************
+    //               ###
+    //   ***       *  |   *
+    //   * *      *______ *
+    //   * *       *  |   *
+    //   * *         ***
+    //   * *
+    //   ###
+    //      Bottom line of the paddel
+	ballCollisionTopPaddelBottomLine(paddle) {
+		//TOP OF BALL
+		var ballPositionUp = [{ x: this.ballX, y: this.ballY }, { x: this.ballX, y: this.ballY - this.dy - this.ballRadius }];
 		//BOTTOM line of the paddle
 		var lineBottom = [{ x: paddle.x, y: paddle.y + paddle.paddleHeight }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
 		//this.drawLine('blue',ballPositionUp[0].x, ballPositionUp[0].y,ballPositionUp[1].x, ballPositionUp[1].y)
 		//this.drawLine('gray', lineBottom[0].x, lineBottom[0].y, lineBottom[1].x, lineBottom[1].y)
 		if (this.doLinesIntersect(ballPositionUp, lineBottom)) {
 			console.log("intercept paddel1 TOP line");
-			this.dy = -this.dy;
+			if(this.dy < 0){
+				this.dy = -this.dy;
+			}
+			this.sound.play();
+			return true;
+		}
+		return false;
+	}
+
+
+	    // Top of Paddel ******************
+    //               ***
+    //   ###       *  |   *
+    //   * *      *______ *
+    //   * *       *  |   *
+    //   * *         ###
+    //   * *
+    //   ***
+    //      Bottom line of the paddel
+	ballCollisionLeftPaddelTopLine(paddle) {
+		//BOTTOM OF BALL
+		var ballPositionDown = [{ x: this.ballX, y: this.ballY }, { x: this.ballX, y: this.ballY + this.dy + this.ballRadius }];
+		//Top line of the paddle
+		var lineTop = [{ x: paddle.x, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y }];
+		//this.drawLine('blue',ballPositionDown[0].x, ballPositionDown[0].y,ballPositionDown[1].x, ballPositionDown[1].y)
+		//this.drawLine('gray', lineTop[0].x, lineTop[0].y, lineTop[1].x, lineTop[1].y)
+		if (this.doLinesIntersect(ballPositionDown, lineTop)) {
+			console.log("intercept paddel1 TOP line");
+			if(this.dy > 0){
+				this.dy = -this.dy;
+			}
 			this.sound.play();
 			return true;
 		}
@@ -325,10 +453,13 @@ class Ball {
 		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX + this.dx - this.ballRadius, y: this.ballY + this.dy + this.ballRadius }];
 		//Right line of the paddle
 		var linePaddelRight = [{ x: paddle.x + paddle.paddleWidth, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
+		//this.drawLine('blue',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 		//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
 		if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
-			console.log("intercept paddel1 RIGHT line");
-			this.dx = -this.dx;
+			console.log("intercept paddel1 RIGHT line D");
+			if(this.dx > 0){
+				this.dx = -this.dx;
+			}
 			this.sound.play();
 			return true;
 		}
@@ -340,10 +471,12 @@ class Ball {
 		//Right line of the paddle
 
 		var linePaddelLeft = [{ x: paddle.x, y: paddle.y }, { x: paddle.x, y: paddle.y + paddle.paddleHeight }];
-		//this.drawLine('gray', linePaddelLeft[0].x, linePaddelLeft[0].y, linePaddelLeft[1].x, linePaddelLeft[1].y)
+		//this.drawLine('gray', ballPosition[0].x, ballPosition[0].y, ballPosition[1].x, ballPosition[1].y)
 		if (this.doLinesIntersect(ballPosition, linePaddelLeft)) {
-			console.log("intercept paddel1 RIGHT line");
-			this.dx = -this.dx;
+			console.log("intercept paddel1 RIGHT line A");
+			if(this.dx > 0){
+				this.dx = -this.dx;
+			}
 			this.sound.play();
 			return true;
 		}
@@ -351,9 +484,11 @@ class Ball {
 	}
 
 	collision(paddle) {
+		if(!this.ballColisionLeftPaddelRightLineInLeftPartOfBall(paddle)) {
+			if(!this.ballCollisionTopPaddelBottomLine(paddle)){
 		if (!this.ballColisionLeftPaddelTopLine(paddle)) {
 			if (!this.ballCollisionLeftPaddelRightLine(paddle)) {
-				if (!this.ballCollisionLeftPaddelBottomLine(paddle)) {
+					if(!this.ballCollisionLeftPaddelTopLine(paddle)) {
 					if (!this.ballCollisionLeftPaddelLeftLine(paddle)) {
 						if (!this.ballColisionLeftPaddelRightLineInDownLeftPartOfBall(paddle)) {
 							if (!this.ballColisionLeftPaddelRightLineInUpLeftPartOfBall(paddle)) {
@@ -372,6 +507,8 @@ class Ball {
 				}
 			}
 		}
+	}
+	}
 		return true;
 	}
 
@@ -492,11 +629,12 @@ class Paddle {
 }
 
 class Pong {
-	constructor(nbPlayers, isTournament = false, notifyWinner = null) {
+	constructor(nbPlayers, playerNames, isTournament = false, notifyWinner = null) {
 		// Get canvas attributes
 		this.width = canvas.width; // Canvas width in pixels
 		this.height = canvas.height; // Canvas height in pixels
 		this.nbPlayers = nbPlayers;
+        this.playerNames = playerNames;
 		this.paddle1 = new Paddle(PaddleTypes.LEFT1);
 		this.paddle2 = new Paddle(PaddleTypes.RIGHT1);
 		this.score = new Score();
@@ -569,8 +707,10 @@ class Pong {
 	}
 
 	resume() {
-		this.ball.resumeBallMovement();
-		this.intervalId = setInterval(this.pongRender.bind(this), 1000 / 60);
+		if(this.isGameRunning == true) {
+			this.ball.resumeBallMovement();
+			this.intervalId = setInterval(this.pongRender.bind(this), 1000 / 60);
+		}
 	}
 
 	stop() {
@@ -608,20 +748,6 @@ class Pong {
 		lineHeight = fontSize * 0.8; // Space between lines
 		let startY = canvasHeight / 2 - (lineHeight * (textLines.length - 0.8)) / 2;
 		ctx.fillText(line, canvasWidth / 2, startY);
-
-	}
-
-	displayWinner() {
-		var element = document.getElementById('winner');
-
-		if (this.score.scoreL == g_SCORE_TO_WIN) {
-			element.innerText = "Left Player wins!";
-		}
-		else {
-			element.innerText = "Right Player wins!";
-		}
-		var myModal = new bootstrap.Modal('#winnerpopup');
-		myModal.show();
 	}
 
 	render() {
@@ -636,28 +762,94 @@ class Pong {
 		this.ball.drawBall();
 	}
 
-	getWinner() {
-		if (this.score.scoreL == g_SCORE_TO_WIN) {
-			return ("left");
-		}
-		else {
-			return ("right");
-		}
-	}
-
 	pongRender() {
         this.render();
-        this.ball.ballMove(); // Move the ball
-        this.updatePaddles(); // Update the paddles asynchronously
+        this.ball.ballMove();
+        this.updatePaddles();
 
-        if (this.score.checkGameOver() === true) {
-            if (this.isTournament === false)
-                this.displayWinner();
-            else
-                this.notifyWinner(this.getWinner());
-            this.stop();
-            this.render();
+        if (this.score.checkGameOver() === true)
+            this.gameOver();
+    }
+
+    getWinnersAndLosers() {
+        let winners, losers;
+
+        if (this.score.scoreL == g_SCORE_TO_WIN) {
+            // Left side won
+            winners = this.nbPlayers === 4 ? [this.playerNames[0], this.playerNames[2]] : [this.playerNames[0]];
+            losers = this.nbPlayers === 4 ? [this.playerNames[1], this.playerNames[3]] : [this.playerNames[1]];
         }
+        else {
+            // Right side won
+            winners = this.nbPlayers === 4 ? [this.playerNames[1], this.playerNames[3]] : [this.playerNames[1]];
+            losers = this.nbPlayers === 4 ? [this.playerNames[0], this.playerNames[2]] : [this.playerNames[0]];
+        }
+
+        return { winners, losers };
+    }
+
+    gameOver() {
+        const { winners, losers } = this.getWinnersAndLosers();
+
+        if (this.isTournament === false) {
+            this.displayWinner(winners);
+
+            // Not saving results for guest mode
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('mode') !== 'guest')
+                this.saveMatchResults(winners, losers);
+        }
+        else {
+            const winner = (this.score.scoreL === g_SCORE_TO_WIN) ? "left" : "right";
+            this.notifyWinner(winner);
+        }
+
+        this.stop();
+        this.render();
+    }
+
+    saveMatchResults(winners, losers) {
+        const matchData = {
+            mode: this.nbPlayers === 4 ? 'pong_2v2' : 'pong_1v1',
+            winners: winners,
+            losers: losers,
+            scores: {
+                left: this.score.scoreL,
+                right: this.score.scoreR
+            }
+        };
+
+        const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        fetch('/users/save_match_results/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify(matchData)
+        })
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to save match results.');
+                return response.json();
+            })
+            .catch(error => {
+                console.error('Error saving match results:', error);
+            });
+    }
+
+    displayWinner(winners) {
+        let winnerText = '';
+        if (Array.isArray(winners) && winners.length === 2)
+            winnerText = `${winners[0]} and ${winners[1]} win!`;
+        else
+            winnerText = `${winners} wins!`;
+
+        let element = document.getElementById('winner');
+        element.innerText = winnerText;
+
+        let myModal = new bootstrap.Modal('#winnerpopup');
+        myModal.show();
     }
 
     handleKeyboardEvent(event) {
@@ -783,7 +975,7 @@ class Game {
 		if (this.isTournament == true)
 			this.tournament = new Tournament(players);
 		else
-			this.pong = new Pong(players.length);
+			this.pong = new Pong(players.length, players);
 
 		if (isTournament === true || players.length == 2) {
 			document.getElementById('3rdplayer').style.display = 'none';
@@ -821,9 +1013,11 @@ class Game {
 	forceRefresh() {
 		if (this.isTournament == true) {
 			this.tournament.pong.render();
+			this.tournament.displayGameAnnouncement();
 		}
 		else {
 			this.pong.render();
+			this.pong.initialDisplay();
 		}
 	}
 
@@ -845,13 +1039,6 @@ class Game {
 			}
 			else {
 				this.pong.resume();
-			}
-		} else {
-			if (this.isTournament == true) {
-				this.tournament.pong.countdown.resume();
-			}
-			else {
-				this.pong.countdown.resume();
 			}
 		}
 	}
@@ -891,9 +1078,9 @@ function applyConfiguration() {
 class Tournament {
     constructor(players) {
         this.players = players;
-        this.pong = new Pong(2, true, this.winnerCallback);
+        this.pong = new Pong(2, players, true, this.winnerCallback);
 
-        this.playerArray = (this.players.length == 3)
+        this.playerArray = (this.players.length === 3)
             ? this.getUniqueRandomPlayers(3)
             : this.getUniqueRandomPlayers(4);
 
@@ -1111,6 +1298,8 @@ function visual() {
     }
 
     game.forceRefresh();
+	game.pong.displayGameAnnouncement();
+
 }
 
 function launchGame(playerNames, isTournament = false) {

@@ -15,17 +15,9 @@ function gameInit() {
     ];
 
     const selectedMode = gameModes.find(gameMode => gameMode.mode === mode);
-    if (!selectedMode) {
-        getPage('404');
-        return;
-    }
-
     const isLoggedIn = (username !== null);
-    if (selectedMode.isLoggedIn && !isLoggedIn) {
-        getPage('404');
-        return;
-    }
-    else if (!selectedMode.isLoggedIn && isLoggedIn) {
+
+    if (!selectedMode || (selectedMode.isLoggedIn && !isLoggedIn) || (!selectedMode.isLoggedIn && isLoggedIn)) {
         getPage('404');
         return;
     }
@@ -52,7 +44,7 @@ function handleGameRegisterModal(mode, username, isTournament) {
         playerNames.push(username);
 
     const gameRegisterForm = document.getElementById('gameRegisterForm');
-    generateGameRegisterForm(gameRegisterForm, playerInputs);
+    generateGameRegisterForm(gameRegisterForm, playerInputs, isTournament);
 
     // Game settings handlers
     handleDifficultyDropdown();
@@ -63,17 +55,42 @@ function handleGameRegisterModal(mode, username, isTournament) {
     gameRegisterForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
+        const submittedPlayerNames = new Set(playerNames);
+        let duplicateDetected = false;
+
         playerInputs.forEach(({ inputId, visible }) => {
             if (visible) {
                 const playerName = document.getElementById(inputId).value.trim();
-                if (playerName) playerNames.push(playerName);
+                if (playerName) {
+                    if (submittedPlayerNames.has(playerName)) {
+                        duplicateDetected = true;
+                        document.getElementById(inputId).classList.add('is-invalid');
+                    }
+                    else {
+                        submittedPlayerNames.add(playerName);
+                        document.getElementById(inputId).classList.remove('is-invalid');
+                    }
+                }
             }
         });
 
+        if (duplicateDetected) { // Show an error message to the user
+            const errorMessage = document.getElementById('duplicateError');
+            if (!errorMessage) {
+                const errorDiv = document.createElement('div');
+                errorDiv.id = 'duplicateError';
+                errorDiv.className = 'alert alert-danger';
+                errorDiv.textContent = 'Duplicate names detected. Please enter unique names for all players.';
+                gameRegisterForm.prepend(errorDiv);
+            }
+            return;
+        }
+
         pongRegisterModal.hide();
 
-        updatePlayerDisplay(playerNames, !isTournament);
-        launchGame(playerNames, isTournament);
+        const finalPlayerNames = Array.from(submittedPlayerNames);
+        updatePlayerDisplay(finalPlayerNames, !isTournament);
+        launchGame(finalPlayerNames, isTournament);
     });
 }
 
@@ -104,8 +121,6 @@ function handleDifficultyDropdown() {
                 g_PADDLE_SPEED = gameConfig[selectedDiff].paddleSpeed;
                 g_BALL_SPEED = gameConfig[selectedDiff].ballSpeed;
             }
-            else if (selectedDiff === "Custom")
-                document.getElementById("customConfig").style.display = "block";
             else {
                 alert('Invalid difficulty level selected');
                 getPage('404');
@@ -124,7 +139,7 @@ function handleScoreSlider() {
     });
 }
 
-function generateGameRegisterForm(gameRegisterForm, playerInputs) {
+function generateGameRegisterForm(gameRegisterForm, playerInputs, isTournament) {
     gameRegisterForm.innerHTML = '';
 
     // Create fields depending on visibility
@@ -139,7 +154,9 @@ function generateGameRegisterForm(gameRegisterForm, playerInputs) {
             const label = document.createElement('label');
             label.htmlFor = inputId;
             label.className = 'form-label silk-heavy';
-            label.textContent = `${inputId[0].toUpperCase() + inputId.slice(1, -6)} ${inputId.slice(6, -5)}*`;
+            label.textContent = `${inputId[0].toUpperCase() + inputId.slice(1, -6)} ${inputId.slice(6, -5)}`;
+            if (!(isTournament && divId === 'player4Div'))
+                label.textContent += '*';
 
             // Create the input field
             const input = document.createElement('input');
@@ -150,6 +167,8 @@ function generateGameRegisterForm(gameRegisterForm, playerInputs) {
             input.pattern = '[a-zA-Z0-9_]+';
             input.maxLength = 20;
             input.placeholder = 'Enter your name here';
+            if (isTournament && divId === 'player4Div')
+                input.placeholder += ' (Optional)';
 
             // Append elements to the div
             playerDiv.appendChild(label);
