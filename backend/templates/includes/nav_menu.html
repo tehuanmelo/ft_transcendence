@@ -34,6 +34,8 @@
                         </li>
                     </ul>
                 </div>
+                <a class="nav-link spa-link px-4 {% if request.path == '/ttt/' %}active-link{% endif %}"
+                    href="{% url 'tictactoe' %}" data-method="GET">TicTacToe</a>
                 <a class="{% if request.path == '/users/friends' %}active-link{% endif %} nav-link spa-link px-4" href="{% url 'friends' %}" data-method="GET">
                     Friends
                     {% if pending_requests|length > 0 %}

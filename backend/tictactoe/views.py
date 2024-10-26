@@ -1,8 +1,15 @@
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.shortcuts import render
 from .models import TicTacToeGame
 from users.auth import jwt_login_required
+
+
+@jwt_login_required
+@require_http_methods(["GET"])
+def tictactoe(request):
+    return render(request, "ttt/ttt.html")
 
 
 @jwt_login_required
