@@ -139,7 +139,11 @@ def reject_friend(request, username):
 def search_users(request, query):
     if request.method == "GET":
         current_user = request.user
-        users = CustomUser.objects.filter(username__icontains=query).exclude(username=current_user.username).values("username")
+        users = (
+            CustomUser.objects.filter(username__icontains=query)
+            .exclude(username=current_user.username)
+            .values("username")
+        )
         users_list = list(users)
         return JsonResponse({"success": True, "users": users_list})
     return JsonResponse({"success": False, "error_message": "Invalid request method."})
