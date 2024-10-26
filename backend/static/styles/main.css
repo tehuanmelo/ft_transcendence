@@ -111,6 +111,9 @@ header {
     outline: none;
     color: var(--text);
     line-height: 2;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .nav-link:hover,
@@ -120,14 +123,15 @@ header {
     color: var(--accent);
 }
 
-.nav-link.active-link {
+.nav-link.active-link,
+.navbar-nav .nav-link.show {
     color: var(--accent);
 }
 
 .navbar-nav .dropdown-menu {
     background-color: var(--background);
     border-color: var(--navbar);
-    border-radius: 0px;
+    border-radius: 0;
     right: 0;
 }
 
@@ -144,8 +148,6 @@ header {
 
 .navbar-nav .dropdown-item[id="logoutButton"]:hover,
 .navbar-nav .dropdown-item[id="logoutButton"]:focus {
-    outline: none;
-    background-color: var(--navbar);
     color: var(--bs-danger);
 }
 
@@ -162,20 +164,8 @@ header {
 
 .navbar-nav .dropdown .nav-link:hover img,
 .navbar-nav .dropdown .nav-link:focus img {
-    transform: scale(1.2);
+    transform: scale(1.1);
     border-color: var(--accent);
-}
-
-.navbar-nav .dropdown-toggle[id="user"]::after {
-    border-left-color: transparent;
-    border-right-color: transparent;
-    margin-left: -0.5rem;
-}
-
-.navbar-nav .dropdown-toggle[id="pongModes"]::after {
-    border-left-color: transparent;
-    border-right-color: transparent;
-    margin-left: -0.5rem;
 }
 
 .navbar-nav .dropdown-toggle:hover,
@@ -183,12 +173,38 @@ header {
     color: var(--accent);
 }
 
+.navbar-nav .nav-link i,
+.navbar-nav .dropdown-toggle i,
+.navbar-nav .dropdown-menu .dropdown-item i {
+    font-size: 1.1rem;
+    vertical-align: middle;
+}
+
+.navbar-nav .dropdown-menu .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .offcanvas {
     background-color: var(--navbar);
 }
 
+.offcanvas-header {
+    border-bottom: 2px solid var(--text);
+}
+
 .offcanvas-title {
     color: var(--text);
+}
+
+.offcanvas-body .dropdown-divider {
+    margin: 0.5rem 0;
+    border-bottom: 2px solid var(--text);
+}
+
+.offcanvas-body .nav-link {
+    line-height: 3;
 }
 
 /* ---------------------------------- Logo ---------------------------------- */
