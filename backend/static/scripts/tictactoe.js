@@ -16,6 +16,8 @@ let gameId = null;
 let currentPlayer = 'X';
 
 function renderBoard(board) {
+    if (!board) return;
+
     const gameContainer = document.getElementById('game');
     gameContainer.innerHTML = '';
 
@@ -31,11 +33,16 @@ function renderBoard(board) {
             if (cell === "")
                 cellDiv.addEventListener('click', () => makeMove(rowIndex, colIndex));
 
+            // Change the cursor to "X" or "O" on hover
+            cellDiv.style.cursor = currentPlayer === 'X' ? 'url(/static/images/cursor-x.svg), auto' : 'url(/static/images/cursor-o.svg), auto';
+            console.log(cellDiv.style.cursor);
+
             boardDiv.appendChild(cellDiv);
         });
     });
     gameContainer.appendChild(boardDiv);
     document.getElementById('ttt').style.display = 'flex';
+    document.getElementById('current-player').textContent = `Current Player: ${currentPlayer}`;
 }
 
 function startGame() {
@@ -55,6 +62,8 @@ function startGame() {
             gameId = data.game_id;
             currentPlayer = data.current_player;
             renderBoard(data.board);
+            document.getElementById('result').textContent = '';
+            document.getElementById('current-player').textContent = `Current Player: ${currentPlayer}`;
             // TODO handle data.error
         })
         .catch(error => {
@@ -80,12 +89,15 @@ function makeMove(rowIndex, colIndex) {
             return response.json();
         })
         .then(data => {
-            renderBoard(data.board);
             currentPlayer = data.current_player;
+            renderBoard(data.board);
+            document.getElementById('current-player').textContent = `Current Player: ${currentPlayer}`;
             if (data.winner)
-                alert(`${data.winner} wins!`)
-            // TODO handle data.error
-            // TODO handle game draw
+                document.getElementById('result').textContent = `${data.winner} wins!`;
+            else if (data.draw)
+                document.getElementById('result').textContent = `It's a draw!`;
+            else
+                document.getElementById('result').textContent = '';
         })
         .catch(error => {
             console.error('Error:', error);
