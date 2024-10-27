@@ -1299,8 +1299,6 @@ function visual() {
     }
 
     game.forceRefresh();
-	game.pong.displayGameAnnouncement();
-
 }
 
 function launchGame(playerNames, isTournament = false) {
