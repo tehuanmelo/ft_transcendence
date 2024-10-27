@@ -167,8 +167,10 @@ function generateGameRegisterForm(gameRegisterForm, playerInputs, isTournament) 
             input.pattern = '[a-zA-Z0-9_]+';
             input.maxLength = 20;
             input.placeholder = 'Enter your name here';
-            if (isTournament && divId === 'player4Div')
+            if (isTournament && divId === 'player4Div') {
+                input.required = false;
                 input.placeholder += ' (Optional)';
+            }
 
             // Append elements to the div
             playerDiv.appendChild(label);

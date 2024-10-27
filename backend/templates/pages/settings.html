@@ -7,23 +7,82 @@
 {% block content %}
 
 <!-- Account Settings -->
-<div class="container py-5">
-    <h1 class="mb-4">Account Settings</h1>
+<div class="container-xl py-5">
+    <h1 class="text-center silk-heavy">Account Settings</h1>
+    <hr class="mb-4">
 
-    <div class="list-group" data-bs-theme="dark">
+    <div class="row g-4">
         {% if not user.is_2fa_set %}
-        <a class="list-group-item list-group-item-action spa-link" href="{% url 'enable_2fa' %}"
-            data-method="GET">Enable 2FA</a>
+        <!-- Enable 2FA Card -->
+        <div class="col">
+            <div class="card h-100" data-bs-theme="dark">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Enable 2FA</h5>
+                    <hr>
+                    <p class="card-text">Add an extra layer of security by enabling two-factor authentication.
+                    </p>
+                </div>
+                <div class="card-footer d-flex justify-content-end">
+                    <a class="btn btn-primary spa-link" href="{% url 'enable_2fa' %}" data-method="GET">Enable 2FA</a>
+                </div>
+            </div>
+        </div>
         {% else %}
-        <a class="list-group-item list-group-item-action spa-link" href="#" data-bs-toggle="modal"
-            data-bs-target="#disable2faModal">Disable 2FA</a>
-        <a class="list-group-item list-group-item-action spa-link" href="{% url 'reset_2fa' %}" data-method="GET">Reset
-            2FA</a>
+        <!-- Disable 2FA Card -->
+        <div class="col">
+            <div class="card h-100" data-bs-theme="dark">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Disable Two-Factor Authentication (2FA)</h5>
+                    <hr>
+                    <p class="card-text">Remove the two-factor authentication from your account.</p>
+                    <a class="btn btn-danger" href="#" data-bs-toggle="modal" data-bs-target="#disable2faModal">Disable
+                        2FA</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reset 2FA Card -->
+        <div class="col">
+            <div class="card h-100" data-bs-theme="dark">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Reset Two-Factor Authentication (2FA)</h5>
+                    <hr>
+                    <p class="card-text">If you're having issues, reset your 2FA settings.</p>
+                    <a class="btn btn-warning spa-link" href="{% url 'reset_2fa' %}" data-method="GET">Reset 2FA</a>
+                </div>
+            </div>
+        </div>
         {% endif %}
-        <a class="list-group-item list-group-item-action spa-link" href="{% url 'change_password' %}"
-            data-method="GET">Change Password</a>
-        <a class="list-group-item list-group-item-action spa-link" href="#" data-bs-toggle="modal"
-            data-bs-target="#deleteAccountModal">Delete account</a>
+
+        <!-- Change Password Card -->
+        <div class="col">
+            <div class="card h-100" data-bs-theme="dark">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Change Password</h5>
+                    <hr>
+                    <p class="card-text">Update your password to keep your account secure.</p>
+                </div>
+                <div class="card-footer d-flex justify-content-end">
+                    <a class="btn btn-primary spa-link" href="{% url 'change_password' %}" data-method="GET">Change
+                        Password</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Account Card -->
+        <div class="col">
+            <div class="card h-100" data-bs-theme="dark">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Delete Account</h5>
+                    <hr>
+                    <p class="card-text">Permanently delete your account. This action is irreversible.</p>
+                </div>
+                <div class="card-footer d-flex justify-content-end">
+                    <a class="btn btn-danger" href="#" data-bs-toggle="modal"
+                        data-bs-target="#deleteAccountModal">Delete Account</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

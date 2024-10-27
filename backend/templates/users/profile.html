@@ -7,112 +7,90 @@
 {% block content %}
 
 <!-- Profile -->
-<div class="container-xl d-flex justify-content-center h-75">
-    <div id="userInfo" class="main border">
-        <div class="profile-image-wrapper">
+<div class="container-xl profile-container mt-3">
+    <div class="profile-header">
+        <div class="profile-image">
             {% if user.profile_image %}
-            <img src="{{ user.profile_image.url }}" class="profile-image rounded-circle"
-                alt="{{ user.username }}'s Profile Image">
+            <img src="{{ user.profile_image.url }}" alt="{{ user.username }}'s Profile Image">
             {% else %}
-            <img src="{% static 'images/default_user.jpg' %}" class="profile-image rounded-circle"
-                alt="Default User Image">
+            <img src="{% static 'images/default_user.jpg' %}" alt="Default User Image">
             {% endif %}
         </div>
-
-        <h1 class="profile-name">{{ user.username }}</h1>
-
-        <div class="name">
-            {% if user.first_name %}
-            <div>First name: {{ user.first_name }}</div>
-            {% endif %}
-            {% if user.last_name %}
-            <div>Last name: {{ user.last_name }}</div>
-            {% endif %}
-        </div>
-
-        <div class="card-body">
-            {% if user.github or user.twitter %}
-            <p class="social-links mt-3">
+        <div class="profile-info">
+            <h1 class="profile-username">{{ user.username }}</h1>
+            <p class="profile-email">Email: {{ user.email }}</p>
+            <p>Registered on: {{ user.date_joined|date:"d-M-Y" }}</p>
+            <div class="social-links">
                 {% if user.github %}
-                <a href="{{user.github}}" target="_blank" class="btn-social"><i class="fa-brands fa-github"></i></a>
+                <a href="{{ user.github }}" class="btn btn-accent" target="_blank"><i class="fab fa-github"></i> GitHub</a>
                 {% endif %}
                 {% if user.twitter %}
-                <a href="{{user.twitter}}" target="_blank" class="btn-social"><i class="fa-brands fa-twitter"></i></a>
+                <a href="{{ user.twitter }}" class="btn btn-accent" target="_blank"><i class="fab fa-twitter"></i> Twitter</a>
                 {% endif %}
-            </p>
-            {% endif %}
-
-            {% if user.email %}
-            <div class="email">
-                <p class="card-text">Email: <a href="mailto:{{user.email}}">{{user.email}}</a></p>
             </div>
-            {% endif %}
-
-            {% if user.bio %}
-            <div class="border bio-text p-4">
-                <h4>bio:</h4>
-                <p class="card-text">{{user.bio}}</p>
-            </div>
-            {% endif %}
-
-            <a class="btn btn-accent mt-3 spa-link" href="{% url 'edit_profile' %}" data-method="GET">Edit
-                Profile</a>
+            <p class="profile-bio">Bio: {{ user.bio }}</p>
         </div>
-        <div class="main border">
-            <div class="stats">
-                <h2>Stats</h2>
-                <p>Wins: {{ user.wins }}</p>
-                <p>Losses: {{ user.losses }}</p>
-            </div>
-        </div>
-        <div class="main border mt-4">
-            <div class="card-body">
-                <h2>Match History</h2>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Mode</th>
-                            <th>Match Details</th>
-                            <th>Result</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for match in matches %}
-                        <tr>
-                            <td>{{ match.date|date:"d-M-Y" }}</td>
-                            <td>
-                                {% if match.mode == 'pong_1v1' %}
-                                Pong 1v1
-                                {% elif match.mode == 'pong_2v2' %}
-                                Pong 2v2
-                                {% elif match.mode == 'tictactoe' %}
-                                Tic Tac Toe
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if match.mode == 'pong_1v1' or match.mode == 'tictactoe' %}
-                                You vs {{ match.opponents.0 }}
-                                {% elif match.mode == 'pong_2v2' %}
-                                You and {{ match.teammate }} vs {{ match.opponents.0 }} and {{ match.opponents.1 }}
-                                {% endif %}
-                            </td>
-                            <td>{{ match.result|title }}</td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="4" class="text-center">No matches found.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+        <div class="profile-edit">
+            <a class="edit-button spa-link" href="{% url 'edit_profile' %}" data-method="GET">Edit</a>
         </div>
     </div>
 
-    <div id="userStats" class="">
-
+    <div class="profile-stats">
+        <h2>Stats</h2>
+        <p>Wins: {{ user.wins }}</p>
+        <p>Losses: {{ user.losses }}</p>
     </div>
-</div>
 
-{% endblock content %}
+    <div class="profile-match-history">
+        <h2>Match History</h2>
+        {% if matches %}
+        <div class="table-container">
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Mode</th>
+                        <th>Match Details</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for match in matches %}
+                    <tr>
+                        <td>{{ match.date|date:"d-M-Y" }}</td>
+                        <td>
+                            {% if match.mode == 'pong_1v1' %}
+                            Pong 1v1
+                            {% elif match.mode == 'pong_2v2' %}
+                            Pong 2v2
+                            {% elif match.mode == 'tictactoe' %}
+                            Tic Tac Toe
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if match.mode == 'pong_1v1' or match.mode == 'tictactoe' %}
+                            You vs {{ match.opponents.0 }}
+                            {% elif match.mode == 'pong_2v2' %}
+                            You and {{ match.teammate }} vs {{ match.opponents.0 }} and {{ match.opponents.1 }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if match.result == 'win' %}
+                            <span class="result-win">Win</span>
+                            {% elif match.result == 'loss' %}
+                            <span class="result-loss">Loss</span>
+                            {% else %}
+                            <span class="result-draw">Draw</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>No matches found.</p>
+        {% endif %}
+    </div>
+
+    {% endblock content %}
