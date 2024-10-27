@@ -1,5 +1,9 @@
 // tictactoe.js
 
+let gameId = null;
+let currentPlayer = 'X';
+let gameEnded = false;
+
 function tictactoeInit() {
     // Show the modal automatically when the page loads
     let opponentModal = new bootstrap.Modal(document.getElementById('opponentModal'));
@@ -11,9 +15,6 @@ function tictactoeInit() {
         opponentModal.hide();
     });
 }
-
-let gameId = null;
-let currentPlayer = 'X';
 
 function renderBoard(board) {
     if (!board) return;
@@ -33,9 +34,10 @@ function renderBoard(board) {
             if (cell === "")
                 cellDiv.addEventListener('click', () => makeMove(rowIndex, colIndex));
 
-            // Change the cursor to "X" or "O" on hover
-            cellDiv.style.cursor = currentPlayer === 'X' ? 'url(/static/images/cursor-x.svg), auto' : 'url(/static/images/cursor-o.svg), auto';
-            console.log(cellDiv.style.cursor);
+            if (!gameEnded)
+                cellDiv.style.cursor = currentPlayer === 'X' ? 'url(/static/images/cursor-x.svg), auto' : 'url(/static/images/cursor-o.svg), auto';
+            else
+                cellDiv.style.cursor = 'default';
 
             boardDiv.appendChild(cellDiv);
         });
@@ -61,8 +63,10 @@ function startGame() {
         .then(data => {
             gameId = data.game_id;
             currentPlayer = data.current_player;
+            gameEnded = false;
             renderBoard(data.board);
             document.getElementById('result').textContent = '';
+            document.getElementById('player2-name').textContent = formData.get('opponent_name');
             document.getElementById('current-player').textContent = `Current Player: ${currentPlayer}`;
             // TODO handle data.error
         })
@@ -72,6 +76,8 @@ function startGame() {
 }
 
 function makeMove(rowIndex, colIndex) {
+    if (gameEnded) return;
+
     fetch(`/ttt/move/${gameId}/`, {
         method: 'POST',
         headers: {
@@ -89,15 +95,20 @@ function makeMove(rowIndex, colIndex) {
             return response.json();
         })
         .then(data => {
+            if (data.winner) {
+                document.getElementById('result').textContent = `${data.winner} wins!`;
+                gameEnded = true;
+            }
+            else if (data.draw) {
+                document.getElementById('result').textContent = `It's a draw!`;
+                gameEnded = true;
+            }
+            else
+                document.getElementById('result').textContent = '';
+
             currentPlayer = data.current_player;
             renderBoard(data.board);
             document.getElementById('current-player').textContent = `Current Player: ${currentPlayer}`;
-            if (data.winner)
-                document.getElementById('result').textContent = `${data.winner} wins!`;
-            else if (data.draw)
-                document.getElementById('result').textContent = `It's a draw!`;
-            else
-                document.getElementById('result').textContent = '';
         })
         .catch(error => {
             console.error('Error:', error);

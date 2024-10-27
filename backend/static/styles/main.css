@@ -873,31 +873,49 @@ header {
 
 .board {
     display: grid;
-    grid-template-columns: repeat(3, 100px);
-    grid-template-rows: repeat(3, 100px);
+    grid-template-columns: repeat(3, 200px);
+    grid-template-rows: repeat(3, 200px);
     gap: 5px;
+}
+
+.player-info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 20px;
+}
+
+.player {
+    flex: 1;
+    text-align: center;
+}
+
+#current-player-container {
+    flex: 1;
+    text-align: center;
 }
 
 .cell {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     font-size: 24px;
     border: 2px solid #333;
     cursor: pointer;
-    background-color: #f0f0f0;
+    background-color: var(--navbar);
 }
 
 .cell:hover {
-    background-color: #e0e0e0;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .cell.X {
-    color: blue;
+    color: #1269F3;
 }
 
 .cell.O {
-    color: red;
+    color: var(--accent);
 }
