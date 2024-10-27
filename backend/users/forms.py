@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+import re
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -12,6 +13,14 @@ class CustomUserCreationForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.fields["password1"].help_text = None  # Hide default help text
         self.fields["password2"].help_text = None  # Hide default help text
+
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        if not re.match(r"^[a-zA-Z0-9_-]+$", username):
+            raise forms.ValidationError(
+                "Username can only contain letters, numbers, and underscores."
+            )
+        return username
 
 
 class CustomUserChangeForm(UserChangeForm):
