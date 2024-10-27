@@ -1,6 +1,6 @@
 #!/bin/sh
 
-python3 pong-backend/manage.py makemigrations users
+python3 pong-backend/manage.py makemigrations
 
 black .
 
