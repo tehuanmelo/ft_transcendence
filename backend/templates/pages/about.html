@@ -7,70 +7,94 @@
 {% block content %}
 
 <!-- About -->
-<div class="container py-5">
-    <h1>About the developers!</h1>
-    <hr class="mb-4">
-    <div class="row justify-content-evenly text-center">
-        <!-- Paula -->
-        <div class="col-md-3 col-sm-6 mb-4">
-            <div class="card about-card">
-                <img src="{% static 'images/default_user.jpg' %}" class="card-img-top rounded-circle w-50 mx-auto"
-                    alt="Image of Paula">
-                <div class="card-body">
-                    <h5 class="card-title">Paula</h5>
-                    <p class="card-text">[placeholder text]</p>
-                    <a href="https://github.com/PaulaBalbino" class="btn btn-accent" target="_blank">
-                        <i class="fa-brands fa-github"></i> GitHub
-                    </a>
-                </div>
-            </div>
-        </div>
-        <!-- Samih -->
-        <div class="col-md-3 col-sm-6 mb-4">
-            <div class="card about-card">
-                <img src="{% static 'images/default_user.jpg' %}" class="card-img-top rounded-circle w-50 mx-auto"
-                    alt="Image of Samih">
-                <div class="card-body">
-                    <h5 class="card-title">Samih</h5>
-                    <p class="card-text">[placeholder text]</p>
-                    <a href="https://github.com/samih713" class="btn btn-accent" target="_blank">
-                        <i class="fa-brands fa-github"></i> GitHub
-                    </a>
-                </div>
-            </div>
-        </div>
-        <!-- Tanvir -->
-        <div class="col-md-3 col-sm-6 mb-4">
-            <div class="card about-card">
-                <img src="{% static 'images/tanvir.png' %}" class="card-img-top rounded-circle w-50 mx-auto"
-                    alt="Image of Tanvir">
-                <div class="card-body">
-                    <h5 class="card-title">Tanvir</h5>
-                    <p class="card-text">[placeholder text]</p>
-                    <a href="https://github.com/Taanviir" class="btn btn-accent" target="_blank">
-                        <i class="fa-brands fa-github"></i> GitHub
-                    </a>
-                </div>
-            </div>
-        </div>
-        <!-- Tehuan -->
-        <div class="col-md-3 col-sm-6 mb-4">
-            <div class="card about-card">
-                <img src="{% static 'images/default_user.jpg' %}" class="card-img-top rounded-circle w-50 mx-auto"
-                    alt="Image of Tehuan">
-                <div class="card-body">
-                    <h5 class="card-title">Tehuan</h5>
-                    <p class="card-text">[placeholder text]</p>
-                    <a href="https://github.com/tehuanmelo" class="btn btn-accent" target="_blank">
-                        <i class="fa-brands fa-github"></i> GitHub
-                    </a>
-                </div>
-            </div>
+<div class="container py-5 h-75 d-flex flex-column justify-content-around">
+    <div id="website-info mb-3">
+        <h1 class="text-center">About Pong</h1>
+        <hr class="mb-4">
+        <div id="info">
+            <p> Pong is a web-game we made based on <a href="https://en.wikipedia.org/wiki/Pong" target="_blank">Pong
+                    (1972)</a>. It is also the final project for the <a href="https://42abudhabi.ae/"
+                    target="_blank">42</a> core curriculum.
+            </p>
+            <p> The Pong website offers classic 1v1, 2v2, and tournament-style gameplay, along with modern features like
+                user authentication, matchmaking, and game customization. Players can also enjoy an additional
+                Tic-Tac-Toe game.
+            </p>
+            <p> Built as a single-page application (SPA) using Django and other web technologies, Pong a smooth user
+                experience and dynamic content loading, showcasing the skills acquired throughout the 42 program.
+            </p>
         </div>
     </div>
-    {% if not user.is_authenticated %}
-    {% include "includes/back_to_home.html" %}
-    {% endif %}
+
+    <div id="developers-info">
+        <h1 class="text-center">About the developers</h1>
+        <hr class="mb-4">
+        <div class="row justify-content-evenly text-center">
+            <!-- Malik -->
+            <div class="col-xxl-2 col-md-4 col-sm-6 mb-4 d-flex justify-content-center">
+                <div class="card about-card">
+                    <img src="{% static 'images/default_user.jpg' %}" class="card-img-top rounded-circle w-75 mx-auto"
+                        alt="Image of Malik">
+                    <div class="card-body">
+                        <h5 class="card-title">Malik</h5>
+                        <a href="https://github.com/MalikZu" class="btn btn-accent" target="_blank">
+                            <i class="fa-brands fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Paula -->
+            <div class="col-xxl-2 col-md-4 col-sm-6 mb-4 d-flex justify-content-center">
+                <div class="card about-card">
+                    <img src="{% static 'images/default_user.jpg' %}" class="card-img-top rounded-circle w-75 mx-auto"
+                        alt="Image of Paula">
+                    <div class="card-body">
+                        <h5 class="card-title">Paula</h5>
+                        <a href="https://github.com/PaulaBalbino" class="btn btn-accent" target="_blank">
+                            <i class="fa-brands fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Samih -->
+            <div class="col-xxl-2 col-md-4 col-sm-6 mb-4 d-flex justify-content-center">
+                <div class="card about-card">
+                    <img src="{% static 'images/default_user.jpg' %}" class="card-img-top rounded-circle w-75 mx-auto"
+                        alt="Image of Samih">
+                    <div class="card-body">
+                        <h5 class="card-title">Samih</h5>
+                        <a href="https://github.com/samih713" class="btn btn-accent" target="_blank">
+                            <i class="fa-brands fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Tanvir -->
+            <div class="col-xxl-2 col-md-4 col-sm-6 mb-4 d-flex justify-content-center">
+                <div class="card about-card">
+                    <img src="{% static 'images/tanvir.png' %}" class="card-img-top rounded-circle w-75 mx-auto"
+                        alt="Image of Tanvir">
+                    <div class="card-body">
+                        <h5 class="card-title">Tanvir</h5>
+                        <a href="https://github.com/Taanviir" class="btn btn-accent" target="_blank">
+                            <i class="fa-brands fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Tehuan -->
+            <div class="col-xxl-2 col-md-4 col-sm-6 mb-4 d-flex justify-content-center">
+                <div class="card about-card">
+                    <img src="{% static 'images/default_user.jpg' %}" class="card-img-top rounded-circle w-75 mx-auto"
+                        alt="Image of Tehuan">
+                    <div class="card-body">
+                        <h5 class="card-title">Tehuan</h5>
+                        <a href="https://github.com/tehuanmelo" class="btn btn-accent" target="_blank">
+                            <i class="fa-brands fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if not user.is_authenticated %}
+        {% include "includes/back_to_home.html" %}
+        {% endif %}
+    </div>
 </div>
 
 {% endblock content %}

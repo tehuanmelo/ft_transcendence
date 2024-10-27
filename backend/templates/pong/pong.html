@@ -92,14 +92,16 @@
 </div>
 
 <!-- Visual Imp Mode Modal -->
-<div id="visualmodal" class="modal fade" tabindex="-1">
+<div id="visualmodal" class="modal fade" data-bs-backdrop="static" tabindex="-1" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title" id="staticBackdropLabel">Warning!</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    style="background-color: rgb(243, 156, 18); opacity: 1; border: none;"
+                    onclick="game.resume()"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-footer">
                 <p>This mode can only be chosen before the game begins!</p>
             </div>
         </div>
@@ -168,7 +170,7 @@
 <div id="configModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="max-height: 90vh; height: auto;">
+        <div class="modal-content">
             <div class="modal-header">
                 <h1 id="staticBackdropLabel" class="modal-title fs-5">Pong Configurations
                 </h1>
@@ -253,7 +255,7 @@
                         <div class="col">
                             <label for="scoreSlider" class="form-label silk-heavy">Score To Win: <span
                                     id="scoreDisplay">5</span></label>
-                            <input type="range" id="scoreSlider" name="scoreToWin" class="form-range" min="1" max="10"
+                            <input type="range" id="scoreSlider" name="scoreToWin" class="form-range" min="1" max="11"
                                 value="5" oninput="document.getElementById('scoreDisplay').innerText = this.value">
                         </div>
                     </div>

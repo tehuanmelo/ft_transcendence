@@ -8,44 +8,42 @@
     <nav class="container-xl">
         <img src="{% static 'images/PONG.svg' %}" alt="PONG logo" width="150px" class="img-fluid spa-link logo"
             href="{% url 'home' %}" data-method="GET" style="cursor: pointer;">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
-            aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation"
-            style="border: none; box-shadow: none;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="30px" fill="#f39c12">
-                <path
-                    d="M 0 7.5 L 0 12.5 L 50 12.5 L 50 7.5 Z M 0 22.5 L 0 27.5 L 50 27.5 L 50 22.5 Z M 0 37.5 L 0 42.5 L 50 42.5 L 50 37.5 Z" />
-            </svg>
-        </button>
-        <div id="navbarMenu" class="collapse navbar-collapse">
+
+        <!-- Main Navbar (visible on large screens only) -->
+        <div id="navbarNav" class="collapse navbar-collapse d-none d-lg-block">
             <div class="navbar-nav flex-grow-1 justify-content-center">
-                <a class="nav-link spa-link px-4 {% if request.path == '/' %}active-link{% endif %}"
-                    href="{% url 'home' %}" data-method="GET">Home</a>
-                <a class="nav-link spa-link px-4 {% if request.path == '/about/' %}active-link{% endif %}"
-                    href="{% url 'about' %}" data-method="GET">About</a>
-                <div id="pongModes" class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle px-4" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">Pong</a>
-                    <ul class="dropdown-menu" style="min-width: 200px;">
-                        <li><a class="dropdown-item spa-link" href="{% url 'pong' %}?mode=1v1" data-method="GET">1v1</a>
-                        </li>
-                        <li><a class="dropdown-item spa-link" href="{% url 'pong' %}?mode=2v2" data-method="GET">2v2</a>
-                        </li>
-                        <li><a class="dropdown-item spa-link" href="{% url 'pong' %}?mode=tournament" data-method="GET">Tournament</a>
-                        </li>
-                    </ul>
+                <a class="nav-link spa-link px-lg-4 {% if request.path == '/' %}active-link{% endif %}"
+                    href="{% url 'home' %}" data-method="GET">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a class="nav-link spa-link px-lg-4 {% if request.path == '/about/' %}active-link{% endif %}"
+                    href="{% url 'about' %}" data-method="GET">
+                    <i class="fas fa-info-circle"></i> About
+                </a>
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle px-lg-4" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false"><i class="fas fa-gamepad"></i> Pong</a>
+                    <div class="dropdown-menu" style="min-width: 220px;">
+                        <a class="dropdown-item spa-link" href="{% url 'pong' %}?mode=1v1" data-method="GET"><i
+                                class="fas fa-user-friends"></i> 1v1</a>
+                        <a class="dropdown-item spa-link" href="{% url 'pong' %}?mode=2v2" data-method="GET"><i
+                                class="fas fa-users"></i> 2v2</a>
+                        <a class="dropdown-item spa-link" href="{% url 'pong' %}?mode=tournament" data-method="GET"><i
+                                class="fas fa-trophy"></i>Tournament</a>
+                    </div>
                 </div>
                 <a class="nav-link spa-link px-4 {% if request.path == '/ttt/' %}active-link{% endif %}"
                     href="{% url 'tictactoe' %}" data-method="GET">TicTacToe</a>
                 <a class="{% if request.path == '/users/friends' %}active-link{% endif %} nav-link spa-link px-4" href="{% url 'friends' %}" data-method="GET">
                     Friends
                     {% if pending_requests|length > 0 %}
-                        <span class="badge bg-danger">{{ pending_requests|length }}</span>
+                    <span class="badge bg-danger">!</span>
                     {% endif %}
                 </a>
             </div>
             <div class="navbar-nav">
                 <div class="nav-item dropdown">
-                    <a id="user" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                    <a class="nav-link dropdown-toggle px-lg-4" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         {% if user.profile_image %}
                         <img src="{{ user.profile_image.url }}" class="rounded-circle" alt="Profile Image">
@@ -55,13 +53,57 @@
                         {% endif %}
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item spa-link" href="{% url 'profile' %}" data-method="GET">Profile</a>
-                        <a class="dropdown-item spa-link" href="{% url 'settings' %}" data-method="GET">Settings</a>
+                        <a class="dropdown-item spa-link" href="{% url 'profile' %}" data-method="GET"><i
+                                class="fas fa-user"></i> Profile</a>
+                        <a class="dropdown-item spa-link" href="{% url 'settings' %}" data-method="GET"><i
+                                class="fas fa-cog"></i> Settings</a>
                         <hr class="dropdown-divider">
                         <a id="logoutButton" class="dropdown-item spa-link" href="#" data-bs-toggle="modal"
-                            data-bs-target="#logoutModal">Log Out</a>
+                            data-bs-target="#logoutModal"><i class="fas fa-sign-out-alt"></i> Log Out</a>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Offcanvas Toggle Button (visible on small screens only) -->
+        <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarMenu"
+            aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation"
+            style="border: none; box-shadow: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="30px" fill="#f39c12">
+                <path
+                    d="M 0 7.5 L 0 12.5 L 50 12.5 L 50 7.5 Z M 0 22.5 L 0 27.5 L 50 27.5 L 50 22.5 Z M 0 37.5 L 0 42.5 L 50 42.5 L 50 37.5 Z" />
+            </svg>
+        </button>
+
+        <!-- Offcanvas Menu (visible on small screens only) -->
+        <div id="navbarMenu" class="offcanvas offcanvas-end d-lg-none" tabindex="-1" aria-labelledby="navbarMenuLabel">
+            <div class="offcanvas-header">
+                <h5 id="navbarMenuLabel" class="offcanvas-title">Menu</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <a class="nav-link spa-link" href="{% url 'home' %}" data-method="GET"><i class="fas fa-home"></i>
+                    Home</a>
+                <a class="nav-link spa-link" href="{% url 'about' %}" data-method="GET"><i
+                        class="fas fa-info-circle"></i> About</a>
+                <a class="nav-link spa-link" href="{% url 'pong' %}?mode=1v1" data-method="GET"><i
+                        class="fas fa-user-friends"></i> Pong 1v1</a>
+                <a class="nav-link spa-link" href="{% url 'pong' %}?mode=2v2" data-method="GET"><i
+                        class="fas fa-users"></i> Pong 2v2</a>
+                <a class="nav-link spa-link" href="{% url 'pong' %}?mode=tournament" data-method="GET"><i
+                        class="fas fa-trophy"></i> Tournament</a>
+                <div class="dropdown-divider"></div>
+                <a class="nav-link spa-link" href="{% url 'friends' %}" data-method="GET"><i
+                        class="fas fa-user-friends"></i> Friends</a>
+                <div class="dropdown-divider"></div>
+                <a class="nav-link spa-link" href="{% url 'profile' %}" data-method="GET"><i class="fas fa-user"></i>
+                    Profile</a>
+                <a class="nav-link spa-link" href="{% url 'settings' %}" data-method="GET"><i class="fas fa-cog"></i>
+                    Settings</a>
+                <div class="dropdown-divider"></div>
+                <a class="nav-link spa-link" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal"><i
+                        class="fas fa-sign-out-alt"></i> Log Out</a>
             </div>
         </div>
     </nav>
