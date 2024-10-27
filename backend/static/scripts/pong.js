@@ -1299,6 +1299,7 @@ function visual() {
     }
 
     game.forceRefresh();
+	  document.getElementById("ponggame").focus();
 }
 
 function launchGame(playerNames, isTournament = false) {
