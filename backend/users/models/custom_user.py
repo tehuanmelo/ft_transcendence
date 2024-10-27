@@ -14,7 +14,6 @@ class CustomUser(AbstractUser):
         blank=True,
         max_length=254,
         verbose_name="email address",
-        unique=True
     )
     profile_image = models.ImageField(
         upload_to="profile_images/", blank=True, null=True
