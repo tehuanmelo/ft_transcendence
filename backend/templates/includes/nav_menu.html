@@ -45,10 +45,9 @@
                     <a class="nav-link dropdown-toggle px-lg-4" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         {% if user.profile_image %}
-                        <img src="{{ user.profile_image.url }}" class="rounded-circle d-none d-lg-inline"
-                            alt="Profile Image">
+                        <img src="{{ user.profile_image.url }}" class="rounded-circle" alt="Profile Image">
                         {% else %}
-                        <img src="{% static 'images/default_user.jpg' %}" class="rounded-circle d-none d-lg-inline"
+                        <img src="{% static 'images/default_user.jpg' %}" class="rounded-circle"
                             alt="Default User Image">
                         {% endif %}
                     </a>
