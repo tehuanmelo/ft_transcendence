@@ -35,7 +35,7 @@ function renderBoard(board) {
         });
     });
     gameContainer.appendChild(boardDiv);
-    document.getElementById('ttt').style.display = 'block';
+    document.getElementById('ttt').style.display = 'flex';
 }
 
 function startGame() {
@@ -55,6 +55,7 @@ function startGame() {
             gameId = data.game_id;
             currentPlayer = data.current_player;
             renderBoard(data.board);
+            // TODO handle data.error
         })
         .catch(error => {
             console.error('Error:', error);
@@ -62,16 +63,17 @@ function startGame() {
 }
 
 function makeMove(rowIndex, colIndex) {
-    fetch(`/ttt/move/${gameId}`, {
+    fetch(`/ttt/move/${gameId}/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': document.querySelector('input[name="csrfmiddlewaretoken"]').value
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
             row: rowIndex,
             col: colIndex,
-            player: currentPlayer })
+            player: currentPlayer
+        })
     })
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok');
@@ -82,6 +84,8 @@ function makeMove(rowIndex, colIndex) {
             currentPlayer = data.current_player;
             if (data.winner)
                 alert(`${data.winner} wins!`)
+            // TODO handle data.error
+            // TODO handle game draw
         })
         .catch(error => {
             console.error('Error:', error);
