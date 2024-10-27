@@ -13,7 +13,7 @@ class Match(models.Model):
         default=list,
     )
     teammate = models.CharField(max_length=20, blank=True, null=True)
-    score = models.CharField(max_length=20)
+    score = models.CharField(max_length=20, null=True)
     date = models.DateTimeField(auto_now_add=True)
 
     class MatchResult(models.TextChoices):

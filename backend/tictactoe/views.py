@@ -6,6 +6,7 @@ from django.shortcuts import render
 
 from .models import TicTacToeGame
 from users.auth import jwt_login_required
+from users.models import Match
 
 
 @jwt_login_required
@@ -65,9 +66,10 @@ def make_move(request, game_id):
         if game.winner:
             result = "win" if game.winner == current_player else "loss"
             Match.objects.create(
-                user=game.user if game.winner == "X" else None,
-                opponent=game.opponent if game.winner == "O" else None,
+                user=game.user,
+                opponents=[game.opponent],
                 result=result,
+                mode="tictactoe",
             )
 
     return JsonResponse(
