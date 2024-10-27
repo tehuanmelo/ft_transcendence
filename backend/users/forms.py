@@ -18,7 +18,7 @@ class CustomUserCreationForm(UserCreationForm):
         username = self.cleaned_data.get("username")
         if not re.match(r"^[a-zA-Z0-9_-]+$", username):
             raise forms.ValidationError(
-                "Username can only contain letters, numbers, and underscores."
+                "Username can only contain letters, numbers, dashes and underscores."
             )
         return username
 
