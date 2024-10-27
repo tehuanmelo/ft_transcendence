@@ -39,6 +39,26 @@ def create_game(request):
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 
+@jwt_login_required
+@require_http_methods(["POST"])
+def reset_game(request, game_id):
+    try:
+        game = TicTacToeGame.objects.get(id=game_id)
+    except TicTacToeGame.DoesNotExist:
+        return JsonResponse({"error": "Game not found"}, status=404)
+
+    game.board = [["", "", ""], ["", "", ""], ["", "", ""]]
+    game.current_player = "X"
+    game.winner = None
+    game.save()
+
+    return JsonResponse(
+        {
+            "message": "Game has been reset",
+            "board": game.board,
+            "current_player": game.current_player,
+        }
+    )
 
 @jwt_login_required
 @require_http_methods(["POST"])
