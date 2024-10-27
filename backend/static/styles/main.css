@@ -470,12 +470,15 @@ header {
 }
 
 #pongRegisterModal .modal-header,
-#pongRegisterModal .modal-footer {
+#pongRegisterModal .modal-footer,
+#opponentModal .modal-header,
+#opponentModal .modal-footer {
     background-color: transparent;
     border: none;
 }
 
-#pongRegisterModal>.form-label {
+#pongRegisterModal>.form-label,
+#opponentModal>.form-label {
     margin: none;
 }
 
@@ -538,4 +541,13 @@ header {
     #pongRegisterModal .row {
         flex-direction: column;
     }
+}
+
+/* ------------------------------ TicTacToe --------------------------------- */
+.ttt-container {
+    height: calc(100vh - 99px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

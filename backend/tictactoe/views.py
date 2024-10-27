@@ -1,7 +1,9 @@
+import json
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
+
 from .models import TicTacToeGame
 from users.auth import jwt_login_required
 
@@ -15,16 +17,26 @@ def tictactoe(request):
 @jwt_login_required
 @require_http_methods(["POST"])
 def create_game(request):
-    opponent_name = request.POST.get("opponent_name")
-    game = TicTacToeGame.objects.create(
-        user=request.user,
-        opponent=opponent_name,
-        board=[["", "", ""], ["", "", ""], ["", "", ""]],
-        current_player="X",
-    )
-    return JsonResponse(
-        {"game_id": game.id, "board": game.board, "current_player": game.current_player}
-    )
+    try:
+        data = json.loads(request.body)
+        opponent_name = data.get("opponent_name")
+        game = TicTacToeGame.objects.create(
+            user=request.user,
+            opponent=opponent_name,
+            board=[["", "", ""], ["", "", ""], ["", "", ""]],
+            current_player="X",
+        )
+        return JsonResponse(
+            {
+                "game_id": game.id,
+                "board": game.board,
+                "current_player": game.current_player,
+            }
+        )
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
 
 
 @jwt_login_required
