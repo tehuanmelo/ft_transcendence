@@ -24,9 +24,13 @@ function renderBoard(board) {
     board.forEach((row, rowIndex) => {
         row.forEach((cell, colIndex) => {
             const cellDiv = document.createElement('div');
-            cellDiv.className = 'cell';
+            cellDiv.className = `cell ${cell}`;
             cellDiv.textContent = cell;
-            cellDiv.addEventListener('click', () => makeMove(rowIndex, colIndex));
+
+            // Only add click listener to empty cells
+            if (cell === "")
+                cellDiv.addEventListener('click', () => makeMove(rowIndex, colIndex));
+
             boardDiv.appendChild(cellDiv);
         });
     });
@@ -57,3 +61,29 @@ function startGame() {
         });
 }
 
+function makeMove(rowIndex, colIndex) {
+    fetch(`/ttt/move/${gameId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('input[name="csrfmiddlewaretoken"]').value
+        },
+        body: JSON.stringify({ 
+            row: rowIndex,
+            col: colIndex,
+            player: currentPlayer })
+    })
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
+        .then(data => {
+            renderBoard(data.board);
+            currentPlayer = data.current_player;
+            if (data.winner)
+                alert(`${data.winner} wins!`)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}

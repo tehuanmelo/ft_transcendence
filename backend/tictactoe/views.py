@@ -47,9 +47,13 @@ def make_move(request, game_id):
     except TicTacToeGame.DoesNotExist:
         return JsonResponse({"error": "Game not found"}, status=404)
 
-    row = int(request.POST.get("row"))
-    col = int(request.POST.get("col"))
-    current_player = request.POST.get("current_player")
+    try:
+        data = json.loads(request.body)
+        row = data.get("row")
+        col = data.get("col")
+        current_player = data.get("player")
+    except (json.JSONDecodeError, ValueError):
+        return JsonResponse({"error": "Invalid data"}, status=400)
 
     if game.board[row][col] == "" and game.current_player == current_player:
         game.board[row][col] = current_player
