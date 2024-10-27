@@ -1299,7 +1299,7 @@ function visual() {
 
     game.forceRefresh();
 	game.pong.displayGameAnnouncement();
-
+	document.getElementById("ponggame").focus();
 }
 
 function launchGame(playerNames, isTournament = false) {
