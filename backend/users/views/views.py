@@ -4,7 +4,6 @@ from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from django.http import HttpResponseNotAllowed
 
 from ..auth import (
     jwt_fetch_user,
@@ -69,7 +68,7 @@ def disable_2fa(request):
         )
         response.set_cookie("jwt", token, httponly=True, secure=True)
     else:
-        return HttpResponseNotAllowed(["POST"])
+        return redirect("home")
     return response
 
 
@@ -157,7 +156,7 @@ def logout_view(request):
         response.delete_cookie("jwt")
         return response
     else:
-        return HttpResponseNotAllowed(["POST"])
+        return redirect("home")
 
 
 @check_if_logged
@@ -193,7 +192,6 @@ def edit_profile_view(request):
 
 @jwt_login_required
 def change_password_view(request):
-
     user = request.user
     if request.method == "POST":
         old_password = request.POST.get("old_password")

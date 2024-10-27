@@ -1247,7 +1247,8 @@ function setupDropdownListeners() {
 
 function visual() {
     if (game.isGameRunning() == true) {
-        var myModal = new bootstrap.Modal('#visualmodal');
+        game.pause();
+        let myModal = new bootstrap.Modal('#visualmodal');
         myModal.show();
         return;
     }
@@ -1298,8 +1299,7 @@ function visual() {
     }
 
     game.forceRefresh();
-	game.pong.displayGameAnnouncement();
-	document.getElementById("ponggame").focus();
+	  document.getElementById("ponggame").focus();
 }
 
 function launchGame(playerNames, isTournament = false) {

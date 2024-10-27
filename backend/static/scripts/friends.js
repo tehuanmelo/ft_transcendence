@@ -1,6 +1,6 @@
 // friends.js
 
-function sendFriendRequest(action, friendUsername, successMessage) {
+function sendFriendRequest(action, friendUsername, successMessage = null) {
     const url = `/users/${action}/${friendUsername}/`;
 
     fetch(url, {
@@ -12,8 +12,11 @@ function sendFriendRequest(action, friendUsername, successMessage) {
         body: JSON.stringify({ friend: friendUsername })
     })
         .then(response => {
-            if (response.ok)
-                showSuccessMessage(successMessage);
+            if (response.ok) {
+                if (successMessage)
+                    showSuccessMessage(successMessage);
+            
+            }
             else {
                 return response.text().then(text => {
                     try {
@@ -31,29 +34,118 @@ function sendFriendRequest(action, friendUsername, successMessage) {
 }
 
 function addFriend(friendUsername) {
-    sendFriendRequest('add_friend', friendUsername, 'Friend added successfully.');
+    sendFriendRequest('add_friend', friendUsername, 'Friend request sent successfully.');
 }
 
 function removeFriend(friendUsername) {
-    sendFriendRequest('remove_friend', friendUsername, 'Friend removed successfully.');
+    sendFriendRequest('remove_friend', friendUsername);
 }
 
 function acceptFriend(friendUsername) {
-    sendFriendRequest('accept_friend', friendUsername, 'Friend request accepted.');
+    sendFriendRequest('accept_friend', friendUsername);
 }
 
 function rejectFriend(friendUsername) {
-    sendFriendRequest('reject_friend', friendUsername, 'Friend request rejected.');
+    sendFriendRequest('reject_friend', friendUsername);
 }
 
-function showSuccessMessage(successMessage) {
-    document.getElementById('successMessage').innerText = successMessage;
-    const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-    successModal.show();
+function showAlert(message, type = 'success') {
+    const alertContainer = document.getElementById('alertContainer');
+
+    // Create the alert element
+    const alertElement = document.createElement('div');
+    alertElement.className = `alert alert-${type} alert-dismissible fade show`;
+    alertElement.setAttribute('role', 'alert');
+    alertElement.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+
+    alertContainer.appendChild(alertElement);
+
+    // Automatically remove the alert after 3 seconds
+    setTimeout(() => {
+        alertElement.classList.remove('show');
+        alertElement.classList.add('hide');
+        setTimeout(() => {
+            alertContainer.removeChild(alertElement);
+        }, 150); // Allow time for the hide transition
+    }, 3000);
 }
 
-function showErrorMessage(errorMessage) {
-    document.getElementById('errorMessage').innerText = errorMessage;
-    const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
-    errorModal.show();
+function showErrorMessage(message) {
+    showAlert(message, 'danger');
+}
+
+function showSuccessMessage(message) {
+    showAlert(message, 'success');
+}
+
+function showTab(tabName, event) {
+    // Hide all tabs
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => tab.classList.remove('active'));
+
+    // Show selected tab
+    document.getElementById(tabName).classList.add('active');
+
+    // Update tab button state
+    const tabLinks = document.querySelectorAll('.tab-link');
+    tabLinks.forEach(link => link.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+}
+
+function searchUsers(query) {
+    if (query.length > 0) {
+        fetch(`/users/friends/search/${query}/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success)
+                    displaySearchResults(data.users);
+                else
+                    showErrorMessage(data.error_message);
+            })
+            .catch((error) => {
+                showErrorMessage('A network error occurred.');
+            });
+    }
+    else
+        document.getElementById('searchResults').innerHTML = '';
+}
+
+function displaySearchResults(users) {
+    const searchResults = document.getElementById('searchResults');
+    searchResults.innerHTML = '';
+
+    if (users.length > 0) {
+        users.forEach(user => {
+            const userCard = document.createElement('div');
+            userCard.className = 'friend-card';
+
+            userCard.innerHTML = `
+                <div class="friend-info">
+                    <div class="friend-avatar">
+                        ${user.profile_image
+                    ? `<img src="${user.profile_image}" class="profile-image rounded-circle" alt="${user.username}'s Profile Image">`
+                    : `<img src="/static/images/default_user.jpg" class="profile-image rounded-circle" alt="Default User Image">`}
+                    </div>
+                    <div class="friend-details ms-3">
+                        <span class="friend-username">${user.username}</span>
+                    </div>
+                </div>
+                <button type="button" class="friend-action" onclick="addFriend('${user.username}')">
+                    <i class="fas fa-user-plus"></i>
+                </button>
+            `;
+
+            searchResults.appendChild(userCard);
+        });
+    }
+    else
+        searchResults.innerHTML = '<div class="no-friends">No users found.</div>';
 }
