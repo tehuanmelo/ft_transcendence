@@ -295,7 +295,6 @@ header {
 .link-effect:hover,
 .link-effect:focus {
     outline: none;
-    font-size: 1.2rem;
 }
 
 .link-effect:hover::after,
@@ -760,15 +759,15 @@ header {
     transition: transform 0.2s ease;
 }
 
-.btn:hover {
-    transform: translateY(-3px);
-}
-
 .btn-accent {
     color: var(--text);
     background-color: var(--accent);
     border: solid 2px var(--accent);
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.btn-accent:hover {
+    transform: translateY(-1px);
 }
 
 .btn-accent:hover {
