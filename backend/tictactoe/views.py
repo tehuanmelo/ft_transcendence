@@ -1,5 +1,5 @@
 import json
-from django.shortcuts import get_object_or_404
+import random
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
@@ -22,6 +22,9 @@ def create_game(request):
         data = json.loads(request.body)
         opponent_name = data.get("opponent_name")
         initial_player = random.choice(["X", "O"])
+        user_player = initial_player
+        opponent_player = "O" if user_player == "X" else "X"
+
         game = TicTacToeGame.objects.create(
             user=request.user,
             opponent=opponent_name,
@@ -33,12 +36,15 @@ def create_game(request):
                 "game_id": game.id,
                 "board": game.board,
                 "current_player": game.current_player,
+                "user_player": user_player,
+                "opponent_player": opponent_player,
             }
         )
     except json.JSONDecodeError:
         return JsonResponse({"error": "Invalid JSON"}, status=400)
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
 
 @jwt_login_required
 @require_http_methods(["POST"])
@@ -60,6 +66,7 @@ def reset_game(request, game_id):
             "current_player": game.current_player,
         }
     )
+
 
 @jwt_login_required
 @require_http_methods(["POST"])

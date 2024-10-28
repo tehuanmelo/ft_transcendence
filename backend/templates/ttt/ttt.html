@@ -8,21 +8,18 @@
 
 <div id="ttt" class="container ttt-container" style="display: none;">
     <h1>Tic Tac Toe</h1>
-    <div class="player-info">
+    <div class="game-wrapper">
         <div id="player1" class="player">
-            <h2>Player 1</h2>
-            <div id="player1-name">{{ user.username }}</div>
+            <div id="player1-name">
+                {{ user.username }}
+                <span id="userSymbol"></span>
+            </div>
         </div>
-        <div id="current-player-container">
-            <div id="current-player"></div>
-        </div>
+        <div id="game"></div>
         <div id="player2" class="player">
-            <h2>Player 2</h2>
             <div id="player2-name"></div>
         </div>
     </div>
-    <div id="game"></div>
-    <div id="result"></div>
 </div>
 
 <!-- Opponent Modal -->
@@ -45,6 +42,26 @@
                 <a class="btn btn-secondary spa-link silk-heavy" href="{% url 'home' %}" data-method="GET"
                     data-bs-dismiss="modal">Cancel</a>
                 <button type="submit" class="btn btn-accent silk-heavy" form="opponentForm">Start</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Result Modal -->
+<div id="resultModal" class="modal fade" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="resultModalLabel">Game Over</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="result-message"></p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-secondary spa-link silk-heavy" href="{% url 'home' %}" data-method="GET"
+                    data-bs-dismiss="modal">Return to Home</a>
+                <button type="button" class="btn btn-accent" onclick="startGame()">Play Again</button>
             </div>
         </div>
     </div>

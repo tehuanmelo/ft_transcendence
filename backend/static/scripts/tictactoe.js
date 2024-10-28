@@ -3,6 +3,7 @@
 let gameId = null;
 let currentPlayer = 'X';
 let gameEnded = false;
+let resultModal = null;
 
 function tictactoeInit() {
     // Show the modal automatically when the page loads
@@ -14,6 +15,9 @@ function tictactoeInit() {
         startGame();
         opponentModal.hide();
     });
+
+    // Initialize result modal instance
+    resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
 }
 
 function renderBoard(board) {
@@ -44,7 +48,23 @@ function renderBoard(board) {
     });
     gameContainer.appendChild(boardDiv);
     document.getElementById('ttt').style.display = 'flex';
-    document.getElementById('current-player').textContent = `Current Player: ${currentPlayer}`;
+
+    highlightCurrentPlayer();
+}
+
+function highlightCurrentPlayer() {
+    const player1 = document.getElementById('player1');
+    const player2 = document.getElementById('player2');
+
+    const userPlayer = document.getElementById('player1-name').textContent.includes('(X)') ? 'X' : 'O';
+
+    if (currentPlayer === userPlayer) {
+        player1.classList.add('active-player');
+        player2.classList.remove('active-player');
+    } else {
+        player2.classList.add('active-player');
+        player1.classList.remove('active-player');
+    }
 }
 
 function startGame() {
@@ -64,11 +84,18 @@ function startGame() {
             gameId = data.game_id;
             currentPlayer = data.current_player;
             gameEnded = false;
+
+            // Assign player roles
+            const userPlayer = data.user_player;
+            const opponentPlayer = data.opponent_player;
+
+            // Display player names and roles
+            document.getElementById('userSymbol').textContent = `(${userPlayer})`;
+            document.getElementById('player2-name').textContent = `${formData.get('opponent_name')} (${opponentPlayer})`;
+
             renderBoard(data.board);
-            document.getElementById('result').textContent = '';
-            document.getElementById('player2-name').textContent = formData.get('opponent_name');
-            document.getElementById('current-player').textContent = `Current Player: ${currentPlayer}`;
-            // TODO handle data.error
+            if (resultModal)
+                resultModal.hide();
         })
         .catch(error => {
             console.error('Error:', error);
@@ -95,22 +122,20 @@ function makeMove(rowIndex, colIndex) {
             return response.json();
         })
         .then(data => {
-            if (data.winner) {
-                document.getElementById('result').textContent = `${data.winner} wins!`;
+            if (data.winner || data.draw) {
                 gameEnded = true;
+                showResultModal(data.winner ? `${data.winner} wins!` : "It's a draw!");
             }
-            else if (data.draw) {
-                document.getElementById('result').textContent = `It's a draw!`;
-                gameEnded = true;
-            }
-            else
-                document.getElementById('result').textContent = '';
 
             currentPlayer = data.current_player;
             renderBoard(data.board);
-            document.getElementById('current-player').textContent = `Current Player: ${currentPlayer}`;
         })
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+function showResultModal(resultMessage) {
+    document.getElementById('result-message').textContent = resultMessage;
+    resultModal.show();
 }
