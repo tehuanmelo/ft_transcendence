@@ -18,6 +18,7 @@ class Match(models.Model):
 
     class MatchResult(models.TextChoices):
         WIN = "win", "Win"
+        DRAW = "draw", "Draw"
         LOSS = "loss", "Loss"
 
     result = models.CharField(
