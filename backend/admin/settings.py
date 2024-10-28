@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "pages.apps.PagesConfig",
     "pong.apps.PongConfig",
+    "tictactoe.apps.TictactoeConfig",
     # 3rd-party apps
     "crispy_forms",
     "crispy_bootstrap5",

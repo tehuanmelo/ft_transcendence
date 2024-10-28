@@ -2,6 +2,7 @@
 
 const initFunctions = {
     '/pong': gameInit,
+    '/ttt/': tictactoeInit,
 }
 
 document.addEventListener('DOMContentLoaded', () => {
