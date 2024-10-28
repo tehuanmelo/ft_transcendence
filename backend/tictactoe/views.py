@@ -53,7 +53,7 @@ def make_move(request, game_id):
     except TicTacToeGame.DoesNotExist:
         return JsonResponse({"error": "Game not found"}, status=404)
 
-    if (game.status != "in_progress"):
+    if game.status != "in_progress":
         return JsonResponse({"error": "Game has already finished"}, status=400)
 
     try:

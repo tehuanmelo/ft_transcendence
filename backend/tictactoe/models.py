@@ -15,6 +15,20 @@ class TicTacToeGame(models.Model):
         size=3,
     )
     current_player = models.CharField(max_length=1, default="X")
-    status = models.CharField(max_length=15, default="in_progress")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Status(models.TextChoices):
+        IN_PROGRESS = "in_progress", "In Progress"
+        DRAW = "draw", "Draw"
+        WIN = "win", "Win"
+        LOSS = "loss", "Loss"
+
+    status = models.CharField(
+        max_length=15,
+        choices=Status.choices,
+        default=Status.IN_PROGRESS,
+    )
+
+    def __str__(self):
+        return f"Game {self.id}: {self.user} vs {self.opponent} - {self.status}"
