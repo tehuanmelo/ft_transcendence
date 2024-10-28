@@ -11,17 +11,17 @@
     <div class="container my-auto" style="max-width: 700px;">
         <h1 class="text-center">REGISTER</h1>
 
-        <form id="register-form" class="p-2">
+        <form id="register-form" class="p-2 mb-3">
             {% csrf_token %}
             {{ form|crispy }}
             <div class="text-center">
-                <a class="btn btn-form spa-link w-75" href="{% url 'register' %}" data-method="POST"
+                <a class="btn btn-form spa-link w-50" href="{% url 'register' %}" data-method="POST"
                     data-form="#register-form">Register</a>
             </div>
         </form>
         <div class="form-prompt text-center my-2">
             <p>Already have an account?</p>
-            <a href="{% url 'login' %}" class="spa-link link-effect" data-method="GET">Login here</a>
+            <a href="{% url 'login' %}" class="spa-link link-effect mb-2" data-method="GET">Login here</a>
         </div>
         {% include "includes/back_to_home.html" %}
     </div>
