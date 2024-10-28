@@ -47,55 +47,44 @@ def create_game(request):
 
 @jwt_login_required
 @require_http_methods(["POST"])
-def reset_game(request, game_id):
-    try:
-        game = TicTacToeGame.objects.get(id=game_id)
-    except TicTacToeGame.DoesNotExist:
-        return JsonResponse({"error": "Game not found"}, status=404)
-
-    game.board = [["", "", ""], ["", "", ""], ["", "", ""]]
-    game.current_player = "X"
-    game.winner = None
-    game.save()
-
-    return JsonResponse(
-        {
-            "message": "Game has been reset",
-            "board": game.board,
-            "current_player": game.current_player,
-        }
-    )
-
-
-@jwt_login_required
-@require_http_methods(["POST"])
 def make_move(request, game_id):
     try:
         game = TicTacToeGame.objects.get(id=game_id)
     except TicTacToeGame.DoesNotExist:
         return JsonResponse({"error": "Game not found"}, status=404)
 
+    if (game.status != "in_progress"):
+        return JsonResponse({"error": "Game has already finished"}, status=400)
+
     try:
         data = json.loads(request.body)
         row = data.get("row")
         col = data.get("col")
-        current_player = data.get("player")
+        current_player = data.get("current_player")
+        user_player = data.get("user_player")
     except (json.JSONDecodeError, ValueError):
         return JsonResponse({"error": "Invalid data"}, status=400)
 
-    if game.board[row][col] == "" and game.current_player == current_player:
+    if game.board[row][col] == "":
         game.board[row][col] = current_player
         game.current_player = "O" if current_player == "X" else "X"
-        game.winner = check_winner(game.board)
+
+        winner = check_winner(game.board)
+        if winner is None:
+            if all(cell != "" for row in game.board for cell in row):
+                game.status = "draw"
+            else:
+                game.status = "in_progress"
+        else:
+            game.status = "win" if winner == user_player else "loss"
+
         game.save()
 
-        # Update match history if there's a winner
-        if game.winner:
-            result = "win" if game.winner == current_player else "loss"
+        if game.status in ["win", "loss", "draw"]:
             Match.objects.create(
                 user=game.user,
                 opponents=[game.opponent],
-                result=result,
+                result=game.status,
                 mode="tictactoe",
             )
 
@@ -103,7 +92,7 @@ def make_move(request, game_id):
         {
             "board": game.board,
             "current_player": game.current_player,
-            "winner": game.winner,
+            "game_status": game.status,
         }
     )
 

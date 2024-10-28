@@ -4,6 +4,8 @@ let gameId = null;
 let currentPlayer = 'X';
 let gameEnded = false;
 let resultModal = null;
+let userPlayer = null;
+let opponent_name = null;
 
 function tictactoeInit() {
     // Show the modal automatically when the page loads
@@ -70,6 +72,7 @@ function highlightCurrentPlayer() {
 function startGame() {
     const form = document.getElementById('opponentForm');
     const formData = new FormData(form);
+    opponent_name = formData.get('opponent_name');
 
     fetch('/ttt/create/', {
         method: 'POST',
@@ -77,7 +80,7 @@ function startGame() {
             'Content-Type': 'application/json',
             'X-CSRFToken': formData.get('csrfmiddlewaretoken')
         },
-        body: JSON.stringify({ opponent_name: formData.get('opponent_name') })
+        body: JSON.stringify({ opponent_name: opponent_name })
     })
         .then(response => response.json())
         .then(data => {
@@ -86,12 +89,12 @@ function startGame() {
             gameEnded = false;
 
             // Assign player roles
-            const userPlayer = data.user_player;
+            userPlayer = data.user_player;
             const opponentPlayer = data.opponent_player;
 
             // Display player names and roles
             document.getElementById('userSymbol').textContent = `(${userPlayer})`;
-            document.getElementById('player2-name').textContent = `${formData.get('opponent_name')} (${opponentPlayer})`;
+            document.getElementById('player2-name').textContent = `${opponent_name} (${opponentPlayer})`;
 
             renderBoard(data.board);
             if (resultModal)
@@ -114,7 +117,8 @@ function makeMove(rowIndex, colIndex) {
         body: JSON.stringify({
             row: rowIndex,
             col: colIndex,
-            player: currentPlayer
+            current_player: currentPlayer,
+            user_player: userPlayer,
         })
     })
         .then(response => {
@@ -122,9 +126,18 @@ function makeMove(rowIndex, colIndex) {
             return response.json();
         })
         .then(data => {
-            if (data.winner || data.draw) {
+            if (data.game_status && data.game_status !== 'in_progress') {
                 gameEnded = true;
-                showResultModal(data.winner ? `${data.winner} wins!` : "It's a draw!");
+
+                let resultMessage;
+                if (data.game_status === 'draw')
+                    resultMessage = "It's a draw!";
+                else if (data.game_status === 'win')
+                    resultMessage = `${document.querySelector('meta[name="username"]').getAttribute('content')} wins!`;
+                else if (data.game_status === 'loss')
+                    resultMessage = `${opponent_name} wins!`;
+
+                showResultModal(resultMessage);
             }
 
             currentPlayer = data.current_player;

@@ -15,6 +15,6 @@ class TicTacToeGame(models.Model):
         size=3,
     )
     current_player = models.CharField(max_length=1, default="X")
-    winner = models.CharField(max_length=1, null=True, blank=True)
+    status = models.CharField(max_length=15, default="in_progress")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

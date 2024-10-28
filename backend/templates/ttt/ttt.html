@@ -6,6 +6,10 @@
 
 {% block content %}
 
+{% if user.is_authenticated %}
+<meta name="username" content="{{ user.username }}">
+{% endif %}
+
 <div id="ttt" class="container ttt-container" style="display: none;">
     <h1>Tic Tac Toe</h1>
     <div class="game-wrapper">
