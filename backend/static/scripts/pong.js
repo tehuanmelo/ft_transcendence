@@ -138,7 +138,6 @@ class Ball {
 		//this.drawLine('red',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 		//this.drawLine('red',line1[0].x, line1[0].y,line1[1].x, line1[1].y)
 		if (this.doLinesIntersect(ballPosition, line1)) {
-			console.log("intercept paddel1 TOP line DL");
 			if(this.dx < 0){
 				this.dx = -this.dx;
 			}
@@ -169,7 +168,6 @@ class Ball {
 			//this.drawLine('gray',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 			//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
 			if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
-				console.log("intercept paddel1 RIGHT line DL dx " + this.dx + " dy " + this.dy);
 				if(this.dx < 0){
 					this.dx = -this.dx;
 				}
@@ -199,7 +197,6 @@ class Ball {
 		//this.drawLine('pink',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 		//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
 		if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
-			console.log("intercept paddel1 RIGHT line L dx " + this.dx + " dy " + this.dy);
 			if(this.dx < 0){
 				this.dx = -this.dx;
 			}
@@ -230,7 +227,6 @@ class Ball {
 			//this.drawLine('green',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 			//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
 			if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
-				console.log("intercept paddel1 RIGHT line UL dx " + this.dx + " dy " + this.dy + " at angle " + angle);
 				if(this.dx < 0){
 					this.dx = -this.dx;
 				}
@@ -258,7 +254,6 @@ class Ball {
 			//this.drawLine('brown',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 			//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
 			if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
-				console.log("intercept paddel1 RIGHT line UL dx " + this.dx + " dy " + this.dy);
 				if(this.dx > 0){
 					this.dx = -this.dx;
 				}
@@ -286,7 +281,6 @@ class Ball {
 		//	this.drawLine('BlueViolet',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 		//this.drawLine('gray', linePaddelBottom[0].x, linePaddelBottom[0].y, linePaddelBottom[1].x, linePaddelBottom[1].y)
 		if (this.doLinesIntersect(ballPosition, linePaddelBottom)) {
-			console.log("intercept paddel1 BOTTOM line UR dx " + this.dx + " dy " + this.dy);
 			if(this.dy < 0) {
 				this.dy = -this.dy;
 			}
@@ -315,11 +309,9 @@ class Ball {
 		//this.drawLine('Chocolate',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 		//this.drawLine('green', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
 		if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
-			console.log("intercept paddel1 LEFT line DR dx " + this.dx + " dy " + this.dy);
 			if(this.dx > 0){
 				this.dx = -this.dx;
 			}
-			// this.dy = -this.dy;
 			this.sound.play();
 			return true;
 		}
@@ -346,7 +338,6 @@ class Ball {
 	//	this.drawLine('red',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 		//this.drawLine('green', linePaddelTop[0].x, linePaddelTop[0].y, linePaddelTop[1].x, linePaddelTop[1].y)
 		if (this.doLinesIntersect(ballPosition, linePaddelTop)) {
-			console.log("intercept paddel1 TOP line DR dx " + this.dx + " dy " + this.dy);
 			if(this.dy > 0) {
 				this.dy = -this.dy;
 			}
@@ -365,7 +356,6 @@ class Ball {
 	//	this.drawLine('yellow',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 	//	this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
 		if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
-			console.log("intercept paddel1 RIGHT line B");
 			if(this.dx < 0) {
 				this.dx = -this.dx;
 			}
@@ -382,7 +372,6 @@ class Ball {
 		// this.drawLine('pink',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
 	//	this.drawLine('gray', linePaddelLeft[0].x, linePaddelLeft[0].y, linePaddelLeft[1].x, linePaddelLeft[1].y)
 		if (this.doLinesIntersect(ballPosition, linePaddelLeft)) {
-			console.log("intercept paddel1 RIGHT line C");
 			if(this.dx > 0) {
 				this.dx = -this.dx;
 			}
@@ -410,7 +399,6 @@ class Ball {
 		//this.drawLine('blue',ballPositionUp[0].x, ballPositionUp[0].y,ballPositionUp[1].x, ballPositionUp[1].y)
 		//this.drawLine('gray', lineBottom[0].x, lineBottom[0].y, lineBottom[1].x, lineBottom[1].y)
 		if (this.doLinesIntersect(ballPositionUp, lineBottom)) {
-			console.log("intercept paddel1 TOP line");
 			if(this.dy < 0){
 				this.dy = -this.dy;
 			}
@@ -435,10 +423,7 @@ class Ball {
 		var ballPositionDown = [{ x: this.ballX, y: this.ballY }, { x: this.ballX, y: this.ballY + this.dy + this.ballRadius }];
 		//Top line of the paddle
 		var lineTop = [{ x: paddle.x, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y }];
-		//this.drawLine('blue',ballPositionDown[0].x, ballPositionDown[0].y,ballPositionDown[1].x, ballPositionDown[1].y)
-		//this.drawLine('gray', lineTop[0].x, lineTop[0].y, lineTop[1].x, lineTop[1].y)
 		if (this.doLinesIntersect(ballPositionDown, lineTop)) {
-			console.log("intercept paddel1 TOP line");
 			if(this.dy > 0){
 				this.dy = -this.dy;
 			}
@@ -453,10 +438,7 @@ class Ball {
 		var ballPosition = [{ x: this.ballX, y: this.ballY }, { x: this.ballX + this.dx - this.ballRadius, y: this.ballY + this.dy + this.ballRadius }];
 		//Right line of the paddle
 		var linePaddelRight = [{ x: paddle.x + paddle.paddleWidth, y: paddle.y }, { x: paddle.x + paddle.paddleWidth, y: paddle.y + paddle.paddleHeight }];
-		//this.drawLine('blue',ballPosition[0].x, ballPosition[0].y,ballPosition[1].x, ballPosition[1].y)
-		//this.drawLine('gray', linePaddelRight[0].x, linePaddelRight[0].y, linePaddelRight[1].x, linePaddelRight[1].y)
 		if (this.doLinesIntersect(ballPosition, linePaddelRight)) {
-			console.log("intercept paddel1 RIGHT line D");
 			if(this.dx > 0){
 				this.dx = -this.dx;
 			}
@@ -471,9 +453,7 @@ class Ball {
 		//Right line of the paddle
 
 		var linePaddelLeft = [{ x: paddle.x, y: paddle.y }, { x: paddle.x, y: paddle.y + paddle.paddleHeight }];
-		//this.drawLine('gray', ballPosition[0].x, ballPosition[0].y, ballPosition[1].x, ballPosition[1].y)
 		if (this.doLinesIntersect(ballPosition, linePaddelLeft)) {
-			console.log("intercept paddel1 RIGHT line A");
 			if(this.dx > 0){
 				this.dx = -this.dx;
 			}

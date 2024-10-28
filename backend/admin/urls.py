@@ -39,9 +39,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("pages.urls")),
     path("users/", include("users.urls")),
-    path("pong", include("pong.urls")),
+    path("game/", include("game.urls")),
     path("check_health", check_health),
-    path("ttt/", include("tictactoe.urls")),
 ]
 
 if settings.DEBUG:
