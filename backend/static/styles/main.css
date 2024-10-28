@@ -334,6 +334,17 @@ header {
     color: var(--muted);
 }
 
+.form-control.otp {
+    background-color: var(--background);
+}
+
+.form-control.otp:focus,
+.form-control.otp:hover {
+    color: var(--text);
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: none;
+}
+
 .invalid-feedback {
     color: #dc3545;
     font-size: 0.6rem;
@@ -377,6 +388,22 @@ header {
     border-color: var(--accent);
     transform: scale(0.95);
     box-shadow: none;
+}
+
+@media (max-width: 576px) {
+    .input-group {
+        flex-direction: column;
+    }
+
+    .input-group .btn {
+        width: 100%;
+        border-radius: 0;
+        margin-top: 10px;
+    }
+
+    .input-group .form-control {
+        width: 100%;
+    }
 }
 
 /* -------------------------------- Profile --------------------------------- */
