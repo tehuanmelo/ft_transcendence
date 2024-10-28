@@ -2,6 +2,7 @@
 
 const initFunctions = {
     '/pong': gameInit,
+    '/settings/': deleteAccount,
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -37,8 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = document.location.pathname;
         getPage(url, true);
     });
-
-
 });
 
 function handleSpaLinkEvent(target) {
@@ -109,4 +108,15 @@ function postForm(formSelector, url) {
         })
         .then(pageHtml => updateContent(pageHtml, redirectUrl))
         .catch(error => console.error('Error when submitting the form:', error));
+}
+
+function deleteAccount() {
+    // Enable the delete button when the checkbox is checked
+    document.getElementById('confirmDeleteCheckbox').addEventListener('change', function () {
+        const deleteButton = document.getElementById('deleteAccountBtn');
+        if (this.checked)
+            deleteButton.classList.remove('muted-btn');
+        else
+            deleteButton.classList.add('muted-btn');
+    });
 }
