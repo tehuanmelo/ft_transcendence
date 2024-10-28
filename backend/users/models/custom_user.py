@@ -36,6 +36,7 @@ class CustomUser(AbstractUser):
     )
     wins = models.IntegerField(default=0)
     losses = models.IntegerField(default=0)
+    draws = models.IntegerField(default=0)
 
     def add_friend(self, friend):
         friendship, created = Friendship.objects.get_or_create(user=self, friend=friend)
@@ -77,8 +78,10 @@ class CustomUser(AbstractUser):
         """Update the win/loss stats for this user based on match history."""
         wins = Match.objects.filter(user=self, result=Match.MatchResult.WIN).count()
         losses = Match.objects.filter(user=self, result=Match.MatchResult.LOSS).count()
+        draws = Match.objects.filter(user=self, result=Match.MatchResult.DRAW).count()
         self.wins = wins
         self.losses = losses
+        self.draws = draws
         self.save()
 
     def create_match(
