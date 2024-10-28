@@ -70,7 +70,7 @@
                             alt="Default User Image">
                         {% endif %}
                     </div>
-                    <div>
+                    <div class="friend-details ms-3">
                         <span class="friend-username">{{ request.username }}</span>
                     </div>
                 </div>
@@ -109,18 +109,5 @@
         </div>
     </div>
 </div>
-
-<script>
-    // Handle form submission to add a friend
-    function handleSearch(event) {
-        event.preventDefault();
-        const query = document.getElementById('friendUsername').value;
-        if (query)
-            searchUsers(query);
-    }
-
-    const csrfTokenContext = "{{ csrf_token }}";
-    const errorMessageContext = "{{ error_message|escapejs }}";
-</script>
 
 {% endblock %}
