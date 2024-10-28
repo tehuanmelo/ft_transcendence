@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from tictactoe.models import TicTacToeGame
+from .models import TicTacToeGame
 
 
 class TicTacToeGameTests(TestCase):

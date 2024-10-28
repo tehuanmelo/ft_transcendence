@@ -1,8 +1,8 @@
 // main.js: contains routing logic and SPA loading
 
 const initFunctions = {
-    '/pong': gameInit,
-    '/ttt/': tictactoeInit,
+    '/game/pong': gameInit,
+    '/game/tictactoe/': tictactoeInit,
 }
 
 document.addEventListener('DOMContentLoaded', () => {
