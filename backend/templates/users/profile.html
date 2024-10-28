@@ -22,13 +22,19 @@
             <p>Registered on: {{ user.date_joined|date:"d-M-Y" }}</p>
             <div class="social-links">
                 {% if user.github %}
-                <a href="{{ user.github }}" class="btn btn-accent" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                <a href="{{ user.github }}" class="btn btn-accent" target="_blank"><i class="fab fa-github"></i>
+                    GitHub</a>
                 {% endif %}
                 {% if user.twitter %}
-                <a href="{{ user.twitter }}" class="btn btn-accent" target="_blank"><i class="fab fa-twitter"></i> Twitter</a>
+                <a href="{{ user.twitter }}" class="btn btn-accent" target="_blank"><i class="fab fa-twitter"></i>
+                    Twitter</a>
                 {% endif %}
             </div>
-            <p class="profile-bio">Bio: {{ user.bio }}</p>
+            {% if user.bio %}
+            <div class="user-bio">
+                <p class="profile-bio">Bio: {{ user.bio }}</p>
+            </div>
+            {% endif %}
         </div>
         <div class="profile-edit">
             <a class="edit-button spa-link" href="{% url 'edit_profile' %}" data-method="GET">Edit</a>
