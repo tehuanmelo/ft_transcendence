@@ -667,6 +667,10 @@ header {
     .tab-text {
         display: none;
     }
+
+    .tab-link i {
+        margin: 0;
+    }
 }
 
 .tab-content {
