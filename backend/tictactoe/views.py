@@ -21,11 +21,12 @@ def create_game(request):
     try:
         data = json.loads(request.body)
         opponent_name = data.get("opponent_name")
+        initial_player = random.choice(["X", "O"])
         game = TicTacToeGame.objects.create(
             user=request.user,
             opponent=opponent_name,
             board=[["", "", ""], ["", "", ""], ["", "", ""]],
-            current_player="X",
+            current_player=initial_player,
         )
         return JsonResponse(
             {
