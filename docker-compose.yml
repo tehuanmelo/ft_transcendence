@@ -1,4 +1,40 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    restart: on-failure
+    volumes:
+      - ${PWD}/pongdb:/var/lib/postgresql/data
+    networks:
+      - pong
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 15s
+      retries: 5
+
+  django:
+    build: ./containers/django
+    image: django
+    container_name: django
+    restart: on-failure
+    volumes:
+      - ./backend:/usr/local/django/pong-backend
+    networks:
+      - pong
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://127.0.0.1:8000/check_health || exit 1"]
+      interval: 15s
+      timeout: 15s
+      retries: 5
+
   nginx:
     build: ./containers/nginx
     image: nginx
@@ -13,34 +49,11 @@ services:
       - 80:80
       - 443:443
     depends_on:
-      - django
+      django:
+        condition: service_healthy
     env_file:
       - .env
 
-  postgres:
-    image: postgres:16-alpine
-    container_name: postgres
-    restart: on-failure
-    volumes:
-      - ${PWD}/pongdb:/var/lib/postgresql/data
-    networks:
-      - pong
-    env_file:
-      - .env
-
-  django:
-    build: ./containers/django
-    image: django
-    container_name: django
-    restart: on-failure
-    volumes:
-      - ./backend:/usr/local/django/pong-backend
-    networks:
-      - pong
-    depends_on:
-      - postgres
-    env_file:
-      - .env
 
 volumes:
   pongdb:

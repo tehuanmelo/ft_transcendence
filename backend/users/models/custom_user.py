@@ -13,7 +13,8 @@ class CustomUser(AbstractUser):
         error_messages={"unique": "A user with that email already exists."},
         blank=True,
         max_length=254,
-        verbose_name="email address",
+        verbose_name="Email Address*",
+        null=False,
         unique=True,
     )
     profile_image = models.ImageField(
