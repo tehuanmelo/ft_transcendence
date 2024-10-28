@@ -72,7 +72,7 @@
                 </div>
             </div>
             <div class="col-md-4 mb-4">
-                <div class="card text-white bg-warning shadow-sm h-100">
+                <div class="card text-white bg-secondary shadow-sm h-100">
                     <div class="card-body d-flex align-items-center">
                         <div class="me-3">
                             <i class="fas fa-meh fa-2x"></i>
@@ -94,10 +94,10 @@
             <table class="styled-table">
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>Mode</th>
-                        <th>Match Details</th>
-                        <th>Result</th>
+                        <th class="date-column">Date</th>
+                        <th class="game-column">Mode</th>
+                        <th class="details-column">Match Details</th>
+                        <th class="result-column">Result</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -105,29 +105,46 @@
                     <tr>
                         <td>{{ match.date|date:"d-M-Y" }}</td>
                         <td>
-                            {% if match.mode == 'pong_1v1' %}
-                            Pong 1v1
-                            {% elif match.mode == 'pong_2v2' %}
-                            Pong 2v2
-                            {% elif match.mode == 'tictactoe' %}
-                            Tic Tac Toe
-                            {% endif %}
+                            <div class="game-mode">
+                                {% if match.mode == 'pong_1v1' %}
+                                <span class="game-mode-text text-primary">
+                                    <i class="fas fa-user-friends"></i>
+                                </span>
+                                Pong 1v1
+                                {% elif match.mode == 'pong_2v2' %}
+                                <span class="game-mode-text text-info">
+                                    <i class="fas fa-users"></i>
+                                </span>
+                                Pong 2v2
+                                {% elif match.mode == 'tictactoe' %}
+                                <span class="game-mode-text text-warning">
+                                    <i class="fas fa-th"></i>
+                                </span>
+                                Tic Tac Toe
+                                {% endif %}
+                            </div>
                         </td>
                         <td>
-                            {% if match.mode == 'pong_1v1' or match.mode == 'tictactoe' %}
-                            You vs {{ match.opponents.0 }}
-                            {% elif match.mode == 'pong_2v2' %}
-                            You and {{ match.teammate }} vs {{ match.opponents.0 }} and {{ match.opponents.1 }}
-                            {% endif %}
+                            <div class="match-details">
+                                {% if match.mode == 'pong_1v1' or match.mode == 'tictactoe' %}
+                                <strong>You</strong> vs <strong>{{ match.opponents.0 }}</strong>
+                                {% elif match.mode == 'pong_2v2' %}
+                                <strong>You</strong> & <strong>{{ match.teammate }}</strong> vs <strong>
+                                    {{ match.opponents.0 }}</strong> & <strong>{{ match.opponents.1 }}</strong>
+                                {% endif %}
+                            </div>
                         </td>
                         <td>
-                            {% if match.result == 'win' %}
-                            <span class="result-win">Win</span>
-                            {% elif match.result == 'loss' %}
-                            <span class="result-loss">Loss</span>
-                            {% else %}
-                            <span class="result-draw">Draw</span>
-                            {% endif %}
+                            <div
+                                class="result-card {% if match.result == 'win' %}result-win{% elif match.result == 'loss' %}result-loss{% else %}result-draw{% endif %}">
+                                {% if match.result == 'win' %}
+                                Win
+                                {% elif match.result == 'loss' %}
+                                Loss
+                                {% else %}
+                                Draw
+                                {% endif %}
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}
