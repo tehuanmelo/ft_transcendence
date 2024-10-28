@@ -789,12 +789,15 @@ header {
 }
 
 #pongRegisterModal .modal-header,
-#pongRegisterModal .modal-footer {
+#pongRegisterModal .modal-footer,
+#opponentModal .modal-header,
+#opponentModal .modal-footer {
     background-color: transparent;
     border: none;
 }
 
-#pongRegisterModal>.form-label {
+#pongRegisterModal>.form-label,
+#opponentModal>.form-label {
     margin: none;
 }
 
@@ -857,4 +860,65 @@ header {
     #pongRegisterModal .row {
         flex-direction: column;
     }
+}
+
+/* ------------------------------ TicTacToe --------------------------------- */
+.ttt-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 200px);
+    grid-template-rows: repeat(3, 200px);
+    gap: 5px;
+}
+
+.player {
+    flex: 1;
+    text-align: center;
+    max-width: 200px;
+}
+
+#current-player-container {
+    flex: 1;
+    text-align: center;
+}
+
+.cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 200px;
+    font-size: 24px;
+    border: 2px solid #333;
+    cursor: pointer;
+    background-color: var(--navbar);
+}
+
+.cell:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.cell.X {
+    color: #1269F3;
+}
+
+.cell.O {
+    color: var(--accent);
+}
+
+.active-player {
+    background-color: rgba(0, 0, 0, 0.5);
 }

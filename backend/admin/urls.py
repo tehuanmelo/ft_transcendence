@@ -35,6 +35,7 @@ urlpatterns = [
     path("", include("pages.urls")),
     path("users/", include("users.urls")),
     path("pong", include("pong.urls")),
+    path("ttt/", include("tictactoe.urls")),
 ]
 
 if settings.DEBUG:
