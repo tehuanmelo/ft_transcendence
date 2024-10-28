@@ -37,9 +37,9 @@
                                 class="fas fa-th"></i> TTT</a>
                     </div>
                 </div>
-                <a class="{% if request.path == '/users/friends' %}active-link{% endif %} nav-link spa-link px-4"
+                <a class="{% if request.path == '/users/friends' %}active-link{% endif %} nav-link spa-link px-lg-4"
                     href="{% url 'friends' %}" data-method="GET">
-                    Friends
+                    <i class="fas fa-user-friends"></i> Friends
                     {% if pending_requests|length > 0 %}
                     <span class="badge bg-danger">!</span>
                     {% endif %}
@@ -91,16 +91,18 @@
                     Home</a>
                 <a class="nav-link spa-link" href="{% url 'about' %}" data-method="GET"><i
                         class="fas fa-info-circle"></i> About</a>
+                <div class="dropdown-divider"></div>
                 <a class="nav-link spa-link" href="{% url 'pong' %}?mode=1v1" data-method="GET"><i
                         class="fas fa-user-friends"></i> Pong 1v1</a>
                 <a class="nav-link spa-link" href="{% url 'pong' %}?mode=2v2" data-method="GET"><i
                         class="fas fa-users"></i> Pong 2v2</a>
                 <a class="nav-link spa-link" href="{% url 'pong' %}?mode=tournament" data-method="GET"><i
-                        class="fas fa-trophy"></i> Tournament</a>
+                        class="fas fa-trophy"></i> Pong Tournament</a>
+                <a class="nav-link spa-link" href="{% url 'tictactoe' %}" data-method="GET"><i class="fas fa-th"></i>
+                    TicTacToe</a>
                 <div class="dropdown-divider"></div>
                 <a class="nav-link spa-link" href="{% url 'friends' %}" data-method="GET"><i
                         class="fas fa-user-friends"></i> Friends</a>
-                <div class="dropdown-divider"></div>
                 <a class="nav-link spa-link" href="{% url 'profile' %}" data-method="GET"><i class="fas fa-user"></i>
                     Profile</a>
                 <a class="nav-link spa-link" href="{% url 'settings' %}" data-method="GET"><i class="fas fa-cog"></i>
