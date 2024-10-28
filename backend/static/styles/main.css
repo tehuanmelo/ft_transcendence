@@ -468,7 +468,7 @@ header {
 }
 
 .profile-bio {
-    background-color: rgba(255,255,255,0.1);
+    background-color: rgba(255, 255, 255, 0.1);
     padding: 10px;
     border-radius: 5px;
     margin-top: 10px;
@@ -495,11 +495,18 @@ header {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
+.table-container {
+    max-height: 1000px;
+    overflow-y: auto;
+}
+
 .styled-table thead tr {
     background-color: #444;
-    color: #ffffff;
+    color: var(--text);
     text-align: left;
-    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .styled-table th,
@@ -517,7 +524,7 @@ header {
 
 .styled-table tbody tr:hover {
     background-color: rgba(0, 0, 0, 0.5);
-    color: #ffffff;
+    color: var(--text);
 }
 
 .styled-table tbody tr:last-of-type {
