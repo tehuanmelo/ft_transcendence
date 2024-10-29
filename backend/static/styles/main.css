@@ -103,6 +103,27 @@ strong {
     color: var(--accent);
 }
 
+/* Scrollbar styles for WebKit (Chrome, Safari) */
+*::-webkit-scrollbar {
+    width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: var(--navbar);
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--accent);
+    border-radius: 10px;
+    border: 2px solid var(--navbar);
+}
+
+/* Additional scrollbar styling for Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) var(--navbar);
+}
+
 /* --------------------------------- Navbar --------------------------------- */
 header {
     background-color: var(--navbar);
@@ -274,7 +295,6 @@ header {
 .link-effect:hover,
 .link-effect:focus {
     outline: none;
-    font-size: 1.2rem;
 }
 
 .link-effect:hover::after,
@@ -312,6 +332,17 @@ header {
 
 .form-control::placeholder {
     color: var(--muted);
+}
+
+.form-control.otp {
+    background-color: var(--background);
+}
+
+.form-control.otp:focus,
+.form-control.otp:hover {
+    color: var(--text);
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: none;
 }
 
 .invalid-feedback {
@@ -359,6 +390,22 @@ header {
     box-shadow: none;
 }
 
+@media (max-width: 576px) {
+    .input-group {
+        flex-direction: column;
+    }
+
+    .input-group .btn {
+        width: 100%;
+        border-radius: 0;
+        margin-top: 10px;
+    }
+
+    .input-group .form-control {
+        width: 100%;
+    }
+}
+
 /* -------------------------------- Profile --------------------------------- */
 .profile-container {
     display: flex;
@@ -372,11 +419,9 @@ header {
 
 .profile-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
+    align-items: center;
     width: 100%;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #444;
-    padding-bottom: 20px;
 }
 
 .profile-image img {
@@ -386,35 +431,21 @@ header {
 }
 
 .profile-info {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     padding-left: 20px;
 }
 
 .profile-username {
     font-size: 2em;
+    margin: 0;
 }
 
 .profile-email,
+.profile-registered,
 .profile-bio,
 .profile-stats p,
 .profile-match-history p {
     margin: 0;
     font-size: 1em;
-}
-
-.profile-bio {
-    background-color: var(--secondary-bg);
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 10px;
-}
-
-.social-links a:hover {
-    text-decoration: underline;
-    color: var(--accent);
 }
 
 .profile-edit {
@@ -427,6 +458,20 @@ header {
     padding: 10px 20px;
     text-decoration: none;
     border-radius: 5px;
+}
+
+.profile-divider {
+    border: none;
+    border-bottom: 2px solid #444;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.profile-bio {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
 .profile-stats,
@@ -442,20 +487,35 @@ header {
 
 .styled-table {
     width: 100%;
-    background-color: #333;
-    /* border-collapse: collapse; */
-    /* border-radius: 5px 5px 0 0; */
-    /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); */
+    background-color: #222;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.table-container {
+    max-height: 1000px;
+    overflow-y: auto;
 }
 
 .styled-table thead tr {
     background-color: #444;
+    color: var(--text);
     text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .styled-table th,
 .styled-table td {
-    padding: 10px 15px;
+    padding: 12px 15px;
+}
+
+.styled-table tbody {
+    font-family: 'Pixel-Sans', sans-serif;
 }
 
 .styled-table tbody tr {
@@ -463,7 +523,52 @@ header {
 }
 
 .styled-table tbody tr:hover {
-    background-color: #555;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: var(--text);
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #444;
+}
+
+.styled-table .date-column {
+    width: 20%;
+    font-size: 20px;
+}
+
+.styled-table .game-column {
+    width: 20%;
+    font-size: 20px;
+}
+
+.styled-table .details-column {
+    width: 50%;
+    font-size: 20px;
+}
+
+.styled-table .result-column {
+    width: 10%;
+    font-size: 20px;
+}
+
+.match-details {
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+}
+
+.match-details strong {
+    color: var(--accent);
+}
+
+.result-card {
+    padding: 10px 10px;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    font-family: 'Press Start 2P', sans-serif;
 }
 
 .result-win {
@@ -475,7 +580,17 @@ header {
 }
 
 .result-draw {
-    color: var(--muted);
+    color: #9e9e9e;
+}
+
+.game-mode {
+    display: flex;
+    align-items: center;
+}
+
+.game-mode-text {
+    font-size: 16px;
+    margin-right: 5px;
 }
 
 @media (max-width: 768px) {
@@ -620,6 +735,10 @@ header {
     .tab-text {
         display: none;
     }
+
+    .tab-link i {
+        margin: 0;
+    }
 }
 
 .tab-content {
@@ -627,27 +746,6 @@ header {
     padding: 1rem;
     height: 100%;
     overflow-y: auto;
-}
-
-/* Scrollbar styles for WebKit (Chrome, Safari) */
-.tab-content::-webkit-scrollbar {
-    width: 8px;
-}
-
-.tab-content::-webkit-scrollbar-track {
-    background: var(--navbar);
-}
-
-.tab-content::-webkit-scrollbar-thumb {
-    background-color: var(--accent);
-    border-radius: 10px;
-    border: 2px solid var(--navbar);
-}
-
-/* Additional scrollbar styling for Firefox */
-.tab-content {
-    scrollbar-width: thin;
-    scrollbar-color: var(--accent) var(--navbar);
 }
 
 .tab-content.active {
@@ -693,9 +791,18 @@ header {
 .friend-avatar {
     width: 50px;
     height: 50px;
-    background-color: #fff;
+    overflow: hidden;
     border-radius: 50%;
-    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.friend-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .friend-username {
@@ -751,15 +858,15 @@ header {
     transition: transform 0.2s ease;
 }
 
-.btn:hover {
-    transform: translateY(-3px);
-}
-
 .btn-accent {
     color: var(--text);
     background-color: var(--accent);
     border: solid 2px var(--accent);
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.btn-accent:hover {
+    transform: translateY(-1px);
 }
 
 .btn-accent:hover {

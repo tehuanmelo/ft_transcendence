@@ -1,4 +1,3 @@
-
 .canvas-container {
     width: 100%;
     height: 100%;
@@ -18,22 +17,6 @@ canvas {
     flex-direction: column;
 }
 
-.handjet-font {
-    font-family: "Handjet", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: medium;
-    font-variation-settings:
-        "ELGR" 1,
-        "ELSH" 2;
-}
-
-.chakra-petch-regular {
-    font-family: "Chakra Petch", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-}
-
 .switch-container {
     display: flex;
     align-items: center;
@@ -41,24 +24,18 @@ canvas {
 
 .switch-label {
     margin-right: 10px;
-    /* Adjust spacing between label and switch */
 }
 
-.press-start-2p-regular {
-    font-family: "Press Start 2P", system-ui;
-    font-weight: 400;
-    font-style: normal;
+.btn-dark-orange,
+.btn-dark-orange:active,
+.btn-dark-orange.show {
+    background-color: #e9a108f3 !important;
+    border-color: #e9a108f3 !important;
+    color: rgb(12, 12, 12) !important;
 }
 
-.press-start-2p-regular-conf {
-    font-family: "Press Start 2P", system-ui;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 25px;
-}
-
-.btn-dark-orange {
-    background-color: #e9a108f3; /* Dark orange */
+.btn-dark-orange:hover {
+    background-color: #f7cb6cf3;
     border-color: #e9a108f3;
     color: rgb(12, 12, 12);
 }

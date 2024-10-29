@@ -15,7 +15,6 @@ def save_match_result(request):
             mode = data.get("mode")
             winners = data.get("winners")
             losers = data.get("losers")
-            score_data = data.get("scores")
 
             if not winners or not losers:
                 return JsonResponse({"error": "Missing players data"}, status=400)
@@ -59,7 +58,6 @@ def save_match_result(request):
                     opponents=opponents,
                     teammate=teammate,
                     result=result,
-                    score=f"{score_data['left']}-{score_data['right']}",
                     mode=mode,
                 )
             else:  # Handle 1v1 and tictactoe
@@ -86,7 +84,6 @@ def save_match_result(request):
                     user=request.user,
                     opponents=opponents,
                     result=result,
-                    score=f"{score_data['left']}-{score_data['right']}",
                     mode=mode,
                 )
 
