@@ -10,18 +10,18 @@
 <meta name="username" content="{{ user.username }}">
 {% endif %}
 
-<div id="ttt" class="container ttt-container" style="display: none;">
+<div id="ttt" class="container py-5 ttt-container" style="display: none;">
     <h1>Tic Tac Toe</h1>
     <div class="game-wrapper">
         <div id="player1" class="player">
-            <div id="player1-name">
+            <div id="player1-name" class="username-text">
                 {{ user.username }}
                 <span id="userSymbol"></span>
             </div>
         </div>
         <div id="game"></div>
         <div id="player2" class="player">
-            <div id="player2-name"></div>
+            <div id="player2-name" class="username-text"></div>
         </div>
     </div>
 </div>
@@ -52,7 +52,8 @@
 </div>
 
 <!-- Result Modal -->
-<div id="resultModal" class="modal fade" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+<div id="resultModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="resultModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -63,7 +64,7 @@
                 <p id="result-message"></p>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-secondary spa-link silk-heavy" href="{% url 'home' %}" data-method="GET"
+                <a class="btn btn-secondary spa-link" href="{% url 'home' %}" data-method="GET"
                     data-bs-dismiss="modal">Return to Home</a>
                 <button type="button" class="btn btn-accent" onclick="startGame()">Play Again</button>
             </div>
