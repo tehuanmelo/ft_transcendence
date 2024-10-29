@@ -93,8 +93,8 @@ function startGame() {
             const opponentPlayer = data.opponent_player;
 
             // Display player names and roles
-            document.getElementById('userSymbol').textContent = `(${userPlayer})`;
-            document.getElementById('player2-name').textContent = `${opponent_name} (${opponentPlayer})`;
+            document.getElementById('userSymbol').innerHTML = `(<span style="color: #1269F3">${userPlayer}</span>)`;
+            document.getElementById('player2-name').innerHTML = `${opponent_name} (<span style="color: var(--accent)">${opponentPlayer}</span>)`;
 
             renderBoard(data.board);
             if (resultModal)
