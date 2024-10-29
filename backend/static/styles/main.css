@@ -670,6 +670,12 @@ header {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
+.fixed-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
 @media (max-width: 576px) {
     .about-card {
         padding: 15px;
