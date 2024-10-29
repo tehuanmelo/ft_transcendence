@@ -15,7 +15,8 @@ function sendFriendRequest(action, friendUsername, successMessage = null) {
             if (response.ok) {
                 if (successMessage)
                     showSuccessMessage(successMessage);
-
+                else
+                    getPage('/users/friends/');
             }
             else {
                 return response.text().then(text => {
