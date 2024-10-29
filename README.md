@@ -1,29 +1,117 @@
 # ft_transcendence
-Multiplayer Pong Game
 
-## Modules
-| MODULE                                               | TYPE   | POINTS   | DESCRIPTION                                                                                                      |
-|------------------------------------------------------|--------|----------|------------------------------------------------------------------------------------------------------------------|
-| Use a Framework as backend                           | Major  | 1.0      | Use Django for backend development.                                                                              |
-| Use a front-end framework or toolkit                 | Minor  | 0.5      | Use Bootstrap toolkit for the frontend development.                                                              |
-| Use a database for the backend                       | Minor  | 0.5      | Use PostgreSQL for all DB instances to ensure data consistency and compatibility.                                |
-| Designing the Backend as Microservices               | Major  | 1.0      | Structure the backend as microservices for improved modularity and scalability.                                  |
-| Multiplayers (more than 2 in the same game)          | Major  | 1.0      | It’s up to you to define how the game could be played with 3, 4, 5, 6 ... players.                               |
-| Game Customization Options                           | Minor  | 0.5      | Provide customization options for all available games on the platform.                                           |
-| Support on all devices                               | Minor  | 0.5      | Ensure that your website works seamlessly on all types of devices                                                |
-| Expanding Browser Compatibility                      | Minor  | 0.5      | Enhance the compatibility of the web application by adding support for an additional web browser.                |
-| Implement Two-Factor Authentication (2FA) and JWT    | Major  | 1.0      | Add security features like 2FA (SMS or authenticator app or email) and JSON Web Tokens (JWT) for authentication. |
-| Add accessibility for Visually Impaired Users        | Minor  | 0.5      | Make your website more accessible for visually impaired users.                                                   |
-| Implementing a remote authentication                 | Major  | 1.0      | Implement OAuth 2.0 authentication with 42.                                                                      |
+A multi-game web application including Pong and Tic Tac Toe, built with Django and Docker.
 
-**Note**:
-- 100% Pass requirement: 7 Major modules.
-- 2 Minor modules count as 1 Major.
-- Currently there are 5 Major modules in the table and 6 Minor modules thus giving us:
-- 5 + (6 / 2) = 8 points in total
+## Project Structure
 
-| POSSIBLE MODULES                                     | TYPE   | POINTS   | DESCRIPTION                                                                                                                       |
-|------------------------------------------------------|--------|----------|-----------------------------------------------------------------------------------------------------------------------------------|
-| Introduce an AI Opponent                             | Major  | 1.0      | Develop and integrate an AI opponent for users to play against. AI must replicate keyboard input and do not use the A* algorithm. |
-| Add Another Game with User History and Matchmaking   | Major  | 1.0      | Introduce an additional game, including features for user history and matchmaking.                                                |
-| User and Game Stats Dashboards                       | Minor  | 0.5      | Introduce dashboards that display statistics for individual users and game sessions.                                              |
+```
+.
+├── Makefile
+├── README.md
+├── backend
+│   ├── admin
+│   ├── game
+│   ├── pages
+│   ├── static
+│   ├── templates
+│   └── users
+├── containers
+│   ├── django
+│   └── nginx
+└── docker-compose.yml
+```
+
+## Prerequisites
+
+Ensure the following are installed on your system:
+
+- **Docker** - [Get Docker](https://docs.docker.com/get-docker/)
+- **Docker Compose** - Comes bundled with Docker Desktop. For Linux, you may need to install separately.
+
+## Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Taanviir/ft_transcendence.git
+cd ft_transcendence
+```
+
+### 2. Create the `.env` File
+
+Create a `.env` file in the project root and define the necessary environment variables:
+
+```bash
+POSTGRES_USER=your_postgres_user
+POSTGRES_PASSWORD=your_postgres_password
+POSTGRES_DB=your_postgres_db
+```
+
+Check the [.env.example](.env.example) file for reference.
+
+### 3. Using the Makefile
+
+The Makefile provides convenient commands to manage your Docker environment and project setup. Key targets include:
+
+| Command             | Description                                               |
+|---------------------|-----------------------------------------------------------|
+| `make up`           | Builds and starts all containers in detached mode         |
+| `make down`         | Stops and removes containers                              |
+| `make nuke`         | Removes all containers, images, volumes, and networks     |
+| `make clean`        | Cleans up database and migration files                    |
+| `make fclean`       | Executes `clean` and `nuke`                               |
+| `make re`           | Restarts the Docker environment                           |
+| `make exec-<service>` | Opens a shell in the specified service (e.g., `django`) |
+| `make show-users`   | Displays all users in the custom Django user model        |
+
+### 4. Running the Application
+
+To start the application, run:
+
+```bash
+make up
+```
+
+Access the website at [https://localhost:443](https://localhost:443).
+
+To stop the application, run:
+
+```bash
+make down
+```
+
+### 5. Cleaning Up
+
+To delete database and media files without removing images, use:
+
+```bash
+make clean
+```
+
+To remove all Docker resources, including images and volumes, run:
+
+```bash
+make nuke
+```
+
+## Running Tests
+
+To run tests for individual apps (e.g., `game`):
+
+```bash
+make exec-django
+python manage.py test game
+```
+
+### Database Access
+
+To access the PostgreSQL database, use:
+
+```bash
+make run-database
+```
+
+## Troubleshooting
+
+- **Docker not running:** Ensure Docker is installed and running. Use `make check_docker` to check the status.
+- **`.env` file missing:** Create a `.env` file with the necessary environment variables as shown above.
