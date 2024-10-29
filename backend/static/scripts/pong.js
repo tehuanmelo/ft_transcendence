@@ -793,10 +793,6 @@ class Pong {
             mode: this.nbPlayers === 4 ? 'pong_2v2' : 'pong_1v1',
             winners: winners,
             losers: losers,
-            scores: {
-                left: this.score.scoreL,
-                right: this.score.scoreR
-            }
         };
 
         const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');

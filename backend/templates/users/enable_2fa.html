@@ -7,19 +7,22 @@
 {% block content %}
 
 <!-- Enable 2FA -->
-<div class="container py-5 d-flex justify-content-center">
-    <div class="card shadow-sm w-100" style="max-width: 700px;">
+<div class="container py-5 d-flex flex-column justify-content-center align-items-center">
+    <div style="max-width: 700px;">
+        <h1 class="d-none d-sm-block text-center">Setup Two-Factor Authentication</h3>
+            <h1 class="d-block d-sm-none text-center">Setup 2FA</h3>
+    </div>
+    <div class="card shadow-sm w-100" style="max-width: 700px;" data-bs-theme="dark">
         <div class="card-body">
-            <h3 class="card-title mb-4 d-none d-sm-block text-center">Setup Two-Factor Authentication</h3>
-            <h3 class="card-title mb-4 d-block d-sm-none text-center">Setup 2FA</h3>
 
             <p>1. Scan the QR code below with an authenticator app to setup your 2FA.</p>
             <p class="text-muted" style="font-size: 0.9rem;">We recommend Google Authenticator for
-                <a href="https://apps.apple.com/us/app/google-authenticator/id388497605" target="_blank"
-                    rel="noopener noreferrer">
+                <a class="link-effect" href="https://apps.apple.com/us/app/google-authenticator/id388497605"
+                    target="_blank" rel="noopener noreferrer">
                     iPhone</a>
                 or
-                <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+                <a class="link-effect"
+                    href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
                     target="_blank" rel="noopener noreferrer">
                     Android</a>.
             </p>
@@ -46,13 +49,12 @@
             <form id="enable_2fa">
                 {% csrf_token %}
                 <div class="form-group row justify-content-center">
-                    <div class="col-auto">
-                        <input type="text" name="otp" id="otp" class="form-control" required placeholder="6-digit code"
-                            style="width: 250px;">
-                    </div>
-                    <div class="col-auto">
-                        <a class="btn btn-success spa-link" href="{% url 'enable_2fa' %}" data-method="POST"
-                            data-form="#enable_2fa">Enable 2FA</a>
+                    <label for="otp" class="form-label">Enter Code:</label>
+                    <div class="input-group">
+                        <input type="text" name="otp" id="otp" class="form-control otp" required
+                            placeholder="6-digit code">
+                        <button class="btn btn-accent spa-link" href="{% url 'enable_2fa' %}" data-method="POST"
+                            data-form="#enable_2fa">Enable 2FA</button>
                     </div>
                 </div>
             </form>

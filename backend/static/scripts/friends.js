@@ -6,7 +6,7 @@ function sendFriendRequest(action, friendUsername, successMessage = null) {
     fetch(url, {
         method: 'POST',
         headers: {
-            'X-CSRFToken': csrfTokenContext,
+            'X-CSRFToken': document.querySelector('input[name="csrfmiddlewaretoken"]').value,
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ friend: friendUsername })
@@ -15,7 +15,7 @@ function sendFriendRequest(action, friendUsername, successMessage = null) {
             if (response.ok) {
                 if (successMessage)
                     showSuccessMessage(successMessage);
-            
+
             }
             else {
                 return response.text().then(text => {
@@ -95,6 +95,13 @@ function showTab(tabName, event) {
     event.currentTarget.classList.add('active');
 }
 
+function handleSearch(event) {
+    event.preventDefault();
+    const query = document.getElementById('friendUsername').value;
+    if (query)
+        searchUsers(query);
+}
+
 function searchUsers(query) {
     if (query.length > 0) {
         fetch(`/users/friends/search/${query}/`, {
@@ -131,8 +138,8 @@ function displaySearchResults(users) {
                 <div class="friend-info">
                     <div class="friend-avatar">
                         ${user.profile_image
-                    ? `<img src="${user.profile_image}" class="profile-image rounded-circle" alt="${user.username}'s Profile Image">`
-                    : `<img src="/static/images/default_user.jpg" class="profile-image rounded-circle" alt="Default User Image">`}
+                    ? `<img src="${user.profile_image}" class="rounded-circle" alt="${user.username}'s Profile Image">`
+                    : `<img src="/static/images/default_user.jpg" class="rounded-circle" alt="Default User Image">`}
                     </div>
                     <div class="friend-details ms-3">
                         <span class="friend-username">${user.username}</span>
