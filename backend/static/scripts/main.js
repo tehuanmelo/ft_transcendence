@@ -1,7 +1,6 @@
 // main.js: contains routing logic and SPA loading
 
 const initFunctions = {
-<<<<<<< HEAD
     '/game/pong': gameInit,
     '/game/tictactoe/': tictactoeInit,
     '/settings/': deleteAccount,
