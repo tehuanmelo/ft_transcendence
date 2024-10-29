@@ -1,4 +1,6 @@
 from django.utils import timezone
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class UpdateLastActivityMiddleware:
@@ -12,6 +14,11 @@ class UpdateLastActivityMiddleware:
             and request.user is not None
             and request.user.is_authenticated
         ):
-            request.user.last_activity = timezone.now()
-            request.user.save(update_fields=["last_activity"])
+            User = get_user_model()
+            try:
+                user = User.objects.get(pk=request.user.pk)
+                user.last_activity = timezone.now()
+                user.save(update_fields=["last_activity"])
+            except ObjectDoesNotExist:
+                pass
         return response
