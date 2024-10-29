@@ -20,6 +20,7 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf.urls import handler404
 from django.shortcuts import render
+from django.http import HttpResponse
 
 from . import settings
 
@@ -28,14 +29,18 @@ def error_404(request, exception):
     return render(request, "pages/404.html", status=404)
 
 
+def check_health(request):
+    return HttpResponse("OK", status=200)
+
+
 handler404 = "admin.urls.error_404"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("pages.urls")),
     path("users/", include("users.urls")),
-    path("pong", include("pong.urls")),
-    path("ttt/", include("tictactoe.urls")),
+    path("game/", include("game.urls")),
+    path("check_health", check_health),
 ]
 
 if settings.DEBUG:

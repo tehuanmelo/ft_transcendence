@@ -74,7 +74,7 @@ function startGame() {
     const formData = new FormData(form);
     opponent_name = formData.get('opponent_name');
 
-    fetch('/ttt/create/', {
+    fetch('/game/tictactoe/create/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ function startGame() {
 function makeMove(rowIndex, colIndex) {
     if (gameEnded) return;
 
-    fetch(`/ttt/move/${gameId}/`, {
+    fetch(`/game/tictactoe/move/${gameId}/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

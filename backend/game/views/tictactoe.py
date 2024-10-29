@@ -4,20 +4,21 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
 
-from .models import TicTacToeGame
+from ..models import TicTacToeGame
 from users.auth import jwt_login_required
 from users.models import Match
 
 
 @jwt_login_required
 @require_http_methods(["GET"])
-def tictactoe(request):
-    return render(request, "ttt/ttt.html")
+def tictactoe_view(request):
+    return render(request, "game/tictactoe.html")
 
 
 @jwt_login_required
 @require_http_methods(["POST"])
 def create_game(request):
+    print("creating game")
     try:
         data = json.loads(request.body)
         opponent_name = data.get("opponent_name")
