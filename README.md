@@ -1,6 +1,71 @@
 # ft_transcendence
 
-A multi-game web application including Pong and Tic Tac Toe, built with Django and Docker.
+**Authors:**  
+- Malik AlZubaidi - [maalzuba](#)  
+- Paula Balbino - [pbalbino](#)  
+- Samih Abdelrahman - [sabdelra](#)  
+- Tanvir Ahmed Anas - [tanas](#)  
+- Tehuan Melo - [tde-melo](#)
+
+**Submission Date:** Nov. 28th, 2024  
+
+
+## Table of Contents
+
+1. [Project Description](#project-description)  
+2. [Features](#features)  
+3. [Technologies Used](#technologies-used)  
+3. [Project Structure](#project-structure)  
+4. [Installation](#installation)  
+5. [Getting Started](#getting-started)  
+5. [Running Tests](#running-tests)  
+6. [Usage](#usage)  
+7. [Troubleshooting](#troubleshooting)  
+
+
+## Project Description
+
+**ft_transcendence** is a web application designed to deliver a modern multiplayer gaming experience centered around the classic Pong game. This platform allows players to engage in real-time contests, customize gameplay, and explore additional games like Tic-Tac-Toe. With responsive design, enhanced security features, and accessibility considerations, it aims to offer an inclusive and seamless gaming experience.
+
+**Why We Built This:**  
+To combine technical innovation and user engagement, creating a platform that balances security, scalability, and immersive gameplay.
+
+
+
+## Features
+
+- **Gaming Options:**
+  - Play Pong in 1v1 or 2v2 modes.
+  - Experience Tic-Tac-Toe with matchmaking and user history.
+  - Customize game settings (speed, difficulty, sound).
+
+- **User Management:**
+  - Secure registration and login using Two-Factor Authentication (2FA) and JSON Web Tokens (JWT).
+  - Profile customization with avatars and display names.
+  - Friends list with online status and messaging.
+
+- **Accessibility & Compatibility:**
+  - Optimized for visually impaired users with high-contrast themes and keyboard navigation.
+  - Cross-browser support (Google Chrome and Firefox).
+
+- **Security:**
+  - HTTPS with TLS for secure data transmission.
+  - Defense against SQL injections and XSS attacks.
+
+- **Infrastructure:**
+  - Built using Docker containers for scalability and maintainability.
+  - Server-Side Rendering (SSR) for better performance and SEO.
+
+---
+
+## Technologies Used
+
+- **Backend:** Django (Python)  
+- **Frontend:** Vanilla JavaScript, Bootstrap, CSS  
+- **Database:** PostgreSQL  
+- **Authentication:** JSON Web Tokens (JWT), Two-Factor Authentication (2FA)  
+- **Server:** Nginx (static files and reverse proxy)  
+- **Containerization:** Docker  
 
 ## Project Structure
 
@@ -21,7 +86,9 @@ A multi-game web application including Pong and Tic Tac Toe, built with Django a
 └── docker-compose.yml
 ```
 
-## Prerequisites
+## Installation
+
+### Prerequisites
 
 Ensure the following are installed on your system:
 
@@ -72,7 +139,7 @@ To start the application, run:
 make up
 ```
 
-Access the website at [https://localhost:443](https://localhost:443).
+### Access the website at [https://localhost:443](https://localhost:443)
 
 To stop the application, run:
 
@@ -110,6 +177,20 @@ To access the PostgreSQL database, use:
 ```bash
 make run-database
 ```
+
+## Usage
+
+### 1. Registration/Login:
+Use the provided registration form or login with your username and password.
+
+### 2. Gameplay:
+Navigate to the game section to start a Pong or Tic-Tac-Toe match. Customize settings before starting.
+
+### 3. Profile Management:
+Edit your profile, upload an avatar, and view your match history.
+
+### 4. Multiplayer Features:
+Add friends, invite them to games, or send messages using the chat interface.
 
 ## Troubleshooting
 
